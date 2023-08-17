@@ -20,7 +20,6 @@ public class LoginController {
 
     @PostMapping (value = "/do-login")
     public Result<String> doLogin(HttpServletResponse response, @RequestBody @Valid LoginVo loginVo){
-        log.info(loginVo.toString());
         String token = loginService.login(response,loginVo);
         return Result.success(token);
     }

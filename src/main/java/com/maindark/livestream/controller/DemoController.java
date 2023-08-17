@@ -7,6 +7,7 @@ import com.maindark.livestream.redis.UserKey;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.LiveStreamUserService;
+import com.maindark.livestream.sms.SMSService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,9 @@ public class DemoController {
     LiveStreamUserService liveStreamUserService;
     @Resource
     RedisService redisService;
+
+    @Resource
+    SMSService smsService;
     @GetMapping("/hello")
     public Result<String>  hell(){
         return Result.success("hello World");
@@ -55,5 +59,13 @@ public class DemoController {
 //           String key2 = redisService.get(UserKey.getById,String.class);
 //           return Result.success(key2);
         return null;
+    }
+
+    @GetMapping("/sms/send")
+    public Result<String> sendSMS(String mobile){
+        log.info(mobile);
+        mobile = "353899677097";
+        String result =smsService.sendSMS(mobile);
+        return Result.success(result);
     }
 }

@@ -22,8 +22,9 @@ public class LiveStreamUserController {
     public Result<Boolean> updatePasswordById(LiveStreamUser liveStreamUser, @Valid @RequestBody ResetPasswordVo resetPasswordVo, @PathVariable("token") String token){
         Long userId = liveStreamUser.getId();
         String password = resetPasswordVo.getPassword();
+        String verifyCode = resetPasswordVo.getMsgCode();
        log.info("id:"+userId +" password:" + password +" token:" + token);
-       Boolean res = liveStreamUserService.updatePassword(token,userId,password);
+       Boolean res = liveStreamUserService.updatePassword(token,userId,password,verifyCode);
        return Result.success(res);
     }
 

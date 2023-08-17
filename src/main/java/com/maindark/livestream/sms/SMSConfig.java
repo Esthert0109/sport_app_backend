@@ -10,6 +10,8 @@ public class SMSConfig {
 
     private String apiKey;
 
+    private String url;
+
     public String getContent() {
         return content;
     }
@@ -24,5 +26,13 @@ public class SMSConfig {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

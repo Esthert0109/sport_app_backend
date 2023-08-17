@@ -17,6 +17,13 @@ public class CodeMsg {
 
     public static CodeMsg PASSWORD_ERROR = new CodeMsg(500213,"password is not correct, please try again!");
     public static CodeMsg MOBILE_NOT_EXIST = new CodeMsg(500214,"mobile is not exist");
+
+    //sms
+    public static CodeMsg SMS_CODE_NOT_EXIST = new CodeMsg(500310,"verify code is not exist, please try again");
+    public static CodeMsg SMS_CODE_ERROR = new CodeMsg(500311,"verify code is incorrect, please try again");
+    public static CodeMsg SMS_CODE_SEND_ERROR = new CodeMsg(500312,"message sends error, please try again");
+
+
     //
     private CodeMsg(int code,String msg){
         this.code = code;
