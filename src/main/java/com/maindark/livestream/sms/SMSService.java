@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Random;
 @Service
 @Slf4j
@@ -23,11 +26,11 @@ public class SMSService {
 
     @Resource
     RedisService redisService;
-    public  String sendSMS(String mobileNumber) {
+    public  Boolean sendSMS(String mobileNumber)  {
         // 随机的四位数OTP
         Random random = new Random();
         int OTPNumber = random.nextInt(9000) + 1000;
-        String messageContent = smsConfig.getContent().replace("{code}",String.valueOf(OTPNumber)) ;
+        String messageContent = smsConfig.getContent() + String.valueOf(OTPNumber) ;
         // 自动生成一个 referenceID
         String referenceID = UUIDUtil.uuid();
         String param = "apiKey=" + smsConfig.getApiKey()
@@ -36,17 +39,18 @@ public class SMSService {
                 + "&referenceID=" + referenceID;
         RestTemplate restTemplate = new RestTemplate();
         String url =  smsConfig.getUrl() + param;
+        log.info("send sms url:{}",url);
         String result = restTemplate.getForObject(url,String.class);
-        log.info("sms result:" + result);
+        log.info("sms result:{}",result);
         JSONObject resultObj = JSON.parseObject(result);
         String status = (String)resultObj.get("status");
         if(StringUtils.equals("ok",status)) {
             redisService.set(SMSKey.smsKey,mobileNumber,String.valueOf(OTPNumber));
+            return true;
         } else {
+            log.error("send msg url:{}",url);
+            log.error("send smg result:{}",result);
             throw new GlobalException(CodeMsg.SMS_CODE_SEND_ERROR);
         }
-        return status;
     }
-
-
 }

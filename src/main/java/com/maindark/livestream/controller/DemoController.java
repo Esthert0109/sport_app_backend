@@ -62,10 +62,9 @@ public class DemoController {
     }
 
     @GetMapping("/sms/send")
-    public Result<String> sendSMS(String mobile){
+    public Result<Boolean> sendSMS(String mobile) throws Exception{
         log.info(mobile);
-        mobile = "353899677097";
-        String result =smsService.sendSMS(mobile);
+        Boolean result =smsService.sendSMS(mobile);
         return Result.success(result);
     }
 }

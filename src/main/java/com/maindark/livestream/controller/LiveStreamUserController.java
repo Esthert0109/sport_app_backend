@@ -23,7 +23,7 @@ public class LiveStreamUserController {
         Long userId = liveStreamUser.getId();
         String password = resetPasswordVo.getPassword();
         String verifyCode = resetPasswordVo.getMsgCode();
-       log.info("id:"+userId +" password:" + password +" token:" + token);
+       log.info("id: {}, password: {},token: {}",userId, password,token);
        Boolean res = liveStreamUserService.updatePassword(token,userId,password,verifyCode);
        return Result.success(res);
     }

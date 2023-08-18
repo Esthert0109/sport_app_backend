@@ -78,6 +78,9 @@ public class LiveStreamUserService {
         if(!StringUtils.equals(redisSMSCode,msgCode)) {
             throw new GlobalException(CodeMsg.SMS_CODE_ERROR);
         }
+        //delete redis msg cache
+        redisService.delete(SMSKey.smsKey,String.valueOf(id));
+
         //update database
         LiveStreamUser toBeUpdate = new LiveStreamUser();
         toBeUpdate.setId(id);
