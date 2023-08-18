@@ -36,7 +36,7 @@ public class DemoController {
 
     @GetMapping("/db/get")
     public Result<LiveStreamUser> dbGet(@RequestParam String id){
-        LiveStreamUser user = liveStreamUserService.getById(Long.valueOf(id));
+        LiveStreamUser user = liveStreamUserService.getById(Long.parseLong(id));
         return Result.success(user);
     }
 
@@ -50,7 +50,7 @@ public class DemoController {
     public Result<String> setRedis(){
 
             LiveStreamUser liveStreamUser = new LiveStreamUser();
-            liveStreamUser.setId(Long.valueOf(123));
+            liveStreamUser.setId(Long.parseLong("1234555"));
             liveStreamUser.setPassword("123459");
             liveStreamUser.setNickName("hongFeiDu");
             liveStreamUser.setLoginCount(1);
@@ -62,7 +62,7 @@ public class DemoController {
     }
 
     @GetMapping("/sms/send")
-    public Result<Boolean> sendSMS(String mobile) throws Exception{
+    public Result<Boolean> sendSMS(String mobile){
         log.info(mobile);
         Boolean result =smsService.sendSMS(mobile);
         return Result.success(result);
