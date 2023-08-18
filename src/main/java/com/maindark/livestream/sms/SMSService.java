@@ -28,7 +28,7 @@ public class SMSService {
         // 随机的四位数OTP
         Random random = new Random();
         int OTPNumber = random.nextInt(9000) + 1000;
-        String messageContent = smsConfig.getContent() + String.valueOf(OTPNumber) ;
+        String messageContent = smsConfig.getContent() + OTPNumber;
         // 自动生成一个 referenceID
         String referenceID = UUIDUtil.uuid();
         String param = "apiKey=" + smsConfig.getApiKey()
