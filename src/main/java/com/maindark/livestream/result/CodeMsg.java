@@ -23,6 +23,9 @@ public class CodeMsg {
     public static CodeMsg SMS_CODE_ERROR = new CodeMsg(500311,"verify code is incorrect, please try again");
     public static CodeMsg SMS_CODE_SEND_ERROR = new CodeMsg(500312,"message sends error, please try again");
 
+    //img
+    public static CodeMsg IMG_UPLOAD_ERROR = new CodeMsg(500410,"img uploads error, please try again");
+
 
     //
     private CodeMsg(int code,String msg){
