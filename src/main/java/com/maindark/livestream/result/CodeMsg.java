@@ -22,6 +22,7 @@ public class CodeMsg {
     public static CodeMsg SMS_CODE_NOT_EXIST = new CodeMsg(500310,"verify code is not exist, please try again");
     public static CodeMsg SMS_CODE_ERROR = new CodeMsg(500311,"verify code is incorrect, please try again");
     public static CodeMsg SMS_CODE_SEND_ERROR = new CodeMsg(500312,"message sends error, please try again");
+    public static CodeMsg SMS_CODE_LIMIT = new CodeMsg(500313,"you cannot send message again, please try tomorrow");
 
     //img
     public static CodeMsg IMG_UPLOAD_ERROR = new CodeMsg(500410,"img uploads error, please try again");

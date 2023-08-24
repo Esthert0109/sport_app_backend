@@ -6,7 +6,11 @@ public class SMSKey extends BasePrefix{
     }
 
 
-    public static final int expiredSeconds = 360;
+    public static final int expiredSeconds = 30;
+
+    public static final int limitTime = 3600 * 24;
 
     public static SMSKey smsKey = new SMSKey(expiredSeconds,"sms");
+
+    public static SMSKey smsLimit = new SMSKey(limitTime,"smsLimit");
 }
