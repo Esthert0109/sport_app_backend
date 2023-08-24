@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 public class ResetPasswordVo {
 
 
-    @NotNull(message = "msgCode can not be empty!")
+    @NotNull(message = "msgCode can be not empty!")
 
     private String msgCode;
     @NotNull

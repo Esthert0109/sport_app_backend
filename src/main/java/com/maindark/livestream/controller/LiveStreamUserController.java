@@ -18,7 +18,7 @@ public class LiveStreamUserController {
 
     @Resource
     public LiveStreamUserService liveStreamUserService;
-   @PatchMapping ("/{token}")
+   @PatchMapping ("/updatePass/{token}")
     public Result<Boolean> updatePasswordById(LiveStreamUser liveStreamUser, @Valid @RequestBody ResetPasswordVo resetPasswordVo, @PathVariable("token") String token){
         Long userId = liveStreamUser.getId();
         String password = resetPasswordVo.getPassword();

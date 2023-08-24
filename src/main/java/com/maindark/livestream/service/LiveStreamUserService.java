@@ -17,11 +17,13 @@ import com.maindark.livestream.vo.LiveStreamUserVo;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Slf4j
 @Service
 public class LiveStreamUserService {
     public static final String COOK_NAME_TOKEN = "token";
@@ -49,6 +51,10 @@ public class LiveStreamUserService {
     public LiveStreamUserVo findById(long id){
         LiveStreamUserVo liveStreamUserVo = new LiveStreamUserVo();
         LiveStreamUser liveStreamUser = liveStreamUserDao.getById(id);
+        if (liveStreamUser == null) {
+            log.error("mobile: {} does not exist",id);
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
         BeanUtils.copyProperties(liveStreamUser,liveStreamUserVo);
         return liveStreamUserVo;
     }
