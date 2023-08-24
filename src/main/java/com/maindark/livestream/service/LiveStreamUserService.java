@@ -100,7 +100,42 @@ public class LiveStreamUserService {
         return true;
     }
 
+    public boolean updateNickName(String token, Long id, String nickName) {
+        //get user
+        LiveStreamUser user = getById(id);
+        if(user == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+        //update database
+        LiveStreamUser toBeUpdate = new LiveStreamUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setNickName(nickName);
+        liveStreamUserDao.updateNickName(toBeUpdate);
 
+        //manage cache
+        redisService.delete(UserKey.getById, ""+id);
+        user.setNickName(toBeUpdate.getNickName());
+        redisService.set(LoginKey.token, token, user);
+        return true;
+    }
+
+    public Boolean updateHead(String token, Long id, String head) {
+        LiveStreamUser user = getById(id);
+        if(user == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+        //update database
+        LiveStreamUser toBeUpdate = new LiveStreamUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setHead(head);
+        liveStreamUserDao.updateHead(toBeUpdate);
+
+        //manage cache
+        redisService.delete(UserKey.getById, ""+id);
+        user.setHead(toBeUpdate.getHead());
+        redisService.set(LoginKey.token, token, user);
+        return true;
+    }
     private void addCookie(HttpServletResponse response,LiveStreamUser liveStreamUser){
         String token = UUIDUtil.uuid();
         redisService.set(LoginKey.token,token,liveStreamUser);
@@ -109,6 +144,7 @@ public class LiveStreamUserService {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
+
 
 
 }

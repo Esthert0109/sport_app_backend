@@ -2,6 +2,7 @@ package com.maindark.livestream.controller;
 
 import com.maindark.livestream.domain.LiveStreamUser;
 import com.maindark.livestream.form.LiveStreamUserForm;
+import com.maindark.livestream.form.ResetHeadForm;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.LiveStreamUserService;
 import com.maindark.livestream.vo.LiveStreamUserVo;
@@ -39,4 +40,19 @@ public class LiveStreamUserController {
        LiveStreamUserVo liveStreamUserVo = liveStreamUserService.findById(id);
        return Result.success(liveStreamUserVo);
     }
+    @PatchMapping("/updateNickName/{token}/{nickName}")
+    public Result<Boolean> updateNickName(LiveStreamUser liveStreamUser,@PathVariable String token,@PathVariable String nickName){
+       Long id = liveStreamUser.getId();
+       liveStreamUserService.updateNickName(token,id,nickName);
+       return Result.success(true);
+    }
+
+    @PatchMapping("/updateHead/{token}")
+    public Result<Boolean> updateHead(LiveStreamUser liveStreamUser,@PathVariable String token,@RequestBody @Valid ResetHeadForm resetHeadForm){
+        String head = resetHeadForm.getHead();
+        Long id = liveStreamUser.getId();
+        liveStreamUserService.updateHead(token,id,head);
+        return Result.success(true);
+    }
+
 }
