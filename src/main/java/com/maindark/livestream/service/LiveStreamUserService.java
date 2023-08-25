@@ -61,6 +61,10 @@ public class LiveStreamUserService {
 
 
     public LiveStreamUser save(LiveStreamUserForm liveStreamUserForm) {
+        LiveStreamUser checkUser = getById(liveStreamUserForm.getId());
+        if(checkUser != null) {
+            throw new GlobalException(CodeMsg.MOBILE_EXIST);
+        }
         LiveStreamUser liveStreamUser = new LiveStreamUser();
         BeanUtils.copyProperties(liveStreamUserForm,liveStreamUser);
         liveStreamUser.setSalt(SALT);

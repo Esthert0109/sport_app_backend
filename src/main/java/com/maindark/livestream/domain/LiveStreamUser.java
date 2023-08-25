@@ -3,10 +3,7 @@ package com.maindark.livestream.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 
 import java.util.Date;
