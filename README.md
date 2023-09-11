@@ -1,2 +1,12 @@
 # lives-tream
 Live sports platform
+主机名称：
+C20230906135424
+主 IP 地址：
+107.148.50.20
+用户名：
+root
+密码：
+J6l5AgP2
+端口：
+13013
