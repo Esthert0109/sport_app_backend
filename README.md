@@ -10,3 +10,6 @@ root
 J6l5AgP2
 端口：
 13013
+纳米数据
+账号：mindarkdaniel@gmail.com
+密码：QeEpS2fCEQyWsF
