@@ -13,7 +13,7 @@ J6l5AgP2
 纳米数据
 账号：mindarkdaniel@gmail.com
 密码：QeEpS2fCEQyWsF
-
-又拍云
-账号：17729062809
-密码：q1w2e3r4
+#amazon 
+account:jim124
+password:_N4rXA6(EuN?/dg
+email:pingandu590@gmail.com
