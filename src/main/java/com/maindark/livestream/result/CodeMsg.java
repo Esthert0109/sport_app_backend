@@ -26,7 +26,7 @@ public class CodeMsg {
     public static CodeMsg SMS_CODE_LIMIT = new CodeMsg(500313,"you cannot send message again, please try tomorrow");
 
     //img
-    public static CodeMsg IMG_UPLOAD_ERROR = new CodeMsg(500410,"img uploads error, please try again");
+    public static CodeMsg IMG_UPLOAD_ERROR = new CodeMsg(500410,"image uploads error, please try again");
 
 
     //
