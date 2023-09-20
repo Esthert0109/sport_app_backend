@@ -14,6 +14,8 @@ public class NamiConfig {
     private String host;
     private String user;
     private String secretKey;
+    private String footballUrl;
+    private String basketballUrl;
 
 
 }

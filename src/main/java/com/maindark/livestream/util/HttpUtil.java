@@ -14,6 +14,6 @@ public class HttpUtil {
         String result = restTemplate.getForObject(url,String.class);
         log.info("nami result :{}",result);
         JSONObject resultObj = JSON.parseObject(result);
-        return null;
+        return result;
     }
 }
