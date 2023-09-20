@@ -7,6 +7,7 @@ yum install tcl
 make distclean
 make
 make test
+make install
 
 vi redis.conf
 
@@ -21,3 +22,6 @@ cd /usr/local/redis/utils
 /usr/local/redis/data
 
 chkconfig --list | grep redis
+
+rm -fr etc/redis/ /var/log/redis_* /etc/init.d/redis_6379 /usr/local/bin/redis*
+rm -rf /usr/local/redis
