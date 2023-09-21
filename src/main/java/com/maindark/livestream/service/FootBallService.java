@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class FootBallService {
   ////https://open.sportnanoapi.com/api/v5/football/category/list
-    public static String namiUrl = "/api/v5/football";
     @Resource
     NamiConfig namiConfig;
 
     public String getFootBallMatchList(){
-      String url = namiConfig.getHost() + namiUrl + "&user" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
+      String url = namiConfig.getHost() + namiConfig.getFootballUrl() + "&user" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
       String result = HttpUtil.getNaMiData(url);
       return null;
     }

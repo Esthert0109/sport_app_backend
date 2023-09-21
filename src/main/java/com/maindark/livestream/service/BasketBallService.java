@@ -1,6 +1,7 @@
 package com.maindark.livestream.service;
 
 import com.maindark.livestream.nami.NamiConfig;
+import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,11 @@ public class BasketBallService {
     @Resource
     NamiConfig namiConfig;
 
-
+    public String getFootBallMatchList(){
+        String url = namiConfig.getHost() + namiConfig.getBasketballUrl() + "&user" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
+        String result = HttpUtil.getNaMiData(url);
+        return null;
+    }
 
 
 
