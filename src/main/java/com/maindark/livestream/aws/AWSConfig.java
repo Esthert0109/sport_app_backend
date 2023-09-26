@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Getter
 public class AWSConfig {
+
     private String accessKey;
     private String secretKey;
     private String region;
