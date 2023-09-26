@@ -67,16 +67,11 @@ spring.servlet.multipart.max-request-size=10MB
 
 #Nami
 nami.host=https://open.sportnanoapi.com
-nami.user=wildcats
-nami.secretKey=a13dca79730767e9ed2b35761b1171f8
-nami.football-url=/api/v5/football/match/schedule/diary
-nami.basketball-url=/api/v5/basketball/match/schedule/diary
+nami.user=root
+nami.secretKey=btLq1c8Pn9NykmrAJl/ewhGpA/M812ySGHg/VRAM
+nami.football-url=/api/v5/football/category
+nami.basketball-url=/api/v5/basketball/category
 
-#allSports
-allSports.user=root
-allSPorts.secretKey=btLq1c8Pn9NykmrAJl/ewhGpA/M812ySGHg/VRAM
-allSPorts.football-url=/api/v5/football/category
-allSPorts.basketball-url=/api/v5/basketball/category
 #logging
 #logging.pattern.console=%d -%msg%n
 #logging.file.name= /var/log/tomcat/liveStream.log
