@@ -1,6 +1,6 @@
 
 
-mysql:account:root password:livestream:ma6oH
+--mysql:account:root password:livestream:ma6oH
 CREATE USER 'springUser'@'%' IDENTIFIED BY 'livestream:ma6oH';
 GRANT ALL PRIVILEGES ON *.* TO 'springUser'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
@@ -38,9 +38,23 @@ CREATE TABLE `live_stream_message` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
- private Integer id;
-    private String content;
-    private String summary;
-    private Date createDate;
-    private Date editDate;
-    private String status;
+DROP TABLE IF EXISTS `football_match`;
+CREATE TABLE `football_match` (
+  `id` int NOT NULL  COMMENT 'id',
+  `season_id` int COMMENT 'season id',
+  `competition_id` int NOT NULL COMMENT 'competition_id',
+  `status_id` int  COMMENT 'status 0 比赛异常 1 未开赛 2 上半场 3 中场 4 下半场 5 
+  加时赛 6加时赛(弃用) 7 点球决赛 8 完场 9 推迟 10 中断 11 腰斩 12 取消 13 待定 ',
+  `match_time` bigint COMMENT 'match time',
+  `home_team_id` int  COMMENT ' home team id',
+  `away_team_id` int  COMMENT ' away team id',
+  `home_team_score` int  COMMENT ' home team score',
+  `away_team_score` int  COMMENT ' away team score',
+  `line_up` int COMMENT 'if there is a line-up',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ 
+ 
+ 
+ 

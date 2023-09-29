@@ -16,6 +16,9 @@ public class NamiConfig {
     private String secretKey;
     private String footballUrl;
     private String basketballUrl;
+    private String footballCompetitionUrl;
+    private String footballTeamUrl;
+    private String footballMatchUrl;
 
 
 }
