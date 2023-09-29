@@ -38,6 +38,20 @@ CREATE TABLE `live_stream_message` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+DROP TABLE IF EXISTS `football_competition`;
+CREATE TABLE `football_competition` (
+  `id` int NOT NULL  COMMENT 'id',
+  `logo` varchar(255) COMMENT 'logo',
+  `name_zh` varchar(255) NOT NULL COMMENT 'chinese name',
+  `name_en` varchar(255)  COMMENT 'english name',
+  `short_name_zh` varchar(255) COMMENT 'short chinese name',
+  `short_name_en` int  COMMENT 'short english name',
+  `type` int  COMMENT 'type 赛事类型，0-未知、1-联赛、2-杯赛、3-友谊赛 ',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 DROP TABLE IF EXISTS `football_match`;
 CREATE TABLE `football_match` (
   `id` int NOT NULL  COMMENT 'id',
@@ -54,7 +68,30 @@ CREATE TABLE `football_match` (
   `updated_at` bigint   COMMENT 'update time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
- 
+
+DROP TABLE IF EXISTS `football_team`;
+CREATE TABLE `football_team` (
+  `id` int NOT NULL  COMMENT 'id',
+  `competition_id` int NOT NULL  COMMENT 'competition_id',
+  `name_zh` varchar(255) NOT NULL COMMENT 'chinese team name',
+  `name_en` varchar(255)  COMMENT 'english name',
+  `logo` varchar(255) COMMENT 'logo',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `update_football_data`;
+CREATE TABLE `update_football_data` (
+  `id` int NOT NULL auto_increment  COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `season_id` int COMMENT 'season id',
+  `competition_id` int NOT NULL COMMENT 'competition_id',
+  `pub_time` int  COMMENT 'pub time',
+  `update_time` bigint  COMMENT ' update time',
+  `unique_key` bigint COMMENT 'unique key=match_id + season_id + competition_id + put_time + update_time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
  
  
  

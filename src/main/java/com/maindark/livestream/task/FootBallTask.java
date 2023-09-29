@@ -1,13 +1,11 @@
 package com.maindark.livestream.task;
 
 import com.alibaba.fastjson2.JSON;
-import com.maindark.livestream.dao.BasicDao;
-import com.maindark.livestream.dao.FootballCompetitionDao;
-import com.maindark.livestream.dao.FootballMatchDao;
-import com.maindark.livestream.dao.FootballTeamDao;
+import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.FootballCompetition;
 import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.domain.FootballTeam;
+import com.maindark.livestream.domain.UpdateFootballData;
 import com.maindark.livestream.nami.NamiConfig;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
@@ -44,6 +42,9 @@ public class FootBallTask {
     @Resource
     FootballMatchDao footballMatchDao;
 
+    @Resource
+    UpdateFootballDataDao updateFootballDataDao;
+
 
 
     public String getIdUrl(String idUrl){
@@ -56,14 +57,17 @@ public class FootBallTask {
         return url;
     }
 
-    /* execute every ten minus every day*/
+    public String getNormalUrl(String normalUrl){
+        String url = namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
+        return url;
+    }
+
+    /* execute every ten minutes every day*/
     @Scheduled(cron = "0 */10 * * * ?")
     //second, minute, hour, day of month, month, day(s) of week
     public void getAllMatchOrUpdate(){
-
         //Get all match
-        insertFootballData(namiConfig.getFootballMatchUrl(),maxMatchIdFromApi,footballMatchDao);
-        /*while(true) {
+        while(true) {
             String url = getIdUrl(namiConfig.getFootballMatchUrl());
             if(maxMatchIdFromApi == 0) {
                 int maxMatchIdFromDb = footballMatchDao.getMaxId();
@@ -90,13 +94,14 @@ public class FootBallTask {
                 } else {
                     break;
                 }
+            } else {
+                log.error("get match data from nami are wrong, please connect to the nami platform!");
             }
 
-        }*/
+        }
 
         // update match
-        updateFootballData(namiConfig.getFootballMatchUrl(),maxMatchTimeFromApi,footballMatchDao);
-        /*while(true) {
+        while(true) {
             String url = getTimeUrl(namiConfig.getFootballMatchUrl());
             if(maxMatchTimeFromApi == 0) {
                 int maxUpdateAt = footballMatchDao.getMaxUpdatedAt();
@@ -123,9 +128,11 @@ public class FootBallTask {
                 } else {
                     break;
                 }
+            } else {
+                log.error("update match data from nami are wrong, please connect to the nami platform!");
             }
 
-        }*/
+        }
     }
 
 
@@ -136,8 +143,7 @@ public class FootBallTask {
     @Scheduled(cron = "0 */10 * * * ?")
     public void getAllCompetitionOrUpdate(){
         /* First time get maxId from data, and then get maxId from api*/
-        insertFootballData(namiConfig.getFootballCompetitionUrl(),maxCompetitionIdFromApi,footballCompetitionDao);
-        /*while (true) {
+        while (true) {
             String url = getIdUrl(namiConfig.getFootballCompetitionUrl());
             if(maxCompetitionIdFromApi == 0){
                 int maxIdFromDb = footballCompetitionDao.getMaxId();
@@ -167,14 +173,14 @@ public class FootBallTask {
             } else {
                 log.error("get all competitions is wrong, please try again!");
             }
-        }*/
+        }
 
         // Update competition
-        updateFootballData(namiConfig.getFootballCompetitionUrl(),maxCompetitionTimeFromApi,footballCompetitionDao);
-       /* while(true) {
+
+       while(true) {
             String url = getTimeUrl(namiConfig.getFootballCompetitionUrl());
             if(maxCompetitionTimeFromApi == 0) {
-                Integer maxUpdateAtFromDb = footballCompetitionDao.getMaxUpdateAt();
+                Integer maxUpdateAtFromDb = footballCompetitionDao.getMaxUpdatedAt();
                 url += maxUpdateAtFromDb+1;
             } else {
                 url += maxCompetitionTimeFromApi+1;
@@ -201,7 +207,7 @@ public class FootBallTask {
             } else {
                 log.error("update competition error, please connect to nami platform");
             }
-        }*/
+        }
     }
 
 
@@ -210,9 +216,9 @@ public class FootBallTask {
      * */
     @Scheduled(cron = "0 */10 * * * ?")
     public void getAllTeamOrUpdate(){
-        insertFootballData(namiConfig.getFootballTeamUrl(),maxTeamIdFromApi,footballTeamDao);
+
         // Get all teams
-       /*while(true) {
+       while(true) {
            String url;
            url = getIdUrl(namiConfig.getFootballTeamUrl());
            if(maxTeamIdFromApi == 0) {
@@ -230,7 +236,7 @@ public class FootBallTask {
                maxTeamIdFromApi = (Integer) query.get("max_id");
                if(total > 0) {
                    List<Map<String,Object>> teamsList = (List<Map<String, Object>>) resultObj.get("results");
-                   if(teamsList != null) {
+                   if(teamsList != null && teamsList.size() > 0) {
                        int size = teamsList.size();
                        for(int i =0;i<size;i++) {
                            FootballTeam footballTeam = getFootballTeam(teamsList, i);
@@ -243,17 +249,73 @@ public class FootBallTask {
            } else {
                log.error("Get all football teams are wrong from name, please connect to nami platform!");
            }
-       }*/
+       }
        // Update teams
-        updateFootballData(namiConfig.getFootballTeamUrl(),maxTeamTimeFromApi,footballTeamDao);
+        while (true) {
+            String url = getTimeUrl(namiConfig.getFootballTeamUrl());
+            if(maxTeamTimeFromApi == 0){
+                Integer maxUpdateAt = footballTeamDao.getMaxUpdatedAt();
+                url += maxUpdateAt+1;
+            } else {
+                url += maxTeamTimeFromApi+1;
+            }
+
+            String result = HttpUtil.getNaMiData(url);
+            Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+            Integer code = (Integer) resultObj.get("code");
+            if (code == 0) {
+                Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
+                Integer total = (Integer)query.get("total");
+                maxTeamTimeFromApi = (Integer)query.get("max_time");
+                if(total > 0) {
+                    List<Map<String,Object>> teamsList = (List<Map<String, Object>>) resultObj.get("results");
+                    if(teamsList != null && teamsList.size() > 0) {
+                        int size = teamsList.size();
+                        for(int i =0;i<size;i++) {
+                            FootballTeam footballTeam = getFootballTeam(teamsList, i);
+                            footballTeamDao.updateDataById(footballTeam);
+                        }
+                    }
+                } else {
+                    break;
+                }
+            } else {
+                log.error("update all football teams are wrong from nami, please connect to nami platform!");
+            }
+        }
     }
 
-    /**
-     * update all footballTeams
-     * */
-    @Scheduled(cron = "0 */10 * * * ?")
-    public void updateFootTeam(){
+
+    /* execute this task every 20 seconds*/
+    @Scheduled(cron = "*/20 * * * * ?")
+    public void getUpdateDataFromNami(){
+        String url = getNormalUrl(namiConfig.getUpdateDataUrl());
+        String result = HttpUtil.getNaMiData(url);
+        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+        Integer code = (Integer) resultObj.get("code");
+        if(code == 0) {
+            Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
+            if(!results.isEmpty()) {
+                // if there is a key of 2, we can insert line-up data;
+                if(results.containsKey("2")) {
+                    List<Map<String,Object>> updateDataList = (List<Map<String,Object>>)results.get("2");
+                    if(!updateDataList.isEmpty()) {
+                        updateDataList.stream().forEach(el ->{
+                            UpdateFootballData updateFootballData = getUpdateFootballData(el);
+                            UpdateFootballData updateFootballDataFromData = updateFootballDataDao.getDataByUniqueKey(updateFootballData.getUniqueKey());
+                            if(updateFootballDataFromData == null) {
+                                updateFootballDataDao.insert(updateFootballData);
+                            }
+                        });
+
+                    }
+                }
+            }
+        } else {
+            log.error("there is no update data!");
+        }
     }
+
 
 
 
@@ -375,39 +437,23 @@ public class FootBallTask {
 
 
 
-    private void updateFootballData(String apiUrl, Integer maxTimeFromApi, BasicDao baseDao) {
-        while (true) {
-            String url = getTimeUrl(apiUrl);
-            if(maxTimeFromApi == 0){
-                Integer maxUpdateAt = baseDao.getMaxUpdatedAt();
-                url += maxUpdateAt+1;
-            } else {
-                url += maxTimeFromApi+1;
-            }
 
-            String result = HttpUtil.getNaMiData(url);
-            Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-            Integer code = (Integer) resultObj.get("code");
-            if (code == 0) {
-                Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
-                Integer total = (Integer)query.get("total");
-                maxTimeFromApi = (Integer)query.get("max_time");
-                if(total > 0) {
-                    List<Map<String,Object>> teamsList = (List<Map<String, Object>>) resultObj.get("results");
-                    if(teamsList != null) {
-                        int size = teamsList.size();
-                        for(int i =0;i<size;i++) {
-                            FootballTeam footballTeam = getFootballTeam(teamsList, i);
-                            baseDao.updateDataById(footballTeam);
-                        }
-                    }
-                } else {
-                    break;
-                }
-            } else {
-                log.error("Get all football teams are wrong from name, please connect to nami platform!");
-            }
-        }
+
+    private UpdateFootballData getUpdateFootballData(Map<String,Object> el){
+        Integer matchId = (Integer)el.get("match_id");
+        Integer seasonId = (Integer)el.get("season_id");
+        Integer competitionId = (Integer)el.get("competition_id");
+        Integer pubTime = (Integer)el.get("pub_time");
+        Long updateTime = Long.valueOf((Integer)el.get("update_time"));
+        Long uniqueKey = matchId + seasonId + competitionId + pubTime + updateTime;
+        UpdateFootballData updateFootballData = new UpdateFootballData();
+        updateFootballData.setMatchId(matchId);
+        updateFootballData.setSeasonId(seasonId);
+        updateFootballData.setCompetitionId(competitionId);
+        updateFootballData.setPubTime(pubTime);
+        updateFootballData.setUpdateTime(updateTime);
+        updateFootballData.setUniqueKey(uniqueKey);
+        return updateFootballData;
     }
 
 
