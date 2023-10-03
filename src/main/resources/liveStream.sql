@@ -62,9 +62,11 @@ CREATE TABLE `football_match` (
   `match_time` bigint COMMENT 'match time',
   `home_team_id` int  COMMENT ' home team id',
   `away_team_id` int  COMMENT ' away team id',
+  `home_team_name` varchar(255) COMMENT 'home team name',
+  `away_team_name` varchar(255) COMMENT 'away home name',
   `home_team_score` int  COMMENT ' home team score',
   `away_team_score` int  COMMENT ' away team score',
-  `line_up` int COMMENT 'if there is a line-up',
+  `line_up` int COMMENT 'if there is a line-up, 0 no 1 yes',
   `updated_at` bigint   COMMENT 'update time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -91,6 +93,71 @@ CREATE TABLE `update_football_data` (
   `unique_key` bigint COMMENT 'unique key=match_id + season_id + competition_id + put_time + update_time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `home_match_line_up`;
+CREATE TABLE `home_match_line_up` (
+  `id` int NOT NULL   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `team_id` int COMMENT 'team id',
+  `first` int COMMENT 'first 0 no 1 yes ',
+  `captain` int COMMENT 'captain 0 no 1 yes',
+  `player_name` varchar(255) NOT NULL COMMENT 'player name',
+  `player_logo` varchar(255)  NOT null COMMENT 'player logo',
+  `shirt_number` int COMMENT 'shirt number',
+  `position` varchar(255)  COMMENT '球员位置，F前锋、M中场、D后卫、G守门员、其他为未知',
+  `rating` varchar(8) COMMENT 'rating',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `away_match_line_up`;
+CREATE TABLE `away_match_line_up` (
+  `id` int NOT NULL   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `team_id` int COMMENT 'team id',
+  `first` int COMMENT 'first 0 no 1 yes ',
+  `captain` int COMMENT 'captain 0 no 1 yes',
+  `player_name` varchar(255) NOT NULL COMMENT 'player name',
+  `player_logo` varchar(255)  NOT null COMMENT 'player logo',
+  `shirt_number` int COMMENT 'shirt number',
+  `position` varchar(255)  COMMENT '球员位置，F前锋、M中场、D后卫、G守门员、其他为未知',
+  `rating` varchar(8) COMMENT 'rating',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `football_match_live_data`;
+CREATE TABLE `football_match_live_data` (
+  `id` int auto_increment NOT NULL   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `status_id` int COMMENT 'status id',
+  `home_team_id` int COMMENT 'home team id ',
+  `away_team_id` int COMMENT 'away team id',
+  `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
+  `away_team_name` varchar(255) NOT NULL COMMENT 'away team name',
+  `home_attack_num` int COMMENT 'homeAttackNum',
+  `away_attack_num` int COMMENT 'awayAttackNum',
+  `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
+  `away_attack_danger_num` int COMMENT 'awayAttackDangerNum',
+  `home_possession_rate` int COMMENT 'homePossessionRate',
+  `away_possession_rate` int COMMENT 'awayPossessionRate',
+  `home_shoot_goal_num` int COMMENT 'homeShootGoalNum',
+  `away_shoot_goal_num` int COMMENT 'awayShootGoalNum',
+  `home_bias_num` int COMMENT 'homeBiasNum',
+  `away_bias_num` int COMMENT 'awayBiasNum',
+  `home_corner_kick_num` int COMMENT 'homeCornerKickNum',
+  `away_corner_kick_num` int COMMENT 'awayCornerKickNum',
+  `home_red_card_num` int COMMENT 'homeRedCardNum',
+  `away_red_card_num` int COMMENT 'awayRedCardNum',
+  `home_yellow_card_num` int COMMENT 'homeYellowCardNum',
+  `away_yellow_card_num` int COMMENT 'awayYellowCardNum',
+  `home_score` int COMMENT 'homeScore',
+  `away_score` int COMMENT 'awayScore',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
 
  
  

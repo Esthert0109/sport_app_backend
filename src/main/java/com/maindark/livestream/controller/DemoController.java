@@ -11,6 +11,7 @@ import com.maindark.livestream.sms.SMSService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,21 +41,21 @@ public class DemoController {
         return Result.success(user);
     }
 
-    @GetMapping("/redis/get")
-    public Result<LiveStreamUser> getDataFromRedis(){
-       LiveStreamUser value = redisService.get(UserKey.getById,"3",LiveStreamUser.class);
+    @GetMapping("/redis/get/{redisKey}")
+    public Result<LiveStreamUser> getDataFromRedis(@PathVariable("redisKey")String redisKey){
+       LiveStreamUser value = redisService.get(UserKey.getById,redisKey,LiveStreamUser.class);
        return Result.success(value);
     }
 
-    @GetMapping("/redis/set")
-    public Result<String> setRedis(){
+    @GetMapping("/redis/set/{redisKey}")
+    public Result<String> setRedis(@PathVariable("redisKey")String redisKey){
 
             LiveStreamUser liveStreamUser = new LiveStreamUser();
-            liveStreamUser.setId(Long.parseLong("1234555"));
-            liveStreamUser.setPassword("123459");
+            liveStreamUser.setId(Long.parseLong("123455566778"));
+            liveStreamUser.setPassword("test1234556");
             liveStreamUser.setNickName("hongFeiDu");
             liveStreamUser.setLoginCount(1);
-            Boolean bool =  redisService.set(UserKey.getById,""+3,liveStreamUser);
+            Boolean bool =  redisService.set(UserKey.getById,redisKey,liveStreamUser);
 
 //           String key2 = redisService.get(UserKey.getById,String.class);
 //           return Result.success(key2);

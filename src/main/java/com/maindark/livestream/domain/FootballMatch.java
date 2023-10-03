@@ -18,6 +18,8 @@ public class FootballMatch {
     private Long matchTime;
     private Integer homeTeamId;
     private Integer awayTeamId;
+    private String homeTeamName;
+    private String awayTeamName;
     private Integer homeTeamScore;
     private Integer awayTeamScore;
     /*if there is a line-up 0 no 1 yes*/

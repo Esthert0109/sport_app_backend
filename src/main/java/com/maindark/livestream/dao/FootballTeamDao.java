@@ -9,7 +9,7 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
 
 
 
-    @Insert("insert into football_team(id, competition_id,nameZh,name_en,logo,updated_at)values("
+    @Insert("insert into football_team(id, competition_id,name_zh,name_en,logo,updated_at)values("
             + "#{id}, #{competitionId}, #{nameZh}, #{nameEn}, #{logo}, #{updatedAt})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     public Integer insert(FootballTeam footBallTeam);
@@ -21,6 +21,9 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
     public Integer getMaxUpdatedAt();
 
 
-    @Update("update football_team set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},type=#{type},updated_at=#{updatedAt} ")
+    @Update("update football_team set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},updated_at=#{updatedAt}")
     public void updateDataById(FootballTeam footballTeam);
+
+    @Select("select * from football_team where id=#{id}")
+    FootballTeam getTeam(@Param("id")Integer id);
 }
