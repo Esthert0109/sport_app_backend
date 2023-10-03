@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum StatusEnum {
-    UP("0","normal"),
-    DOWN("1","abnormal");
+    DOWN("0","abnormal"),
+    UP("1","normal");
     private String code;
     private String message;
     StatusEnum(String code,String message){

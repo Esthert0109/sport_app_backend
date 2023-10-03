@@ -1,10 +1,10 @@
 package com.maindark.livestream.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.maindark.livestream.domain.FootballCompetition;
+import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.FootBallService;
+import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +22,9 @@ public class FootballController {
     @Resource
     FootBallService footBallService;
 
-    @GetMapping("/list")
-    public Result<List<Map<String,Integer>>> getList(@RequestParam String competitionDate,@RequestParam Integer id,@RequestParam Integer time){
-        List<Map<String,Integer>> result = footBallService.getFootBallMatchList(competitionDate,id,time);
+    @GetMapping("/match/list")
+    public Result<List<FootballMatchVo>> getList(@RequestParam(required = false) String competitionName, @RequestParam(required = false) String teamName){
+        List<FootballMatchVo> result = footBallService.getFootBallMatchList(competitionName,teamName);
         return Result.success(result);
     }
 }

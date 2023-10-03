@@ -458,7 +458,7 @@ public class FootBallTask {
                            footballMatch = footballMatchDao.getFootballMatchById(matchId);
                        }
                        if(matchStatus != 0) {
-                           footballMatch.setStatus(matchStatus);
+                           footballMatch.setStatusId(matchStatus);
                        }
                        if(homeScore != 0) {
                            footballMatch.setHomeTeamScore(homeScore);
@@ -538,9 +538,16 @@ public class FootBallTask {
                }
             }
         }
+    }
 
+    /* get all coaches */
+    @Scheduled(cron = "")
+    public void getAllFootballCoach(){
 
-
+    }
+    /* get all referees */
+    @Scheduled(cron = "")
+    public void getAllReferees(){
 
     }
 
@@ -563,8 +570,11 @@ public class FootBallTask {
             Integer confirmed = (Integer)results.get("confirmed");
             // 正式阵容，1-是、0-不是
             if(confirmed == 1) {
-                //String homeInfo = (String)results.get("home_formation");
-                //String awayInfo = (String)results.get("away_formation");
+                // home team
+                String homeFormation = (String)results.get("home_formation");
+                String awayFormation= (String)results.get("away_formation");
+                // update football formation
+                footballMatchDao.updateFormation(homeFormation,awayFormation);
                 List<Map<String,Object>> home = (List<Map<String, Object>>) results.get("home");
                 List<Map<String,Object>> away = (List<Map<String, Object>>) results.get("away");
                 if(home != null && home.size() >0) {
@@ -745,7 +755,7 @@ public class FootBallTask {
         footballMatch.setCompetitionId(competitionId);
         footballMatch.setHomeTeamId(homeTeamId);
         footballMatch.setAwayTeamId(awayTeamId);
-        footballMatch.setStatus(statusId);
+        footballMatch.setStatusId(statusId);
         footballMatch.setHomeTeamScore(homeScore);
         footballMatch.setAwayTeamScore(awayScore);
         footballMatch.setLineUp(lineUp);

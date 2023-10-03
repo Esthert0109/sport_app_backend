@@ -15,7 +15,6 @@ public interface FootballMatchLiveDataDao {
             "#{awayTeamName},#{homeAttackNum},#{awayAttackNum},#{homeAttackDangerNum},#{awayAttackDangerNum},#{homePossessionRate},#{awayPossessionRate},#{homeShootGoalNum}" +
             ",#{awayShootGoalNum},#{homeBiasNum},#{awayBiasNum},#{homeCornerKickNum},#{awayCornerKickNum},#{homeRedCardNum},#{awayRedCardNum},#{homeYellowCardNum}," +
             "#{awayYellowCardNum},#{homeScore},#{awayScore})")
-    @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     public Integer insert(FootballMatchLiveData footballMatchLiveData);
 
 

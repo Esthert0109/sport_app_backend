@@ -11,10 +11,11 @@ import java.util.Date;
 public class LiveStreamCollection {
     @Id
     private Integer id;
-    private Integer userId;
-    private Integer competitionId;
-    /* 0 football 1 basketball*/
+    private Long userId;
+    private Integer matchId;
     private String category;
-    private Date createDate;
+    private String status;
+    /*0 football 1 basketball*/
+
 
 }

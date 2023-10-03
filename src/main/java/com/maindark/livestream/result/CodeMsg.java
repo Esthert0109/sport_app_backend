@@ -1,5 +1,7 @@
 package com.maindark.livestream.result;
 
+import org.aspectj.apache.bcel.classfile.Code;
+
 public class CodeMsg {
     private int code;
     private String msg;
@@ -32,6 +34,9 @@ public class CodeMsg {
     public static CodeMsg FOOT_BALL_ERROR = new CodeMsg(500510,"football service is wrong, please connect to our administrator!");
     // nami basketball
     public static CodeMsg BASKET_BALL_ERROR = new CodeMsg(500610,"basketball service is wrong, please connect to our administrator!");
+
+    // football match error
+    public static CodeMsg FOOT_BALL_MATCH_PARAMS_ERROR = new CodeMsg(500710,"competition name or team name can not be empty!");
 
 
     private CodeMsg(int code,String msg){

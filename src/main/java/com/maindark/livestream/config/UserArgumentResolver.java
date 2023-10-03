@@ -33,11 +33,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
        HttpServletResponse response =webRequest.getNativeResponse(HttpServletResponse.class);
        String paramToken = request.getParameter(LiveStreamUserService.COOK_NAME_TOKEN);
        String cookieToken = getCookieValue(request,LiveStreamUserService.COOK_NAME_TOKEN);
-       if(StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken)){
+       String headToken = request.getHeader(LiveStreamUserService.COOK_NAME_TOKEN);
+       if(StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(headToken)){
            throw new GlobalException(CodeMsg.LOGIN_IN);
        }
        String token = StringUtils.isEmpty(paramToken)? cookieToken:paramToken;
-
+       if(token == null) {
+           token = headToken;
+       }
        return liveStreamUserService.getByToken(response,token);
     }
 

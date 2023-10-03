@@ -1,6 +1,9 @@
 package com.maindark.livestream.controller;
 
+import com.maindark.livestream.domain.FootballMatch;
+import com.maindark.livestream.domain.LiveStreamCollection;
 import com.maindark.livestream.domain.LiveStreamUser;
+import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.LiveStreamCollectionService;
 import com.maindark.livestream.vo.LiveStreamCollectionVo;
@@ -18,21 +21,34 @@ public class LiveStreamCollectionController {
 
     @GetMapping("/list")
     public Result<List<LiveStreamCollectionVo>> getAllCollection(LiveStreamUser liveStreamUser) {
-        Long id = liveStreamUser.getId();
-        List<LiveStreamCollectionVo> liveStreamCollectionVos = liveStreamCollectionService.getAllCollectionByUserId(Math.toIntExact(id));
+        Long userId = liveStreamUser.getId();
+        List<LiveStreamCollectionVo> liveStreamCollectionVos = liveStreamCollectionService.getAllCollectionByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
 
-    @GetMapping("/{competitionId}")
-    public Result<Object> getCompetitionByCompetitionId(LiveStreamUser liveStreamUser,@PathVariable Integer competitionId){
-        Object object = liveStreamCollectionService.getMatchById(competitionId);
-        return Result.success(object);
+    @GetMapping("/football/{matchId}")
+    public Result<FootballMatch> getFootballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
+        FootballMatch footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
+        return Result.success(footballMatch);
+    }
+
+    @GetMapping("/basketball/{matchId}")
+    public Result<FootballMatch> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
+        FootballMatch footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
+        return Result.success(footballMatch);
     }
 
     @DeleteMapping("/{id}")
     public Result<Boolean> deleteCollectionById(LiveStreamUser liveStreamUser, @PathVariable Integer id){
         liveStreamCollectionService.deleteCollectionById(id);
         return Result.success(true);
+    }
+
+    @PostMapping("/")
+    public Result<LiveStreamCollection> createCollection(LiveStreamUser liveStreamUser, @RequestBody CollectionForm collectionForm){
+        Long userId = liveStreamUser.getId();
+        LiveStreamCollection collection = liveStreamCollectionService.createCollection(userId,collectionForm);
+        return Result.success(collection);
     }
 
 

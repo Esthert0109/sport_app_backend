@@ -1,6 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.FootballTeam;
+import com.maindark.livestream.vo.FootballTeamVo;
 import org.apache.ibatis.annotations.*;
 
 
@@ -26,4 +27,7 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
 
     @Select("select * from football_team where id=#{id}")
     FootballTeam getTeam(@Param("id")Integer id);
+
+    @Select("select id,name_zh as team_name,logo from football_team where id=#{id}")
+    public FootballTeamVo getTeamLogoAndNameById(@Param("id")Integer id);
 }

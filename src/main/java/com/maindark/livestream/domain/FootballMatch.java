@@ -14,7 +14,7 @@ public class FootballMatch {
     private Integer seasonId;
     private Integer competitionId;
     /* match status */
-    private Integer status;
+    private Integer statusId;
     private Long matchTime;
     private Integer homeTeamId;
     private Integer awayTeamId;
@@ -22,6 +22,8 @@ public class FootballMatch {
     private String awayTeamName;
     private Integer homeTeamScore;
     private Integer awayTeamScore;
+    private String homeFormation;
+    private String awayFormation;
     /*if there is a line-up 0 no 1 yes*/
     private Integer lineUp;
     private Long updatedAt;

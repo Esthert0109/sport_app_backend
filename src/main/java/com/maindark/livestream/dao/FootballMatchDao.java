@@ -1,7 +1,10 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.FootballMatch;
+import com.maindark.livestream.vo.FootballMatchVo;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface FootballMatchDao extends BasicDao<FootballMatch> {
@@ -9,7 +12,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
 
     @Insert("insert into football_match(id,season_id,competition_id,status_id,match_time,home_team_id,away_team_id,home_team_name,away_team_name,home_team_score,away_team_score,line_up,updated_at)values("
-            + "#{id},#{seasonId},#{competitionId},#{status},#{matchTime},#{homeTeamId},#{awayTeamId},#{homeTeamName},#{awayTeamName},#{homeTeamScore},#{awayTeamScore},#{lineUp},#{updatedAt})")
+            + "#{id},#{seasonId},#{competitionId},#{statusId},#{matchTime},#{homeTeamId},#{awayTeamId},#{homeTeamName},#{awayTeamName},#{homeTeamScore},#{awayTeamScore},#{lineUp},#{updatedAt})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     public Integer insert(FootballMatch footballMatch);
 
@@ -19,7 +22,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     @Select("select max(updated_at) from football_match")
     Integer getMaxUpdatedAt();
 
-    @Update("update football_match set season_id=#{seasonId},competition_id=#{competitionId},status_id=#{status},match_time=#{matchTime},home_team_score=#{homeTeamScore},away_team_score=#{awayTeamScore},updated_at=#{updatedAt} where id=#{id}")
+    @Update("update football_match set season_id=#{seasonId},competition_id=#{competitionId},status_id=#{statusId},match_time=#{matchTime},home_team_score=#{homeTeamScore},away_team_score=#{awayTeamScore},updated_at=#{updatedAt} where id=#{id}")
     public void updateDataById(FootballMatch footballMatch);
 
     @Select("select line_up from football_match where id=#{id}")
@@ -28,4 +31,12 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     @Select("select * from football_match where id=#{id}")
     public FootballMatch getFootballMatchById(@Param("id")Integer id);
 
+    @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id,t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where fc.name_zh like'%${competitionName}%'  and t1.status_id in(2,3,4,5) and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+    List<FootballMatchVo> getFootballMatchByCompetitionName(@Param("competitionName") String competitionName, @Param("nowSeconds")Long nowSeconds, @Param("tomorrowSeconds")Long tomorrowSeconds);
+
+    @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id,t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id from football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.home_team_name like '%${teamName}%' or t1.away_team_name like'%${teamName}%' and t1.match_time >#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+    List<FootballMatchVo> getFootballMatchByTeamName(@Param("teamName") String teamName,@Param("nowSeconds")Long nowSeconds,@Param("tomorrowSeconds")Long tomorrowSeconds);
+
+    @Update("update football_match set home_formation=#{homeFormation},away_formation=#{awayFormation} where id=#{matchId}")
+    void updateFormation(@Param("homeFormation") String homeFormation, @Param("awayFormation") String awayFormation);
 }

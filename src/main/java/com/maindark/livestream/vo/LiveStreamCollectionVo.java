@@ -6,10 +6,10 @@ import lombok.Data;
 public class LiveStreamCollectionVo {
 
     private Integer id;
-    private Integer userId;
-    private Integer competitionId;
+    private Long userId;
+    private Integer matchId;
     /* 0 football 1 basketball*/
     private String category;
-    private String competitionName;
+    private String status;
 
 }

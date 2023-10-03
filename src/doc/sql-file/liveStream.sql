@@ -27,17 +27,27 @@ CREATE TABLE `live_stream_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-
+DROP TABLE IF EXISTS `live_stream_message`;
 CREATE TABLE `live_stream_message` (
   `id` int NOT NULL auto_increment COMMENT 'message id',
   `summary` varchar(255)  COMMENT 'summary',
   `content` varchar(255) COMMENT 'content',
-  `status` char(2) DEFAULT '0' COMMENT ' 0 up 1 down',
+  `status` char(2) DEFAULT '0' COMMENT ' 0 down 1 up',
   `create_date` datetime DEFAULT current_timestamp()  COMMENT '注册时间',
   `edit_date` datetime DEFAULT current_timestamp() COMMENT 'edit time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+DROP TABLE IF EXISTS `live_stream_collection`;
+CREATE TABLE `live_stream_collection` (
+  `id` int NOT NULL auto_increment COMMENT 'message id',
+  `user_id` bigint  COMMENT 'user id',
+  `match_id` int COMMENT 'match_id',
+  `category` char(2) COMMENT '0 football 1 basketball',
+  `status` char(2) DEFAULT '1' COMMENT ' 0 down 1 up',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `football_competition`;
 CREATE TABLE `football_competition` (
@@ -57,8 +67,8 @@ CREATE TABLE `football_match` (
   `id` int NOT NULL  COMMENT 'id',
   `season_id` int COMMENT 'season id',
   `competition_id` int NOT NULL COMMENT 'competition_id',
-  `status_id` int  COMMENT 'status 0 比赛异常 1 未开赛 2 上半场 3 中场 4 下半场 5 
-  加时赛 6加时赛(弃用) 7 点球决赛 8 完场 9 推迟 10 中断 11 腰斩 12 取消 13 待定 ',
+  `status_id` int  COMMENT 'status 0 比赛异常 1 未开赛 2 上半场 3 中场 4 下半场 5
+   加时赛 6加时赛(弃用) 7 点球决赛 8 完场 9 推迟 10 中断 11 腰斩 12 取消 13 待定 ',
   `match_time` bigint COMMENT 'match time',
   `home_team_id` int  COMMENT ' home team id',
   `away_team_id` int  COMMENT ' away team id',
@@ -66,6 +76,9 @@ CREATE TABLE `football_match` (
   `away_team_name` varchar(255) COMMENT 'away home name',
   `home_team_score` int  COMMENT ' home team score',
   `away_team_score` int  COMMENT ' away team score',
+  `home_formation` varchar(255) COMMENT 'home formation',
+  `away_formation` varchar(255) COMMENT 'away formation',
+  `referee_id` int COMMENT 'referee id',
   `line_up` int COMMENT 'if there is a line-up, 0 no 1 yes',
   `updated_at` bigint   COMMENT 'update time',
   PRIMARY KEY (`id`)
