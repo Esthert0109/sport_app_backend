@@ -1,0 +1,3 @@
+GitHub:username:mindark2023
+Github:password:pass:mindark123456
+Gmail:mindark20230000@gmail.com

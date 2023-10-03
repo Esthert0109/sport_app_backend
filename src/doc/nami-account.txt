@@ -1,0 +1,3 @@
+Nami-Website:https://www.nami.com
+Nami-test-account:ceshitiyuceshi@gmail.com
+Nami-test-password:ceshitiyu@

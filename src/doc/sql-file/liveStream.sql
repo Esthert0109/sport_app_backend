@@ -1,0 +1,164 @@
+
+
+--mysql:account:root password:livestream:ma6oH
+CREATE USER 'springUser'@'%' IDENTIFIED BY 'livestream:ma6oH';
+GRANT ALL PRIVILEGES ON *.* TO 'springUser'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+GRANT SELECT, INSERT ON live_stream.* TO ‘springUser’@’localhost’;
+
+
+
+
+DROP TABLE IF EXISTS `live_stream_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `live_stream_user` (
+  `id` bigint(20) NOT NULL COMMENT '用户ID，手机号码',
+  `area_code` varchar(8) default '60' COMMENT ' area code',
+  `nickname` varchar(255) NOT NULL,
+  `password` varchar(32) DEFAULT NULL COMMENT 'MD5(MD5(pass明文+固定salt) + salt)',
+  `salt` varchar(10) DEFAULT NULL,
+  `head` varchar(128) DEFAULT NULL COMMENT '头像，云存储的ID',
+  `register_date` datetime DEFAULT NULL COMMENT '注册时间',
+  `last_login_date` datetime DEFAULT NULL COMMENT 'last time 登录时间',
+  `login_count` int(11) DEFAULT '0' COMMENT '登录次数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE `live_stream_message` (
+  `id` int NOT NULL auto_increment COMMENT 'message id',
+  `summary` varchar(255)  COMMENT 'summary',
+  `content` varchar(255) COMMENT 'content',
+  `status` char(2) DEFAULT '0' COMMENT ' 0 up 1 down',
+  `create_date` datetime DEFAULT current_timestamp()  COMMENT '注册时间',
+  `edit_date` datetime DEFAULT current_timestamp() COMMENT 'edit time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `football_competition`;
+CREATE TABLE `football_competition` (
+  `id` int NOT NULL  COMMENT 'id',
+  `logo` varchar(255) COMMENT 'logo',
+  `name_zh` varchar(255) NOT NULL COMMENT 'chinese name',
+  `name_en` varchar(255)  COMMENT 'english name',
+  `short_name_zh` varchar(255) COMMENT 'short chinese name',
+  `short_name_en` int  COMMENT 'short english name',
+  `type` int  COMMENT 'type 赛事类型，0-未知、1-联赛、2-杯赛、3-友谊赛 ',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `football_match`;
+CREATE TABLE `football_match` (
+  `id` int NOT NULL  COMMENT 'id',
+  `season_id` int COMMENT 'season id',
+  `competition_id` int NOT NULL COMMENT 'competition_id',
+  `status_id` int  COMMENT 'status 0 比赛异常 1 未开赛 2 上半场 3 中场 4 下半场 5 
+  加时赛 6加时赛(弃用) 7 点球决赛 8 完场 9 推迟 10 中断 11 腰斩 12 取消 13 待定 ',
+  `match_time` bigint COMMENT 'match time',
+  `home_team_id` int  COMMENT ' home team id',
+  `away_team_id` int  COMMENT ' away team id',
+  `home_team_name` varchar(255) COMMENT 'home team name',
+  `away_team_name` varchar(255) COMMENT 'away home name',
+  `home_team_score` int  COMMENT ' home team score',
+  `away_team_score` int  COMMENT ' away team score',
+  `line_up` int COMMENT 'if there is a line-up, 0 no 1 yes',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `football_team`;
+CREATE TABLE `football_team` (
+  `id` int NOT NULL  COMMENT 'id',
+  `competition_id` int NOT NULL  COMMENT 'competition_id',
+  `name_zh` varchar(255) NOT NULL COMMENT 'chinese team name',
+  `name_en` varchar(255)  COMMENT 'english name',
+  `logo` varchar(255) COMMENT 'logo',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `update_football_data`;
+CREATE TABLE `update_football_data` (
+  `id` int NOT NULL auto_increment  COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `season_id` int COMMENT 'season id',
+  `competition_id` int NOT NULL COMMENT 'competition_id',
+  `pub_time` int  COMMENT 'pub time',
+  `update_time` bigint  COMMENT ' update time',
+  `unique_key` bigint COMMENT 'unique key=match_id + season_id + competition_id + put_time + update_time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `home_match_line_up`;
+CREATE TABLE `home_match_line_up` (
+  `id` int NOT NULL   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `team_id` int COMMENT 'team id',
+  `first` int COMMENT 'first 0 no 1 yes ',
+  `captain` int COMMENT 'captain 0 no 1 yes',
+  `player_name` varchar(255) NOT NULL COMMENT 'player name',
+  `player_logo` varchar(255)  NOT null COMMENT 'player logo',
+  `shirt_number` int COMMENT 'shirt number',
+  `position` varchar(255)  COMMENT '球员位置，F前锋、M中场、D后卫、G守门员、其他为未知',
+  `rating` varchar(8) COMMENT 'rating',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `away_match_line_up`;
+CREATE TABLE `away_match_line_up` (
+  `id` int NOT NULL   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `team_id` int COMMENT 'team id',
+  `first` int COMMENT 'first 0 no 1 yes ',
+  `captain` int COMMENT 'captain 0 no 1 yes',
+  `player_name` varchar(255) NOT NULL COMMENT 'player name',
+  `player_logo` varchar(255)  NOT null COMMENT 'player logo',
+  `shirt_number` int COMMENT 'shirt number',
+  `position` varchar(255)  COMMENT '球员位置，F前锋、M中场、D后卫、G守门员、其他为未知',
+  `rating` varchar(8) COMMENT 'rating',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `football_match_live_data`;
+CREATE TABLE `football_match_live_data` (
+  `id` int auto_increment NOT NULL   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `status_id` int COMMENT 'status id',
+  `home_team_id` int COMMENT 'home team id ',
+  `away_team_id` int COMMENT 'away team id',
+  `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
+  `away_team_name` varchar(255) NOT NULL COMMENT 'away team name',
+  `home_attack_num` int COMMENT 'homeAttackNum',
+  `away_attack_num` int COMMENT 'awayAttackNum',
+  `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
+  `away_attack_danger_num` int COMMENT 'awayAttackDangerNum',
+  `home_possession_rate` int COMMENT 'homePossessionRate',
+  `away_possession_rate` int COMMENT 'awayPossessionRate',
+  `home_shoot_goal_num` int COMMENT 'homeShootGoalNum',
+  `away_shoot_goal_num` int COMMENT 'awayShootGoalNum',
+  `home_bias_num` int COMMENT 'homeBiasNum',
+  `away_bias_num` int COMMENT 'awayBiasNum',
+  `home_corner_kick_num` int COMMENT 'homeCornerKickNum',
+  `away_corner_kick_num` int COMMENT 'awayCornerKickNum',
+  `home_red_card_num` int COMMENT 'homeRedCardNum',
+  `away_red_card_num` int COMMENT 'awayRedCardNum',
+  `home_yellow_card_num` int COMMENT 'homeYellowCardNum',
+  `away_yellow_card_num` int COMMENT 'awayYellowCardNum',
+  `home_score` int COMMENT 'homeScore',
+  `away_score` int COMMENT 'awayScore',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+ 
+ 
+ 

@@ -1,0 +1,28 @@
+tar -zvxf redis-6.2.13.tar.gz
+mv redis-6.2.13 /usr/local/redis
+
+cd redis
+yum install gcc
+yum install tcl
+make distclean
+make
+make test
+make install
+
+vi redis.conf
+
+modif daemonize yes | bind 0.0.0.0 | requirepass 123456
+
+cd /usr/local/redis/utils
+
+./install_server.sh
+
+/usr/local/redis/redis.conf
+/usr/local/redis/redis.log
+/usr/local/redis/data
+
+chkconfig --list | grep redis
+
+-- uninstall redis
+rm -fr etc/redis/ /var/log/redis_* /etc/init.d/redis_6379 /usr/local/bin/redis*
+rm -rf /usr/local/redis
