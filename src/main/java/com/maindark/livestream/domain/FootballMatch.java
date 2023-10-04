@@ -18,6 +18,7 @@ public class FootballMatch {
     private Long matchTime;
     private Integer homeTeamId;
     private Integer awayTeamId;
+    private Integer refereeId;
     private String homeTeamName;
     private String awayTeamName;
     private Integer homeTeamScore;

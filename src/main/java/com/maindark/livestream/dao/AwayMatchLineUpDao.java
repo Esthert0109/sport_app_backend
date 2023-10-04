@@ -15,7 +15,7 @@ public interface AwayMatchLineUpDao {
     @Update("update away_match_line_up set first=#{first},captain=#{captain},player_name=#{playerName},player_logo=#{playerLogo},shirt_number=#{shirtNumber},position=#{position},rating=#{rating} where match_id = #{matchId}")
     public void updateAwayMatchLineUp(AwayMatchLineUp awayMatchLineUp);
 
-    @Select("select id from away_match_line_up where match_id=#{matchId}")
-    public AwayMatchLineUp getAwayMatchLineUp(@Param("matchId")Integer matchId);
+    @Select("select * from away_match_line_up where id=#{id} and match_id=#{matchId}")
+    public AwayMatchLineUp getAwayMatchLineUp(@Param("id")Integer id,@Param("matchId")Integer matchId);
 }
 

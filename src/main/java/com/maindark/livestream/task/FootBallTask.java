@@ -541,12 +541,12 @@ public class FootBallTask {
     }
 
     /* get all coaches */
-    @Scheduled(cron = "")
+    //@Scheduled(cron = "")
     public void getAllFootballCoach(){
 
     }
     /* get all referees */
-    @Scheduled(cron = "")
+   // @Scheduled(cron = "")
     public void getAllReferees(){
 
     }
@@ -567,39 +567,41 @@ public class FootBallTask {
         Integer code = (Integer) resultObj.get("code");
         if(code == 0) {
             Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
-            Integer confirmed = (Integer)results.get("confirmed");
-            // 正式阵容，1-是、0-不是
-            if(confirmed == 1) {
-                // home team
-                String homeFormation = (String)results.get("home_formation");
-                String awayFormation= (String)results.get("away_formation");
-                // update football formation
-                footballMatchDao.updateFormation(homeFormation,awayFormation);
-                List<Map<String,Object>> home = (List<Map<String, Object>>) results.get("home");
-                List<Map<String,Object>> away = (List<Map<String, Object>>) results.get("away");
-                if(home != null && home.size() >0) {
-                    home.stream().forEach(ml ->{
-                        HomeMatchLineUp homeMatchLineUp = getFootballHomeMatchLineUp(ml,matchId);
-                        HomeMatchLineUp homeMatchLineUpFromDb = homeMatchLineUpDao.getHomeMatchLineUp(matchId);
-                        if(homeMatchLineUpFromDb == null) {
-                            homeMatchLineUpDao.insert(homeMatchLineUp);
-                        } else {
-                            homeMatchLineUpDao.updateHomeMatchLineUp(homeMatchLineUp);
-                        }
+            if(results!= null && results.size() >0) {
+                Integer confirmed = (Integer)results.get("confirmed");
+                // 正式阵容，1-是、0-不是
+                if(confirmed == 1) {
+                    // home team
+                    String homeFormation = (String)results.get("home_formation");
+                    String awayFormation= (String)results.get("away_formation");
+                    // update football formation
+                    footballMatchDao.updateFormation(homeFormation,awayFormation,matchId);
+                    List<Map<String,Object>> home = (List<Map<String, Object>>) results.get("home");
+                    List<Map<String,Object>> away = (List<Map<String, Object>>) results.get("away");
+                    if(home != null && home.size() >0) {
+                        home.stream().forEach(ml ->{
+                            HomeMatchLineUp homeMatchLineUp = getFootballHomeMatchLineUp(ml,matchId);
+                            HomeMatchLineUp homeMatchLineUpFromDb = homeMatchLineUpDao.getHomeMatchLineUp(homeMatchLineUp.getId(),matchId);
+                            if(homeMatchLineUpFromDb == null) {
+                                homeMatchLineUpDao.insert(homeMatchLineUp);
+                            } else {
+                                homeMatchLineUpDao.updateHomeMatchLineUp(homeMatchLineUp);
+                            }
 
-                    });
-                }
-                if(away != null && away.size() >0) {
-                    away.stream().forEach(ml ->{
-                        AwayMatchLineUp awayMatchLineUp = getFootballAwayMatchLineUp(ml,matchId);
-                        AwayMatchLineUp awayMatchLineUpFromDb = awayMatchLineUpDao.getAwayMatchLineUp(matchId);
-                        if(awayMatchLineUpFromDb == null) {
-                            awayMatchLineUpDao.insert(awayMatchLineUp);
-                        } else {
-                            awayMatchLineUpDao.updateAwayMatchLineUp(awayMatchLineUp);
-                        }
+                        });
+                    }
+                    if(away != null && away.size() >0) {
+                        away.stream().forEach(ml ->{
+                            AwayMatchLineUp awayMatchLineUp = getFootballAwayMatchLineUp(ml,matchId);
+                            AwayMatchLineUp awayMatchLineUpFromDb = awayMatchLineUpDao.getAwayMatchLineUp(awayMatchLineUp.getId(),matchId);
+                            if(awayMatchLineUpFromDb == null) {
+                                awayMatchLineUpDao.insert(awayMatchLineUp);
+                            } else {
+                                awayMatchLineUpDao.updateAwayMatchLineUp(awayMatchLineUp);
+                            }
 
-                    });
+                        });
+                    }
                 }
             }
         }

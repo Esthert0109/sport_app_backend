@@ -11,8 +11,8 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
 
 
-    @Insert("insert into football_match(id,season_id,competition_id,status_id,match_time,home_team_id,away_team_id,home_team_name,away_team_name,home_team_score,away_team_score,line_up,updated_at)values("
-            + "#{id},#{seasonId},#{competitionId},#{statusId},#{matchTime},#{homeTeamId},#{awayTeamId},#{homeTeamName},#{awayTeamName},#{homeTeamScore},#{awayTeamScore},#{lineUp},#{updatedAt})")
+    @Insert("insert into football_match(id,season_id,competition_id,status_id,match_time,home_team_id,away_team_id,referee_id,home_team_name,away_team_name,home_team_score,away_team_score,line_up,updated_at)values("
+            + "#{id},#{seasonId},#{competitionId},#{statusId},#{matchTime},#{homeTeamId},#{awayTeamId},#{refereeId},#{homeTeamName},#{awayTeamName},#{homeTeamScore},#{awayTeamScore},#{lineUp},#{updatedAt})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     public Integer insert(FootballMatch footballMatch);
 
@@ -38,5 +38,5 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     List<FootballMatchVo> getFootballMatchByTeamName(@Param("teamName") String teamName,@Param("nowSeconds")Long nowSeconds,@Param("tomorrowSeconds")Long tomorrowSeconds);
 
     @Update("update football_match set home_formation=#{homeFormation},away_formation=#{awayFormation} where id=#{matchId}")
-    void updateFormation(@Param("homeFormation") String homeFormation, @Param("awayFormation") String awayFormation);
+    void updateFormation(@Param("homeFormation") String homeFormation, @Param("awayFormation") String awayFormation,@Param("matchId")Integer matchId);
 }
