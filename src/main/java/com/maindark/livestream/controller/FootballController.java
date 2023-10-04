@@ -39,4 +39,10 @@ public class FootballController {
         Map<String,Object> map = footBallService.getMatchLineUp(matchId);
         return Result.success(map);
     }
+
+    @GetMapping("/match/details")
+    public Result<Map<String,Object>> getMatchDetails(@RequestParam("matchId")Integer matchId){
+        Map<String,Object> map = footBallService.getMatchLive(matchId);
+        return Result.success(map);
+    }
 }

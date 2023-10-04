@@ -22,6 +22,7 @@ public class NamiConfig {
     private String updateDataUrl;
     private String footballMatchLiveUrl;
     private String footballLineUpUrl;
+    private String footballLiveUrl;
 
 
 }

@@ -5,6 +5,8 @@ import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.*;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.nami.NamiConfig;
+import com.maindark.livestream.redis.FootballMatchKey;
+import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
@@ -37,6 +39,12 @@ public class FootBallService {
 
   @Resource
   AwayMatchLineUpDao awayMatchLineUpDao;
+
+  @Resource
+  RedisService redisService;
+
+  @Resource
+  FootballMatchLiveDataDao footballMatchLiveDataDao;
 
 
   private Integer maxCompetitionIdFromApi = 0;
@@ -99,6 +107,7 @@ public class FootBallService {
       Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
       List<Map<String,Object>> matchList = (List<Map<String,Object>>)results.get("match");
       List<Map<String,Object>> competitionList = (List<Map<String,Object>>)results.get("competition");
+      List<Map<String,Object>> teamList = (List<Map<String,Object>>)results.get("team");
 
       competitionList.stream().forEach(ml ->{
         FootballCompetition footballCompetition = new FootballCompetition();
@@ -110,7 +119,11 @@ public class FootBallService {
         footballCompetition.setNameZh(nameZh);
         footballCompetition.setLogo(logo);
         footballCompetition.setType(1);
-        footballCompetitionDao.insert(footballCompetition);
+        FootballCompetition footballCompetitionFromDb = footballCompetitionDao.getFootballCompetitionById(competitionId);
+        if(footballCompetitionFromDb == null) {
+          footballCompetitionDao.insert(footballCompetition);
+        }
+
       });
       matchList.stream().forEach(ml ->{
         FootballMatch footballMatch = new FootballMatch();
@@ -183,7 +196,27 @@ public class FootBallService {
         if(awayTeam != null) {
           footballMatch.setAwayTeamName(awayTeam.getNameZh());
         }
-        footballMatchDao.insert(footballMatch);
+        FootballMatch footballMatchFromDb = footballMatchDao.getFootballMatchById(id);
+        if(footballMatchFromDb == null) {
+          footballMatchDao.insert(footballMatch);
+        }
+
+      });
+      teamList.stream().forEach(ml ->{
+        FootballTeam footballTeam = new FootballTeam();
+        Integer teamId = (Integer)ml.get("id");
+        String name = (String)ml.get("name");
+        String logo = (String)ml.get("logo");
+        footballTeam.setId(teamId);
+        footballTeam.setNameZh(name);
+        footballTeam.setLogo(logo);
+        footballTeam.setCompetitionId(275);
+        FootballTeam footballTeamFromDb = footballTeamDao.getTeam(teamId);
+        if(footballTeamFromDb == null) {
+          footballTeamDao.insert(footballTeam);
+        }
+
+
       });
       return competitionList;
     }
@@ -212,6 +245,7 @@ public class FootBallService {
     url += "&id="+matchId;
     String result = HttpUtil.getNaMiData(url);
     Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+    log.info("nami result:{}",result);
     Integer code = (Integer) resultObj.get("code");
     if(code == 0) {
       Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
@@ -308,4 +342,203 @@ public class FootBallService {
     return awayMatchLineUp;
   }
 
+  public Map<String, Object> getMatchLive(Integer s) {
+    String url = getNormalUrl(namiConfig.getFootballMatchLiveUrl());
+    String result = HttpUtil.getNaMiData(url);
+    Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+    Integer code = (Integer) resultObj.get("code");
+    if(code == 0)
+    {
+      List<Map<String,Object>> results = (List<Map<String,Object>>)resultObj.get("results");
+      if(results != null && results.size() >0)
+      {
+        int size = results.size();
+        for(int i=0;i<size;i++)
+        {
+          Map<String,Object> ml = (Map<String,Object>)results.get(i);
+          Integer matchStatus = 0;
+          Integer homeScore = 0;
+          Integer awayScore = 0;
+          Integer homeAttackNum = 0;
+          Integer awayAttackNum = 0;
+          Integer homeAttackDangerNum = 0;
+          Integer awayAttackDangerNum = 0;
+          Integer homePossessionRate = 0;
+          Integer awayPossessionRate = 0;
+          Integer homeShootGoalNum = 0;
+          Integer awayShootGoalNum = 0;
+          Integer homeBiasNum = 0;
+          Integer awayBiasNum = 0;
+          Integer homeCornerKickNum = 0;
+          Integer awayCornerKickNum = 0;
+          Integer homeRedCardNum = 0;
+          Integer awayRedCardNum = 0;
+          Integer homeYellowCardNum = 0;
+          Integer awayYellowCardNum = 0;
+          Integer matchId = (Integer)ml.get("id");
+          List<Object> score = (List<Object>) ml.get("score");
+          if(score != null && score.size() >0)
+          {
+            matchStatus = (Integer)score.get(1);
+            List<Integer> homeScores = (List<Integer>) score.get(2);
+            if(homeScores != null && homeScores.size() >0) {
+              Integer score0 = homeScores.get(0);
+              Integer score1 = homeScores.get(5);
+              Integer score2 = homeScores.get(6);
+              if(score1 != 0) {
+                homeScore = score1 + score2;
+              }else if(score1 == 0) {
+                homeScore = score0 + score2;
+              }
+
+            }
+            List<Integer> awayScores = (List<Integer>) score.get(3);
+            if(awayScores != null && awayScores.size() >0) {
+              Integer score0 = awayScores.get(0);
+              Integer score1 = awayScores.get(5);
+              Integer score2 = awayScores.get(6);
+              if(score1 != 0) {
+                awayScore = score1 + score2;
+              }else if(score1 == 0) {
+                awayScore = score0 + score2;
+              }
+            }
+          }
+
+          List<Map<String,Object>> statsList = (List<Map<String,Object>>)ml.get("stats");
+          if(statsList != null && statsList.size() >0)
+          {
+            int statSize = statsList.size();
+            for(int j=0;j<statSize;j++)
+            {
+              Map<String,Object> mp = statsList.get(j);
+              Integer type = (Integer)mp.get("type");
+              Integer home = (Integer)mp.get("home");
+              Integer away = (Integer)mp.get("away");
+              switch (type)
+              {
+                // attackNum
+                case 23:
+                  homeAttackNum = home;
+                  awayAttackNum = away;
+                  break;
+                case 24:
+                  homeAttackDangerNum = home;
+                  awayAttackDangerNum = away;
+                  break;
+                case 25:
+                  homePossessionRate = home;
+                  awayPossessionRate = away;
+                  break;
+                case 21:
+                  homeShootGoalNum = home;
+                  awayShootGoalNum = away;
+                  break;
+                case 22:
+                  homeBiasNum = home;
+                  awayBiasNum = away;
+                  break;
+                case 2:
+                  homeCornerKickNum = home;
+                  awayCornerKickNum = away;
+                  break;
+                case 3:
+                  homeYellowCardNum = home;
+                  awayYellowCardNum = away;
+                  break;
+                case 4:
+                  homeRedCardNum = home;
+                  awayRedCardNum = away;
+                  break;
+              }
+            }
+          }
+
+          /*FootballMatch footballMatch = redisService.get(FootballMatchKey.matchKey,String.valueOf(matchId),FootballMatch.class);
+          if(footballMatch == null) {
+            footballMatch = footballMatchDao.getFootballMatchById(matchId);
+          }
+          if(matchStatus != 0) {
+            footballMatch.setStatusId(matchStatus);
+          }
+          if(homeScore != 0) {
+            footballMatch.setHomeTeamScore(homeScore);
+          }
+          if(awayScore !=0) {
+            footballMatch.setAwayTeamScore(awayScore);
+          }
+          // update redis cache
+          redisService.set(FootballMatchKey.matchKey,String.valueOf(matchId),footballMatch);
+          // update table football_match
+          footballMatchDao.updateDataById(footballMatch);*/
+
+          // football_match_live_data
+          FootballMatchLiveData footballMatchLiveData = redisService.get(FootballMatchKey.matchLiveKey,String.valueOf(matchId),FootballMatchLiveData.class);
+          if(footballMatchLiveData == null) {
+            FootballMatchLiveData footballMatchLiveDataFromDb = footballMatchLiveDataDao.getFootballMatchLiveData(matchId);
+            if(footballMatchLiveDataFromDb == null){
+              footballMatchLiveData = new FootballMatchLiveData();
+              footballMatchLiveData.setMatchId(matchId);
+              footballMatchLiveData.setStatusId(matchStatus);
+              footballMatchLiveData.setHomeScore(homeScore);
+              footballMatchLiveData.setAwayScore(awayScore);
+              footballMatchLiveData.setHomeTeamId(0);
+              footballMatchLiveData.setAwayTeamId(0);
+              footballMatchLiveData.setHomeTeamName("sdfdfd");
+              footballMatchLiveData.setAwayTeamName("dfddfd");
+              footballMatchLiveData.setHomeAttackNum(homeAttackNum);
+              footballMatchLiveData.setAwayAttackNum(awayAttackNum);
+              footballMatchLiveData.setHomeAttackDangerNum(homeAttackDangerNum);
+              footballMatchLiveData.setAwayAttackDangerNum(awayAttackDangerNum);
+              footballMatchLiveData.setHomeBiasNum(homeBiasNum);
+              footballMatchLiveData.setAwayBiasNum(awayBiasNum);
+              footballMatchLiveData.setHomePossessionRate(homePossessionRate);
+              footballMatchLiveData.setAwayPossessionRate(awayPossessionRate);
+              footballMatchLiveData.setHomeCornerKickNum(homeCornerKickNum);
+              footballMatchLiveData.setAwayCornerKickNum(awayCornerKickNum);
+              footballMatchLiveData.setHomeShootGoalNum(homeShootGoalNum);
+              footballMatchLiveData.setAwayShootGoalNum(awayShootGoalNum);
+              footballMatchLiveData.setHomeYellowCardNum(homeYellowCardNum);
+              footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
+              footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
+              footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
+              footballMatchLiveDataDao.insert(footballMatchLiveData);
+            }
+          } else {
+            footballMatchLiveData.setMatchId(matchId);
+            footballMatchLiveData.setStatusId(matchStatus);
+            footballMatchLiveData.setHomeScore(homeScore);
+            footballMatchLiveData.setAwayScore(awayScore);
+            footballMatchLiveData.setHomeTeamId(0);
+            footballMatchLiveData.setAwayTeamId(0);
+            footballMatchLiveData.setHomeTeamName("sfdsfdf");
+            footballMatchLiveData.setAwayTeamName("sdfdfd");
+            footballMatchLiveData.setHomeAttackNum(homeAttackNum);
+            footballMatchLiveData.setAwayAttackNum(awayAttackNum);
+            footballMatchLiveData.setHomeAttackDangerNum(homeAttackDangerNum);
+            footballMatchLiveData.setAwayAttackDangerNum(awayAttackDangerNum);
+            footballMatchLiveData.setHomeBiasNum(homeBiasNum);
+            footballMatchLiveData.setAwayBiasNum(awayBiasNum);
+            footballMatchLiveData.setHomePossessionRate(homePossessionRate);
+            footballMatchLiveData.setAwayPossessionRate(awayPossessionRate);
+            footballMatchLiveData.setHomeCornerKickNum(homeCornerKickNum);
+            footballMatchLiveData.setAwayCornerKickNum(awayCornerKickNum);
+            footballMatchLiveData.setHomeShootGoalNum(homeShootGoalNum);
+            footballMatchLiveData.setAwayShootGoalNum(awayShootGoalNum);
+            footballMatchLiveData.setHomeYellowCardNum(homeYellowCardNum);
+            footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
+            footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
+            footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
+
+            // delete redis data and reset data later
+            redisService.delete(FootballMatchKey.matchLiveKey,String.valueOf(matchId));
+            footballMatchLiveDataDao.updateFootballMatchLiveData(footballMatchLiveData);
+          }
+          // put footballMatchLiveData into redis
+          redisService.set(FootballMatchKey.matchLiveKey,String.valueOf(matchId),footballMatchLiveData);
+        }
+      }
+    }
+     return null;
+  }
 }

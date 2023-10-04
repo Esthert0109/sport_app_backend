@@ -169,6 +169,33 @@ CREATE TABLE `football_match_live_data` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `football_live_address`;
+CREATE TABLE `football_live_address` (
+  `id` int NOT NULL auto_increment   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `match_time` bigint COMMENT 'match time',
+  `comp` varchar(255) COMMENT 'competition description ',
+  `home_team` varchar(255) COMMENT 'home team description',
+  `away_team` varchar(255)  COMMENT 'away team description',
+  `mobile_link` varchar(255)  COMMENT 'mobile link',
+  `pc_link` varchar(255) COMMENT 'pc link',
+  `create_date` datetime DEFAULT current_timestamp()  COMMENT 'create time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `football_live_video`;
+CREATE TABLE `football_live_video` (
+  `id` int NOT NULL auto_increment   COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `type` int COMMENT '类型，1-集锦、2-录像',
+  `title` varchar(255) COMMENT 'title',
+  `mobile_link` varchar(255)  COMMENT 'mobile link',
+  `pc_link` varchar(255) COMMENT 'pc link',
+  `create_date` datetime DEFAULT current_timestamp()  COMMENT 'create time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 
 

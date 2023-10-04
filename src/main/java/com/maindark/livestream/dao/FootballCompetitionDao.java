@@ -25,4 +25,7 @@ public interface FootballCompetitionDao extends BasicDao<FootballCompetition> {
 
     @Select("select * from football_competition")
     public List<FootballCompetition> getAll();
+
+    @Select("select * from football_competition where id=#{competitionId}")
+    FootballCompetition getFootballCompetitionById(@Param("competitionId") Integer competitionId);
 }

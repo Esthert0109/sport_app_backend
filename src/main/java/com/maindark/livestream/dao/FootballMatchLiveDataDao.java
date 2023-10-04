@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface FootballMatchLiveDataDao {
 
-    @Insert("insert into football_match_live_data(id,match_id,status_id,home_team_id,away_team_id," +
+    @Insert("insert into football_match_live_data(match_id,status_id,home_team_id,away_team_id," +
             "home_team_name,away_team_name,home_attack_num,away_attack_num,home_attack_danger_num,away_attack_danger_num,home_possession_rate,away_possession_rate," +
-            "home_shoot_goal_num,away_shoot_goal_num,home_bias_num,away_bias_num,home_corner_kick_num,away_shoot_goal_num,home_red_card_num,away_red_card_num," +
+            "home_shoot_goal_num,away_shoot_goal_num,home_bias_num,away_bias_num,home_corner_kick_num,away_corner_kick_num,home_red_card_num,away_red_card_num," +
             "home_yellow_card_num,away_yellow_card_num,home_score,away_score" +
             " )values("
-            + "#{id}, #{matchId}, #{statusId}, #{homeTeamId}, #{awayTeamId}, #{homeTeamName}," +
+            + "#{matchId}, #{statusId}, #{homeTeamId}, #{awayTeamId}, #{homeTeamName}," +
             "#{awayTeamName},#{homeAttackNum},#{awayAttackNum},#{homeAttackDangerNum},#{awayAttackDangerNum},#{homePossessionRate},#{awayPossessionRate},#{homeShootGoalNum}" +
             ",#{awayShootGoalNum},#{homeBiasNum},#{awayBiasNum},#{homeCornerKickNum},#{awayCornerKickNum},#{homeRedCardNum},#{awayRedCardNum},#{homeYellowCardNum}," +
             "#{awayYellowCardNum},#{homeScore},#{awayScore})")
@@ -21,7 +21,7 @@ public interface FootballMatchLiveDataDao {
 
 
 
-    @Select("select * from football_match_live_data where match_id = #{match_id}")
+    @Select("select * from football_match_live_data where match_id = #{matchId}")
     FootballMatchLiveData getFootballMatchLiveData(@Param("matchId") Integer matchId);
 
     @Update("update football_match_live_data set status_id=#{statusId},home_attack_num=#{homeAttackNum},away_attack_num=#{awayAttackNum}," +

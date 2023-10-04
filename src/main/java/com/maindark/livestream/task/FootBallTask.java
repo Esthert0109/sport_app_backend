@@ -57,21 +57,26 @@ public class FootBallTask {
     @Resource
     FootballMatchLiveDataDao footballMatchLiveDataDao;
 
+    @Resource
+    FootballLiveAddressDao footballLiveAddressDao;
+
+    @Resource
+    FootballLiveVideoDao footballLiveVideoDao;
+
 
 
     public String getIdUrl(String idUrl){
-       String url =  namiConfig.getHost() + idUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey()+"&id=";
-        return url;
+        return namiConfig.getHost() + idUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey()+"&id=";
+
     }
 
     public String getTimeUrl(String timeUrl){
-        String url = namiConfig.getHost() + timeUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey()+"&time=";
-        return url;
+        return namiConfig.getHost() + timeUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey()+"&time=";
+
     }
 
     public String getNormalUrl(String normalUrl){
-        String url = namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
-        return url;
+        return namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
     }
 
     /* execute every ten minutes every day*/
@@ -96,7 +101,7 @@ public class FootBallTask {
                 maxMatchIdFromApi = (Integer) query.get("max_id");
                 if(total > 0) {
                     List<Map<String,Object>> matchList = (List<Map<String,Object>>)resultObj.get("results");
-                    if(matchList != null && matchList.size() >0) {
+                    if(matchList != null && !matchList.isEmpty()) {
                         int size = matchList.size();
                         for(int i =0;i<size;i++) {
                             FootballMatch footballMatch = insertOrUpdateMatch(matchList,i);
@@ -132,7 +137,7 @@ public class FootBallTask {
                 maxMatchTimeFromApi = (Integer) query.get("max_time");
                 if(total >0) {
                     List<Map<String,Object>> matchList = (List<Map<String,Object>>)resultObj.get("results");
-                    if(matchList != null && matchList.size() >0) {
+                    if(matchList != null && !matchList.isEmpty()) {
                         int size = matchList.size();
                         for(int i =0;i<size;i++) {
                             FootballMatch footballMatch = insertOrUpdateMatch(matchList,i);
@@ -177,7 +182,7 @@ public class FootBallTask {
                 maxCompetitionIdFromApi = (Integer) query.get("max_id");
                 if(total > 0) {
                     List<Map<String,Object>> competitionList = (List<Map<String,Object>>)resultObj.get("results");
-                    if (competitionList != null && competitionList.size() > 0) {
+                    if (competitionList != null && !competitionList.isEmpty()) {
                         int size = competitionList.size();
                         for(int i = 0;i < size; i++) {
                             FootballCompetition footballCompetition = insertOrUpdateFootballCompetition(competitionList, i);
@@ -211,7 +216,7 @@ public class FootBallTask {
                 maxCompetitionTimeFromApi = (Integer)query.get("max_time");
                 if(total > 0) {
                     List<Map<String,Object>> updateCompetitionList = (List<Map<String, Object>>) resultObj.get("results");
-                    if (updateCompetitionList != null && updateCompetitionList.size() >0) {
+                    if (updateCompetitionList != null && !updateCompetitionList.isEmpty()) {
                         int size = updateCompetitionList.size();
                         for(int i = 0;i < size; i++) {
                             FootballCompetition footballCompetition = insertOrUpdateFootballCompetition(updateCompetitionList, i);
@@ -253,7 +258,7 @@ public class FootBallTask {
                maxTeamIdFromApi = (Integer) query.get("max_id");
                if(total > 0) {
                    List<Map<String,Object>> teamsList = (List<Map<String, Object>>) resultObj.get("results");
-                   if(teamsList != null && teamsList.size() > 0) {
+                   if(teamsList != null && !teamsList.isEmpty()) {
                        int size = teamsList.size();
                        for(int i =0;i<size;i++) {
                            FootballTeam footballTeam = getFootballTeam(teamsList, i);
@@ -285,7 +290,7 @@ public class FootBallTask {
                 maxTeamTimeFromApi = (Integer)query.get("max_time");
                 if(total > 0) {
                     List<Map<String,Object>> teamsList = (List<Map<String, Object>>) resultObj.get("results");
-                    if(teamsList != null && teamsList.size() > 0) {
+                    if(teamsList != null && !teamsList.isEmpty()) {
                         int size = teamsList.size();
                         for(int i =0;i<size;i++) {
                             FootballTeam footballTeam = getFootballTeam(teamsList, i);
@@ -349,12 +354,12 @@ public class FootBallTask {
         if(code == 0)
         {
             List<Map<String,Object>> results = (List<Map<String,Object>>)resultObj.get("results");
-            if(results != null && results.size() >0)
+            if(results != null && !results.isEmpty())
             {
                int size = results.size();
                for(int i=0;i<size;i++)
                {
-                   Map<String,Object> ml = (Map<String,Object>)results.get(i);
+                   Map<String,Object> ml = results.get(i);
                        Integer matchStatus = 0;
                        Integer homeScore = 0;
                        Integer awayScore = 0;
@@ -376,41 +381,41 @@ public class FootBallTask {
                        Integer awayYellowCardNum = 0;
                        Integer matchId = (Integer)ml.get("id");
                        List<Object> score = (List<Object>) ml.get("score");
-                       if(score != null && score.size() >0)
+                       if(score != null && !score.isEmpty())
                        {
                            matchStatus = (Integer)score.get(1);
                            List<Integer> homeScores = (List<Integer>) score.get(2);
-                           if(homeScores != null && homeScores.size() >0) {
+                           if(homeScores != null && !homeScores.isEmpty()) {
                                Integer score0 = homeScores.get(0);
                                Integer score1 = homeScores.get(5);
                                Integer score2 = homeScores.get(6);
                                if(score1 != 0) {
                                    homeScore = score1 + score2;
-                               }else if(score1 == 0) {
+                               } else {
                                    homeScore = score0 + score2;
                                }
 
                            }
                            List<Integer> awayScores = (List<Integer>) score.get(3);
-                           if(awayScores != null && awayScores.size() >0) {
+                           if(awayScores != null && !awayScores.isEmpty()) {
                                Integer score0 = awayScores.get(0);
                                Integer score1 = awayScores.get(5);
                                Integer score2 = awayScores.get(6);
                                if(score1 != 0) {
                                    awayScore = score1 + score2;
-                               }else if(score1 == 0) {
+                               }else{
                                    awayScore = score0 + score2;
                                }
                            }
                        }
 
                        List<Map<String,Object>> statsList = (List<Map<String,Object>>)ml.get("stats");
-                       if(statsList != null && statsList.size() >0)
+                       if(statsList != null && !statsList.isEmpty())
                        {
                           int statSize = statsList.size();
-                          for(int j=0;j<statSize;i++)
+                          for(int j=0;j<statSize;j++)
                           {
-                              Map<String,Object> mp = statsList.get(i);
+                              Map<String,Object> mp = statsList.get(j);
                               Integer type = (Integer)mp.get("type");
                               Integer home = (Integer)mp.get("home");
                               Integer away = (Integer)mp.get("away");
@@ -551,6 +556,32 @@ public class FootBallTask {
 
     }
 
+    /* Get live url*/
+    @Scheduled(cron = " 0 */10 * * * ?")
+    public void getLiveUrlAddress(){
+        String url = getNormalUrl(namiConfig.getFootballLiveUrl());
+        String result = HttpUtil.getNaMiData(url);
+        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+        Integer code = (Integer) resultObj.get("code");
+        if(code ==0){
+            List<Map<String,Object>> results = (List<Map<String,Object>>)resultObj.get("results");
+            if(results != null && !results.isEmpty()){
+                results.stream().forEach(m ->{
+                    FootballLiveAddress footballLiveAddress = getFootballLiveAddress(m);
+                    FootballLiveAddress footballLiveAddressFromDb = footballLiveAddressDao.getFootballLiveAddressByMatchId(footballLiveAddress.getMatchId());
+                    if(footballLiveAddressFromDb == null){
+                        footballLiveAddressDao.insert(footballLiveAddress);
+                    } else {
+                        footballLiveAddressDao.updateFootballLiveAddressByMatchId(footballLiveAddress);
+                    }
+                });
+            }
+        }
+
+    }
+
+
+
 
 
 
@@ -567,7 +598,7 @@ public class FootBallTask {
         Integer code = (Integer) resultObj.get("code");
         if(code == 0) {
             Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
-            if(results!= null && results.size() >0) {
+            if(results!= null && !results.isEmpty()) {
                 Integer confirmed = (Integer)results.get("confirmed");
                 // 正式阵容，1-是、0-不是
                 if(confirmed == 1) {
@@ -578,7 +609,7 @@ public class FootBallTask {
                     footballMatchDao.updateFormation(homeFormation,awayFormation,matchId);
                     List<Map<String,Object>> home = (List<Map<String, Object>>) results.get("home");
                     List<Map<String,Object>> away = (List<Map<String, Object>>) results.get("away");
-                    if(home != null && home.size() >0) {
+                    if(home != null && !home.isEmpty()) {
                         home.stream().forEach(ml ->{
                             HomeMatchLineUp homeMatchLineUp = getFootballHomeMatchLineUp(ml,matchId);
                             HomeMatchLineUp homeMatchLineUpFromDb = homeMatchLineUpDao.getHomeMatchLineUp(homeMatchLineUp.getId(),matchId);
@@ -590,7 +621,7 @@ public class FootBallTask {
 
                         });
                     }
-                    if(away != null && away.size() >0) {
+                    if(away != null && !away.isEmpty()) {
                         away.stream().forEach(ml ->{
                             AwayMatchLineUp awayMatchLineUp = getFootballAwayMatchLineUp(ml,matchId);
                             AwayMatchLineUp awayMatchLineUpFromDb = awayMatchLineUpDao.getAwayMatchLineUp(awayMatchLineUp.getId(),matchId);
@@ -714,7 +745,7 @@ public class FootBallTask {
         Long matchTime = Long.valueOf((Integer) matchMap.get("match_time"));
         Map<String,Object> coverage = (Map<String,Object>)matchMap.get("coverage");
         Integer lineUp = 0;
-        if(coverage != null && coverage.size() >0) {
+        if(coverage != null && !coverage.isEmpty()) {
             lineUp = (Integer)coverage.get("lineup");
         }
         Integer homeScore = 0;
@@ -736,7 +767,7 @@ public class FootBallTask {
             Integer score2 = homeScores.get(6);
             if(score1 != 0) {
                 homeScore = score1 + score2;
-            }else if(score1 == 0) {
+            } else {
                 homeScore = score0 + score2;
             }
         }
@@ -747,7 +778,7 @@ public class FootBallTask {
             Integer score2 = awayScores.get(6);
             if(score1 != 0) {
                 awayScore = score1 + score2;
-            } else if(score1 ==0) {
+            } else {
                 awayScore = score0 + score2;
             }
         }
@@ -789,6 +820,25 @@ public class FootBallTask {
         updateFootballData.setUpdateTime(updateTime);
         updateFootballData.setUniqueKey(uniqueKey);
         return updateFootballData;
+    }
+
+    private FootballLiveAddress getFootballLiveAddress(Map<String,Object> m){
+        Integer matchId = (Integer)m.get("id");
+        Long matchTime = Long.valueOf((Integer) m.get("match_time"));
+        String comp = (String)m.get("comp");
+        String homeTeam = (String)m.get("home");
+        String awayTeam = (String)m.get("away");
+        String mobileLink = (String)m.get("mobile_link");
+        String pcLink = (String)m.get("pc_link");
+        FootballLiveAddress footballLiveAddress = new FootballLiveAddress();
+        footballLiveAddress.setMatchId(matchId);
+        footballLiveAddress.setMatchTime(matchTime);
+        footballLiveAddress.setComp(comp);
+        footballLiveAddress.setHomeTeam(homeTeam);
+        footballLiveAddress.setAwayTeam(awayTeam);
+        footballLiveAddress.setMobileLink(mobileLink);
+        footballLiveAddress.setPcLink(pcLink);
+        return footballLiveAddress;
     }
 
 
