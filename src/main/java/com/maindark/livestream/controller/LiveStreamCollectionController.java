@@ -1,12 +1,11 @@
 package com.maindark.livestream.controller;
 
-import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.domain.LiveStreamCollection;
 import com.maindark.livestream.domain.LiveStreamUser;
 import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.LiveStreamCollectionService;
-import com.maindark.livestream.vo.LiveStreamCollectionVo;
+import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,21 +19,27 @@ public class LiveStreamCollectionController {
     LiveStreamCollectionService liveStreamCollectionService;
 
     @GetMapping("/list")
-    public Result<List<LiveStreamCollectionVo>> getAllCollection(LiveStreamUser liveStreamUser) {
+    public Result<List<FootballMatchVo>> getAllCollection(LiveStreamUser liveStreamUser) {
         Long userId = liveStreamUser.getId();
-        List<LiveStreamCollectionVo> liveStreamCollectionVos = liveStreamCollectionService.getAllCollectionByUserId(userId);
+        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllCollectionByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+    @GetMapping("/list/3")
+    public Result<List<FootballMatchVo>> getThreeCollections(LiveStreamUser liveStreamUser) {
+        Long userId = liveStreamUser.getId();
+        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeCollectionsByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
 
     @GetMapping("/football/{matchId}")
-    public Result<FootballMatch> getFootballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
-        FootballMatch footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
+    public Result<FootballMatchVo> getFootballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
+        FootballMatchVo footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
         return Result.success(footballMatch);
     }
 
     @GetMapping("/basketball/{matchId}")
-    public Result<FootballMatch> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
-        FootballMatch footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
+    public Result<FootballMatchVo> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
+        FootballMatchVo footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
         return Result.success(footballMatch);
     }
 

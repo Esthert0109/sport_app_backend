@@ -6,18 +6,24 @@ import com.maindark.livestream.domain.*;
 import com.maindark.livestream.nami.NamiConfig;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
+import com.maindark.livestream.util.DateUtil;
+import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
+import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 
 @Component
 @Slf4j
+@EnableScheduling
 public class FootBallTask {
 
     private Integer maxCompetitionIdFromApi = 0;
@@ -61,7 +67,9 @@ public class FootBallTask {
     FootballLiveAddressDao footballLiveAddressDao;
 
     @Resource
-    FootballLiveVideoDao footballLiveVideoDao;
+    FootballVenueDao footballVenueDao;
+    @Resource
+    FootballRefereeDao footballRefereeDao;
 
 
 
@@ -108,6 +116,15 @@ public class FootBallTask {
                             footballMatchDao.insert(footballMatch);
                             // put footballMatch into redis
                             redisService.set(FootballMatchKey.matchKey,String.valueOf(footballMatch.getId()),footballMatch);
+                            // put footballMatchVo into redis
+                            FootballMatchVo footballMatchVo = footballMatchDao.getFootballMatchVoById(footballMatch.getId());
+                            footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(footballMatchVo.getStatusId()));
+                            footballMatchVo.setMatchTimeStr(DateUtil.interceptTime(footballMatchVo.getMatchTime()));
+                            // get referee name
+                            footballMatchVo.setRefereeName(getFootballRefereeName(footballMatch.getRefereeId()));
+                            // get venue name
+                            footballMatchVo.setVenueName(getFootballVenueName(footballMatch.getVenueId()));
+                            redisService.set(FootballMatchKey.matchVoKey,String.valueOf(footballMatch.getId()),footballMatchVo);
                         }
                     }
                 } else {
@@ -144,7 +161,17 @@ public class FootBallTask {
                             footballMatchDao.updateDataById(footballMatch);
                             // delete redis data
                             redisService.delete(FootballMatchKey.matchKey,String.valueOf(footballMatch.getId()));
+                            redisService.delete(FootballMatchKey.matchVoKey,String.valueOf(footballMatch.getId()));
+                            // put data into redis
                             redisService.set(FootballMatchKey.matchKey,String.valueOf(footballMatch.getId()),footballMatch);
+                            FootballMatchVo footballMatchVo = footballMatchDao.getFootballMatchVoById(footballMatch.getId());
+                            footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(footballMatchVo.getStatusId()));
+                            footballMatchVo.setMatchTimeStr(DateUtil.interceptTime(footballMatchVo.getMatchTime()));
+                            // get referee name
+                            footballMatchVo.setRefereeName(getFootballRefereeName(footballMatch.getRefereeId()));
+                            // get venue name
+                            footballMatchVo.setVenueName(getFootballVenueName(footballMatch.getVenueId()));
+                            redisService.set(FootballMatchKey.matchVoKey,String.valueOf(footballMatch.getId()),footballMatchVo);
                         }
                     }
                 } else {
@@ -471,10 +498,19 @@ public class FootBallTask {
                        if(awayScore !=0) {
                            footballMatch.setAwayTeamScore(awayScore);
                        }
+
+                        // update table football_match
+                        footballMatchDao.updateDataById(footballMatch);
                        // update redis cache
                         redisService.set(FootballMatchKey.matchKey,String.valueOf(matchId),footballMatch);
-                       // update table football_match
-                       footballMatchDao.updateDataById(footballMatch);
+                        FootballMatchVo footballMatchVo = footballMatchDao.getFootballMatchVoById(footballMatch.getId());
+                        footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(footballMatchVo.getStatusId()));
+                        footballMatchVo.setMatchTimeStr(DateUtil.interceptTime(footballMatchVo.getMatchTime()));
+                        // get referee name
+                        footballMatchVo.setRefereeName(getFootballRefereeName(footballMatch.getRefereeId()));
+                        // get venue name
+                        footballMatchVo.setVenueName(getFootballVenueName(footballMatch.getVenueId()));
+                        redisService.set(FootballMatchKey.matchVoKey,String.valueOf(footballMatch.getId()),footballMatchVo);
 
                        // football_match_live_data
                    FootballMatchLiveData footballMatchLiveData = redisService.get(FootballMatchKey.matchLiveKey,String.valueOf(matchId),FootballMatchLiveData.class);
@@ -557,7 +593,7 @@ public class FootBallTask {
     }
 
     /* Get live url*/
-    @Scheduled(cron = " 0 */10 * * * ?")
+    //@Scheduled(cron = " 0 */10 * * * ?")
     public void getLiveUrlAddress(){
         String url = getNormalUrl(namiConfig.getFootballLiveUrl());
         String result = HttpUtil.getNaMiData(url);
@@ -577,6 +613,22 @@ public class FootBallTask {
                 });
             }
         }
+    }
+
+    //@Scheduled(cron = "0 */20 * * * ?")
+    public void getAllFootballMatchLineup(){
+       /* List<FootballMatchVo> list = null;
+        LocalDate now = LocalDate.now();
+        //5 12
+        LocalDate tomorrow = now.plusDays(13);
+        long nowSeconds = DateUtil.convertDateToLongTime(now);
+        long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+        log.info("nowTime:{},tomorrowTime:{}",nowSeconds,tomorrowSeconds);
+        list = footballMatchDao.getFootballMatchByTime(nowSeconds,tomorrowSeconds);
+        if(!list.isEmpty()){
+            String url = getNormalUrl(namiConfig.getFootballLineUpUrl());
+            log.info("send url to nami:{}",url);
+        }*/
 
     }
 
@@ -743,6 +795,8 @@ public class FootBallTask {
         Integer awayTeamId = (Integer)matchMap.get("away_team_id");
         Integer statusId = (Integer)matchMap.get("status_id");
         Long matchTime = Long.valueOf((Integer) matchMap.get("match_time"));
+        Integer refereeId =  (Integer) matchMap.get("referee_id");
+        Integer venueId =  (Integer) matchMap.get("venue_id");
         Map<String,Object> coverage = (Map<String,Object>)matchMap.get("coverage");
         Integer lineUp = 0;
         if(coverage != null && !coverage.isEmpty()) {
@@ -797,11 +851,15 @@ public class FootBallTask {
         FootballTeam homeTeam = footballTeamDao.getTeam(footballMatch.getHomeTeamId());
         if(homeTeam != null) {
             footballMatch.setHomeTeamName(homeTeam.getNameZh());
+            footballMatch.setHomeTeamLogo(homeTeam.getLogo());
         }
         FootballTeam awayTeam = footballTeamDao.getTeam(footballMatch.getAwayTeamId());
         if(awayTeam != null) {
+            footballMatch.setAwayTeamLogo(awayTeam.getLogo());
             footballMatch.setAwayTeamName(awayTeam.getNameZh());
         }
+        footballMatch.setRefereeId(refereeId);
+        footballMatch.setVenueId(venueId);
         return footballMatch;
     }
 
@@ -839,6 +897,16 @@ public class FootBallTask {
         footballLiveAddress.setMobileLink(mobileLink);
         footballLiveAddress.setPcLink(pcLink);
         return footballLiveAddress;
+    }
+
+    public String getFootballRefereeName(Integer refereeId){
+        FootballReferee footballReferee = footballRefereeDao.getFootballRefereeById(refereeId);
+        return footballReferee.getNameZh();
+    }
+
+    public String getFootballVenueName(Integer venueId){
+        FootballVenue footballVenue = footballVenueDao.getFootballVenueById(venueId);
+        return footballVenue.getNameZh();
     }
 
 

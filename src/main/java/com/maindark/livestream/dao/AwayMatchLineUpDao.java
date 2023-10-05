@@ -4,6 +4,8 @@ import com.maindark.livestream.domain.AwayMatchLineUp;
 import com.maindark.livestream.domain.HomeMatchLineUp;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface AwayMatchLineUpDao {
 
@@ -17,5 +19,8 @@ public interface AwayMatchLineUpDao {
 
     @Select("select * from away_match_line_up where id=#{id} and match_id=#{matchId}")
     public AwayMatchLineUp getAwayMatchLineUp(@Param("id")Integer id,@Param("matchId")Integer matchId);
+
+    @Select("select * from away_match_line_up where match_id=#{matchId}")
+    public List<AwayMatchLineUp> getAwayMatchLineUpByMatchId(@Param("matchId")Integer matchId);
 }
 

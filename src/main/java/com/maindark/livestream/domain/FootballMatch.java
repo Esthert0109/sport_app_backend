@@ -21,13 +21,17 @@ public class FootballMatch {
     private Integer refereeId;
     private String homeTeamName;
     private String awayTeamName;
+    private String homeTeamLogo;
+    private String awayTeamLogo;
     private Integer homeTeamScore;
     private Integer awayTeamScore;
     private String homeFormation;
     private String awayFormation;
+    private Integer venueId;
     /*if there is a line-up 0 no 1 yes*/
     private Integer lineUp;
     private Long updatedAt;
+
 
 
 

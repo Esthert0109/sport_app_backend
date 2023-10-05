@@ -9,7 +9,9 @@ import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
+import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
+import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import com.maindark.livestream.vo.FootballTeamVo;
 import jakarta.annotation.Resource;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -52,8 +56,7 @@ public class FootBallService {
   private Integer maxCompetitionTimeFromApi = 0;
 
   public String getNormalUrl(String normalUrl){
-    String url = namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
-    return url;
+    return namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
   }
 
     public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName){
@@ -84,23 +87,82 @@ public class FootBallService {
           String timeStr = DateUtil.interceptTime(matchTime);
           footballMatchVo.setMatchTimeStr(timeStr);
           Integer statusId = footballMatchVo.getStatusId();
-          if(1 == statusId){
-            footballMatchVo.setStatusStr("未");
-          } else if(2==statusId){
-            footballMatchVo.setStatusStr("上半场");
-          } else if(3==statusId){
-            footballMatchVo.setStatusStr("中场");
-          } else if(4== statusId){
-            footballMatchVo.setStatusStr("下半场");
-          } else if(5== statusId){
-            footballMatchVo.setStatusStr("加时赛");
-          }
+          footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
         }
       }
       return list;
     }
 
-    public List<Map<String,Object>> getMatchList(String competitionDate){
+
+    /*
+    *
+    * get all matches in seven days
+    * */
+  public Map<String,List<FootballMatchVo>> getFootballMatchesInSevenDays() {
+    // get all start matches
+    LocalDate now = LocalDate.now();
+    LocalDate tomorrow = now.plusDays(1);
+    LocalDate future = now.plusDays(6);
+    LocalDate past = now.minusDays(6);
+
+    Long nowSeconds = DateUtil.convertDateToLongTime(now);
+    Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+    Long futureSeconds = DateUtil.convertDateToLongTime(future);
+    Long pastSeconds = DateUtil.convertDateToLongTime(past);
+    log.info("get past date:{},now date:{},tomorrow date:{},future date:{}",pastSeconds,nowSeconds,tomorrowSeconds,futureSeconds);
+    List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds,nowSeconds);
+    pastMatches = getFootballMatchVos(pastMatches);
+    List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds,tomorrowSeconds);
+    startMatches = getFootballMatchVos(startMatches);
+    List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds,futureSeconds);
+    futureMatches = getFootballMatchVos(futureMatches);
+    Map<String,List<FootballMatchVo>> results = new HashMap<>();
+    results.put("pass",pastMatches);
+    results.put("start",startMatches);
+    results.put("future",futureMatches);
+    return results;
+  }
+
+  private List<FootballMatchVo> getFootballMatchVos(List<FootballMatchVo> futureMatches) {
+    if(futureMatches != null && !futureMatches.isEmpty()){
+      Stream<FootballMatchVo> footballMatchVoStream = futureMatches.stream().map(vo ->{
+        vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
+        FootballTeamVo homeTeam = footballTeamDao.getTeamLogoAndNameById(vo.getHomeTeamId());
+        if(homeTeam != null){
+          vo.setHomeTeamLogo(homeTeam.getLogo());
+        }
+        FootballTeamVo awayTeam = footballTeamDao.getTeamLogoAndNameById(vo.getAwayTeamScore());
+        if(awayTeam != null) {
+          vo.setHomeTeamLogo(awayTeam.getLogo());
+        }
+        vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
+        vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
+        return vo;
+      });
+      futureMatches = getArrayListFromStream(footballMatchVoStream);
+    }
+    return futureMatches;
+  }
+
+  public List<FootballMatchVo> getMatchListByDate(String date) {
+    LocalDate currentDate = DateUtil.convertStringToDate(date);
+    LocalDate deadline = currentDate.plusDays(1);
+    Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
+    Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
+    List<FootballMatchVo> footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds);
+    return footballMatchVos;
+  }
+
+
+  public FootballMatchLiveData getMatchLiveData(Integer matchId){
+    FootballMatchLiveData footballMatchLiveData = redisService.get(FootballMatchKey.matchLiveKey,String.valueOf(matchId),FootballMatchLiveData.class);
+    if(footballMatchLiveData == null) {
+      footballMatchLiveData = footballMatchLiveDataDao.getFootballMatchLiveData(matchId);
+    }
+    return footballMatchLiveData;
+  }
+
+  public List<Map<String,Object>> getMatchList(String competitionDate){
       String url = getNormalUrl(namiConfig.getFootballUrl())+"&date="+ competitionDate;
       String result = HttpUtil.getNaMiData(url);
       Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
@@ -215,8 +277,6 @@ public class FootBallService {
         if(footballTeamFromDb == null) {
           footballTeamDao.insert(footballTeam);
         }
-
-
       });
       return competitionList;
     }
@@ -239,6 +299,14 @@ public class FootBallService {
       return map;
     }
 
+    public FootballMatchLineUpVo getFootballMatchLineUpByMatchId(Integer matchId){
+      FootballMatchLineUpVo footballMatchLineUpVo = new FootballMatchLineUpVo();
+      List<HomeMatchLineUp> homeMatchLineUpList = homeMatchLineUpDao.getHomeMatchLineUpByMatchId(matchId);
+      List<AwayMatchLineUp> awayMatchLineUpList = awayMatchLineUpDao.getAwayMatchLineUpByMatchId(matchId);
+      footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
+      footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
+      return footballMatchLineUpVo;
+    }
 
   public Map<String, Object> getMatchLineUp(Integer matchId) {
     String url = getNormalUrl(namiConfig.getFootballLineUpUrl());
@@ -281,14 +349,10 @@ public class FootBallService {
               } else {
                 awayMatchLineUpDao.updateAwayMatchLineUp(awayMatchLineUp);
               }
-
             });
           }
         }
       }
-
-
-
     }
     return resultObj;
   }
@@ -541,4 +605,23 @@ public class FootBallService {
     }
      return null;
   }
+
+
+  public static <T> ArrayList<T>
+  getArrayListFromStream(Stream<T> stream)
+  {
+
+    List<T>
+            list = stream.collect(Collectors.toList());
+
+    // Create an ArrayList of the List
+    ArrayList<T>
+            arrayList = new ArrayList<T>(list);
+
+    // Return the ArrayList
+    return arrayList;
+  }
+
+
+
 }

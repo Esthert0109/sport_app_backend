@@ -19,4 +19,7 @@ public class FootballMatchVo {
     private Integer statusId;
     private String matchTimeStr;
     private String statusStr;
+    private Integer lineUp;
+    private String refereeName;
+    private String venueName;
 }

@@ -2,14 +2,13 @@ package com.maindark.livestream.service;
 
 import com.maindark.livestream.dao.FootballMatchDao;
 import com.maindark.livestream.dao.LiveStreamCollectionDao;
-import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.domain.LiveStreamCollection;
 import com.maindark.livestream.enums.StatusEnum;
 import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.nami.NamiConfig;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
-import com.maindark.livestream.vo.LiveStreamCollectionVo;
+import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +20,7 @@ public class LiveStreamCollectionService {
    @Resource
     LiveStreamCollectionDao liveStreamCollectionDao;
 
-   @Resource
-    NamiConfig namiConfig;
+
 
    @Resource
     RedisService redisService;
@@ -30,14 +28,19 @@ public class LiveStreamCollectionService {
    @Resource
     FootballMatchDao footballMatchDao;
 
-   public List<LiveStreamCollectionVo> getAllCollectionByUserId(Long userId){
+   public List<FootballMatchVo> getAllCollectionByUserId(Long userId){
        return liveStreamCollectionDao.getAllCollections(userId);
    }
 
-   public FootballMatch getFootballMatchByMatchId(Integer matchId){
-      FootballMatch match = redisService.get(FootballMatchKey.matchKey,String.valueOf(matchId),FootballMatch.class);
+    public List<FootballMatchVo> getThreeCollectionsByUserId(Long userId){
+        return liveStreamCollectionDao.getThreeCollections(userId);
+    }
+
+   public FootballMatchVo getFootballMatchByMatchId(Integer matchId){
+      FootballMatchVo match = redisService.get(FootballMatchKey.matchVoKey,String.valueOf(matchId),FootballMatchVo.class);
       if(match == null) {
-          match = footballMatchDao.getFootballMatchById(matchId);
+          match = footballMatchDao.getFootballMatchVoById(matchId);
+          redisService.set(FootballMatchKey.matchVoKey,String.valueOf(matchId),match);
       }
       return match;
    }

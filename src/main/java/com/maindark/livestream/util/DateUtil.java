@@ -24,6 +24,11 @@ public class DateUtil {
         String timeStr = obj.format(sol);
         timeStr = timeStr.substring(12,16);
         return timeStr;
+    }
 
+    public static LocalDate convertStringToDate(String str){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate date = LocalDate.parse(str,formatter);
+        return date;
     }
 }

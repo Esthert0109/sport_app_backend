@@ -3,6 +3,8 @@ package com.maindark.livestream.dao;
 import com.maindark.livestream.domain.HomeMatchLineUp;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface HomeMatchLineUpDao {
 
@@ -17,4 +19,7 @@ public interface HomeMatchLineUpDao {
 
     @Select("select * from home_match_line_up where id=#{id} and match_id=#{matchId}")
     public HomeMatchLineUp getHomeMatchLineUp(@Param("id")Integer id,@Param("matchId")Integer matchId);
+
+    @Select("select * from home_match_line_up where match_id=#{matchId}")
+    public List<HomeMatchLineUp> getHomeMatchLineUpByMatchId(@Param("matchId")Integer matchId);
 }

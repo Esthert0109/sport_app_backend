@@ -74,11 +74,14 @@ CREATE TABLE `football_match` (
   `away_team_id` int  COMMENT ' away team id',
   `home_team_name` varchar(255) COMMENT 'home team name',
   `away_team_name` varchar(255) COMMENT 'away home name',
+  `home_team_logo` varchar(255) COMMENT 'home team logo',
+  `away_team_logo` varchar(255) COMMENT 'away home logo',
   `home_team_score` int  COMMENT ' home team score',
   `away_team_score` int  COMMENT ' away team score',
   `home_formation` varchar(255) COMMENT 'home formation',
   `away_formation` varchar(255) COMMENT 'away formation',
   `referee_id` int COMMENT 'referee id',
+  `venue_id` int COMMENT 'venue id',
   `line_up` int COMMENT 'if there is a line-up, 0 no 1 yes',
   `updated_at` bigint   COMMENT 'update time',
   PRIMARY KEY (`id`)
@@ -195,7 +198,26 @@ CREATE TABLE `football_live_video` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `football_venue`;
+CREATE TABLE `football_venue` (
+  `id` int NOT NULL  COMMENT 'id',
+  `name_zh` varchar(255) COMMENT 'chinese team name',
+  `name_en` varchar(255)  COMMENT 'english name',
+  `capacity` int COMMENT 'capacity',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `football_referee`;
+CREATE TABLE `football_referee` (
+  `id` int NOT NULL  COMMENT 'id',
+  `name_zh` varchar(255) NOT NULL COMMENT 'chinese team name',
+  `name_en` varchar(255) COMMENT 'english name',
+  `birthday` int COMMENT 'birthday',
+  `age` int COMMENT 'age',
+  `updated_at` bigint COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
  
  
  

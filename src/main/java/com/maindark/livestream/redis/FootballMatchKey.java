@@ -7,4 +7,6 @@ public class FootballMatchKey extends BasePrefix{
 
     public static FootballMatchKey  matchLiveKey = new FootballMatchKey("matchLive");
     public static FootballMatchKey matchKey = new FootballMatchKey("match");
+
+    public static FootballMatchKey matchVoKey =  new FootballMatchKey("matchVo");
 }
