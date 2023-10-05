@@ -218,6 +218,13 @@ CREATE TABLE `football_referee` (
   `updated_at` bigint COMMENT 'update time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--create index
+create index football_match_indexTime on football_match(match_time);
+create index home_match_line_up_indexMatch on home_match_line_up(match_id);
+create index away_match_line_up_indexMatch on away_match_line_up(match_id);
+create index football_match_live_data_indexMatch on football_match_live_data(match_id);
+create index football_competition_index_name on football_competition(name_zh);
  
  
  

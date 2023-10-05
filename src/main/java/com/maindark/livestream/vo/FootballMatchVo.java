@@ -7,8 +7,6 @@ public class FootballMatchVo {
     private Integer id;
     private Integer competitionId;
     private String homeTeamName;
-    private Integer homeTeamId;
-    private Integer awayTeamId;
     private String awayTeamName;
     private Integer homeTeamScore;
     private Integer awayTeamScore;

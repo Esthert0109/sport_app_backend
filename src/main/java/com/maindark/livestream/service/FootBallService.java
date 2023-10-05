@@ -77,12 +77,6 @@ public class FootBallService {
         int size = list.size();
         for(int i=0;i<size;i++) {
           FootballMatchVo footballMatchVo = list.get(i);
-          Integer homeTeamId = footballMatchVo.getHomeTeamId();
-          Integer awayTeamId = footballMatchVo.getAwayTeamId();
-          FootballTeamVo homeTeam = footballTeamDao.getTeamLogoAndNameById(homeTeamId);
-          FootballTeamVo awayTeam = footballTeamDao.getTeamLogoAndNameById(awayTeamId);
-          footballMatchVo.setHomeTeamLogo(homeTeam.getLogo());
-          footballMatchVo.setAwayTeamLogo(awayTeam.getLogo());
           Long matchTime = footballMatchVo.getMatchTime() * 1000;
           String timeStr = DateUtil.interceptTime(matchTime);
           footballMatchVo.setMatchTimeStr(timeStr);
@@ -127,14 +121,6 @@ public class FootBallService {
     if(futureMatches != null && !futureMatches.isEmpty()){
       Stream<FootballMatchVo> footballMatchVoStream = futureMatches.stream().map(vo ->{
         vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
-        FootballTeamVo homeTeam = footballTeamDao.getTeamLogoAndNameById(vo.getHomeTeamId());
-        if(homeTeam != null){
-          vo.setHomeTeamLogo(homeTeam.getLogo());
-        }
-        FootballTeamVo awayTeam = footballTeamDao.getTeamLogoAndNameById(vo.getAwayTeamScore());
-        if(awayTeam != null) {
-          vo.setHomeTeamLogo(awayTeam.getLogo());
-        }
         vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
         vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
         return vo;
@@ -150,6 +136,7 @@ public class FootBallService {
     Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
     Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
     List<FootballMatchVo> footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds);
+    footballMatchVos = getFootballMatchVos(footballMatchVos);
     return footballMatchVos;
   }
 
