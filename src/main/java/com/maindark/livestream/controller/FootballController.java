@@ -1,10 +1,10 @@
 package com.maindark.livestream.controller;
 
 
-import com.maindark.livestream.domain.FootballMatchLiveData;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.FootBallService;
 import com.maindark.livestream.vo.FootballMatchLineUpVo;
+import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +66,8 @@ public class FootballController {
      *
      */
     @GetMapping("/livedata/{matchId}")
-    public Result<FootballMatchLiveData> getFootballMatchLiveData(@PathVariable("matchId")Integer matchId){
-        FootballMatchLiveData footballMatchLiveData = footBallService.getMatchLiveData(matchId);
+    public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")Integer matchId){
+        FootballMatchLiveDataVo footballMatchLiveData = footBallService.getMatchLiveData(matchId);
         return Result.success(footballMatchLiveData);
     }
 
@@ -76,7 +76,7 @@ public class FootballController {
      *
      */
     @GetMapping("/line-up")
-    public Result<Map<String,Object>> getMatchLineUp(@PathVariable("matchId")Integer matchId){
+    public Result<Map<String,Object>> getMatchLineUp(@RequestParam("matchId")Integer matchId){
         Map<String,Object> map = footBallService.getMatchLineUp(matchId);
         return Result.success(map);
     }

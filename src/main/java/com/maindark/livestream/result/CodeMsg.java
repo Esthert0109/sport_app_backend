@@ -30,8 +30,9 @@ public class CodeMsg {
     //img
     public static CodeMsg IMG_UPLOAD_ERROR = new CodeMsg(500410,"image uploads error, please try again");
 
+
     //nami football
-    public static CodeMsg FOOT_BALL_ERROR = new CodeMsg(500510,"football service is wrong, please connect to our administrator!");
+    public static CodeMsg FOOT_BALL_ERROR = new CodeMsg(500510,"football service is wrong, please connect to nami platform!");
     // nami basketball
     public static CodeMsg BASKET_BALL_ERROR = new CodeMsg(500610,"basketball service is wrong, please connect to our administrator!");
 

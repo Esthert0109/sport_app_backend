@@ -14,7 +14,7 @@ public interface AwayMatchLineUpDao {
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     public Integer insert(AwayMatchLineUp awayMatchLineUp);
 
-    @Update("update away_match_line_up set first=#{first},captain=#{captain},player_name=#{playerName},player_logo=#{playerLogo},shirt_number=#{shirtNumber},position=#{position},rating=#{rating} where match_id = #{matchId}")
+    @Update("update away_match_line_up set first=#{first},captain=#{captain},player_name=#{playerName},player_logo=#{playerLogo},shirt_number=#{shirtNumber},position=#{position},rating=#{rating} where id = #{id}")
     public void updateAwayMatchLineUp(AwayMatchLineUp awayMatchLineUp);
 
     @Select("select * from away_match_line_up where id=#{id} and match_id=#{matchId}")

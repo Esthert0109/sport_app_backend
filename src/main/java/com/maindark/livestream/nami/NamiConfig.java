@@ -23,6 +23,25 @@ public class NamiConfig {
     private String footballMatchLiveUrl;
     private String footballLineUpUrl;
     private String footballLiveUrl;
+    private String footballVenueUrl;
+    private String footballRefereeUrl;
+    private String footballCoachUrl;
+
+
+
+    public String getIdUrl(String idUrl){
+        return this.getHost() + idUrl + "?user=" + this.getUser() +"&secret=" + this.getSecretKey()+"&id=";
+
+    }
+
+    public String getTimeUrl(String timeUrl){
+        return this.getHost() + timeUrl + "?user=" + this.getUser() +"&secret=" + this.getSecretKey()+"&time=";
+
+    }
+
+    public String getNormalUrl(String normalUrl){
+        return this.getHost() + normalUrl + "?user=" + this.getUser() +"&secret=" + this.getSecretKey();
+    }
 
 
 }

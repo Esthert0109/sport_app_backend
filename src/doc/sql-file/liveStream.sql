@@ -219,8 +219,22 @@ CREATE TABLE `football_referee` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `football_coach`;
+CREATE TABLE `football_coach` (
+  `id` int NOT NULL  COMMENT 'id',
+  `name_zh` varchar(255)  COMMENT 'chinese team name',
+  `name_en` varchar(255)  COMMENT 'english name',
+  `logo` varchar(255)  COMMENT 'logo',
+  `preferred_formation` varchar(255)  COMMENT 'preferred_formation',
+  `team_id` int COMMENT 'team id',
+  `updated_at` bigint   COMMENT 'update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --create index
 create index football_match_indexTime on football_match(match_time);
+create index football_match_indexHomeTeamName on football_match(home_team_name);
+create index football_match_indexAwayTeamName on football_match(away_team_name);
 create index home_match_line_up_indexMatch on home_match_line_up(match_id);
 create index away_match_line_up_indexMatch on away_match_line_up(match_id);
 create index football_match_live_data_indexMatch on football_match_live_data(match_id);

@@ -12,6 +12,7 @@ import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
 import com.maindark.livestream.vo.FootballMatchLineUpVo;
+import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import com.maindark.livestream.vo.FootballTeamVo;
 import jakarta.annotation.Resource;
@@ -141,18 +142,22 @@ public class FootBallService {
   }
 
 
-  public FootballMatchLiveData getMatchLiveData(Integer matchId){
-    FootballMatchLiveData footballMatchLiveData = redisService.get(FootballMatchKey.matchLiveKey,String.valueOf(matchId),FootballMatchLiveData.class);
-    if(footballMatchLiveData == null) {
-      footballMatchLiveData = footballMatchLiveDataDao.getFootballMatchLiveData(matchId);
+  public FootballMatchLiveDataVo getMatchLiveData(Integer matchId){
+    FootballMatchLiveDataVo footballMatchLiveDataVo = redisService.get(FootballMatchKey.matchLiveVoKey,String.valueOf(matchId),FootballMatchLiveDataVo.class);
+    if(footballMatchLiveDataVo == null) {
+      footballMatchLiveDataVo = footballMatchLiveDataDao.getFootballMatchLiveDataVo(matchId);
     }
-    return footballMatchLiveData;
+    return footballMatchLiveDataVo;
   }
 
   public List<Map<String,Object>> getMatchList(String competitionDate){
       String url = getNormalUrl(namiConfig.getFootballUrl())+"&date="+ competitionDate;
       String result = HttpUtil.getNaMiData(url);
       Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+      String msg = (String)resultObj.get("err");
+      if(msg != null){
+        throw new GlobalException(CodeMsg.FOOT_BALL_ERROR);
+      }
       Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
       List<Map<String,Object>> matchList = (List<Map<String,Object>>)results.get("match");
       List<Map<String,Object>> competitionList = (List<Map<String,Object>>)results.get("competition");
@@ -268,41 +273,31 @@ public class FootBallService {
       return competitionList;
     }
 
-    public Map<String,Integer> getMap(Integer maxId,Integer maxTime){
-      /* String url = namiConfig.getHost() + namiConfig.getFootballUrl() + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey()+"&date="+competitionDate;
-      String result = HttpUtil.getNaMiData(url);
-      Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-      Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
-      List<Map<String,Object>> list = (List<Map<String,Object>>)results.get("match");
-      Integer maxId = footballMatchDao.getMaxId();
-      Integer maxUpdatedAt = footballMatchDao.getMaxUpdatedAt();
-      System.out.println(maxUpdatedAt);
-      System.out.println(maxId);*/
-      maxCompetitionIdFromApi += maxId;
-      maxCompetitionTimeFromApi += maxTime;
-      Map<String,Integer> map = new HashMap<>();
-      map.put("Id",maxCompetitionIdFromApi);
-      map.put("Time",maxCompetitionTimeFromApi);
-      return map;
-    }
 
     public FootballMatchLineUpVo getFootballMatchLineUpByMatchId(Integer matchId){
-      FootballMatchLineUpVo footballMatchLineUpVo = new FootballMatchLineUpVo();
-      List<HomeMatchLineUp> homeMatchLineUpList = homeMatchLineUpDao.getHomeMatchLineUpByMatchId(matchId);
-      List<AwayMatchLineUp> awayMatchLineUpList = awayMatchLineUpDao.getAwayMatchLineUpByMatchId(matchId);
-      footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
-      footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
+      FootballMatchLineUpVo footballMatchLineUpVo = redisService.get(FootballMatchKey.matchLineUpKey,String.valueOf(matchId),FootballMatchLineUpVo.class);
+      if(footballMatchLineUpVo == null) {
+        footballMatchLineUpVo = new FootballMatchLineUpVo();
+        List<HomeMatchLineUp> homeMatchLineUpList = homeMatchLineUpDao.getHomeMatchLineUpByMatchId(matchId);
+        List<AwayMatchLineUp> awayMatchLineUpList = awayMatchLineUpDao.getAwayMatchLineUpByMatchId(matchId);
+        footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
+        footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
+        redisService.set(FootballMatchKey.matchLineUpKey,String.valueOf(matchId),footballMatchLineUpVo);
+      }
       return footballMatchLineUpVo;
     }
 
   public Map<String, Object> getMatchLineUp(Integer matchId) {
-    String url = getNormalUrl(namiConfig.getFootballLineUpUrl());
+    String url = namiConfig.getNormalUrl(namiConfig.getFootballLineUpUrl());
     url += "&id="+matchId;
     String result = HttpUtil.getNaMiData(url);
     Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
     log.info("nami result:{}",result);
     Integer code = (Integer) resultObj.get("code");
-    if(code == 0) {
+    if (code == null){
+      return resultObj;
+    }
+    if(0 == code) {
       Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
       if(results != null && results.size() >0){
         Integer confirmed = (Integer)results.get("confirmed");
@@ -398,6 +393,9 @@ public class FootBallService {
     String result = HttpUtil.getNaMiData(url);
     Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
     Integer code = (Integer) resultObj.get("code");
+    if (code == null){
+      return resultObj;
+    }
     if(code == 0)
     {
       List<Map<String,Object>> results = (List<Map<String,Object>>)resultObj.get("results");
@@ -597,14 +595,9 @@ public class FootBallService {
   public static <T> ArrayList<T>
   getArrayListFromStream(Stream<T> stream)
   {
-
-    List<T>
-            list = stream.collect(Collectors.toList());
-
+    List<T> list = stream.collect(Collectors.toList());
     // Create an ArrayList of the List
-    ArrayList<T>
-            arrayList = new ArrayList<T>(list);
-
+    ArrayList<T> arrayList = new ArrayList<T>(list);
     // Return the ArrayList
     return arrayList;
   }

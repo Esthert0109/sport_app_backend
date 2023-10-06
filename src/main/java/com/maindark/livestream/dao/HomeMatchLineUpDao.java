@@ -14,7 +14,7 @@ public interface HomeMatchLineUpDao {
     public Integer insert(HomeMatchLineUp homeMatchLineUp);
 
 
-    @Update("update home_match_line_up set first=#{first},captain=#{captain},player_name=#{playerName},player_logo=#{playerLogo},shirt_number=#{shirtNumber},position=#{position},rating=#{rating} where match_id = #{matchId}")
+    @Update("update home_match_line_up set first=#{first},captain=#{captain},player_name=#{playerName},player_logo=#{playerLogo},shirt_number=#{shirtNumber},position=#{position},rating=#{rating} where id = #{id}")
     public void updateHomeMatchLineUp(HomeMatchLineUp homeMatchLineUp);
 
     @Select("select * from home_match_line_up where id=#{id} and match_id=#{matchId}")

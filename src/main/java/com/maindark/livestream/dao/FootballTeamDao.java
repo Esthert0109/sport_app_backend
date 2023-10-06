@@ -22,7 +22,7 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
     public Integer getMaxUpdatedAt();
 
 
-    @Update("update football_team set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},updated_at=#{updatedAt}")
+    @Update("update football_team set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},updated_at=#{updatedAt} where id=#{id}")
     public void updateDataById(FootballTeam footballTeam);
 
     @Select("select * from football_team where id=#{id}")
