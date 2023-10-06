@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Update;
 public interface FootballLiveVideoDao {
 
     @Insert("insert into football_live_video(match_id, type, title, mobile_link, pc_link) values(#{matchId},#{type},#{title},#{mobileLink},#{pcLink})")
-    public Integer insert(FootballLiveVideo footballLiveVideo);
+    Integer insert(FootballLiveVideo footballLiveVideo);
 
     @Update("update football_live_video set type=#{type},title=#{title},mobile_link=#{mobileLink},pc_link=#{pcLink} where match_id=#{matchId}")
-    public void updateFootballLiveVideoByMatchId(@Param("matchId")Integer matchId);
+    void updateFootballLiveVideoByMatchId(@Param("matchId") Integer matchId);
 }

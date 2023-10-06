@@ -13,21 +13,21 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
     @Insert("insert into football_team(id, competition_id,name_zh,name_en,logo,updated_at)values("
             + "#{id}, #{competitionId}, #{nameZh}, #{nameEn}, #{logo}, #{updatedAt})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
-    public Integer insert(FootballTeam footBallTeam);
+    Integer insert(FootballTeam footBallTeam);
 
     @Select("select max(id) from football_team")
-    public Integer getMaxId();
+    Integer getMaxId();
 
     @Select("select max(updated_at) from football_team")
-    public Integer getMaxUpdatedAt();
+    Integer getMaxUpdatedAt();
 
 
     @Update("update football_team set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},updated_at=#{updatedAt} where id=#{id}")
-    public void updateDataById(FootballTeam footballTeam);
+    void updateDataById(FootballTeam footballTeam);
 
     @Select("select * from football_team where id=#{id}")
     FootballTeam getTeam(@Param("id")Integer id);
 
     @Select("select id,name_zh as team_name,logo from football_team where id=#{id}")
-    public FootballTeamVo getTeamLogoAndNameById(@Param("id")Integer id);
+    FootballTeamVo getTeamLogoAndNameById(@Param("id") Integer id);
 }

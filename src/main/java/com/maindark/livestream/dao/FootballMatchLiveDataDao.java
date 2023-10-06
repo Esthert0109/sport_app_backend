@@ -16,7 +16,7 @@ public interface FootballMatchLiveDataDao {
             "#{awayTeamName},#{homeAttackNum},#{awayAttackNum},#{homeAttackDangerNum},#{awayAttackDangerNum},#{homePossessionRate},#{awayPossessionRate},#{homeShootGoalNum}" +
             ",#{awayShootGoalNum},#{homeBiasNum},#{awayBiasNum},#{homeCornerKickNum},#{awayCornerKickNum},#{homeRedCardNum},#{awayRedCardNum},#{homeYellowCardNum}," +
             "#{awayYellowCardNum},#{homeScore},#{awayScore})")
-    public Integer insert(FootballMatchLiveData footballMatchLiveData);
+    Integer insert(FootballMatchLiveData footballMatchLiveData);
 
 
 
@@ -30,7 +30,7 @@ public interface FootballMatchLiveDataDao {
             "home_shoot_goal_num,away_shoot_goal_num,home_bias_num,away_bias_num,home_corner_kick_num,away_corner_kick_num," +
             "home_red_card_num,away_red_card_num,home_yellow_card_num,away_yellow_card_num,home_score,away_score from " +
             "football_match_live_data where match_id = #{matchId}")
-    public FootballMatchLiveDataVo getFootballMatchLiveDataVo(@Param("matchId")Integer matchId);
+    FootballMatchLiveDataVo getFootballMatchLiveDataVo(@Param("matchId") Integer matchId);
     @Update("update football_match_live_data set status_id=#{statusId},home_attack_num=#{homeAttackNum}" +
             ",away_attack_num=#{awayAttackNum}," +
             "home_attack_danger_num=#{homeAttackDangerNum},away_attack_danger_num=#{awayAttackDangerNum}," +
@@ -43,7 +43,7 @@ public interface FootballMatchLiveDataDao {
             "home_yellow_card_num=#{homeYellowCardNum}," +
             "away_yellow_card_num=#{awayYellowCardNum},home_score=#{homeScore}" +
             ",away_score=#{awayScore} where match_id=#{matchId}")
-    public void updateFootballMatchLiveData(FootballMatchLiveData footballMatchLiveData);
+    void updateFootballMatchLiveData(FootballMatchLiveData footballMatchLiveData);
 
 
 

@@ -11,10 +11,14 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
 
 
-    @Insert("insert into football_match(id,season_id,competition_id,status_id,match_time,home_team_id,away_team_id,referee_id,venue_id,home_team_name,away_team_name,home_team_score,away_team_score,line_up,updated_at)values("
-            + "#{id},#{seasonId},#{competitionId},#{statusId},#{matchTime},#{homeTeamId},#{awayTeamId},#{refereeId},#{venueId},#{homeTeamName},#{awayTeamName},#{homeTeamScore},#{awayTeamScore},#{lineUp},#{updatedAt})")
+    @Insert("insert into football_match(id,season_id,competition_id,status_id,match_time," +
+            "home_team_id,away_team_id,referee_id,venue_id,home_team_name,away_team_name," +
+            "home_team_score,away_team_score,line_up,updated_at)values("
+            + "#{id},#{seasonId},#{competitionId},#{statusId},#{matchTime},#{homeTeamId}," +
+            "#{awayTeamId},#{refereeId},#{venueId},#{homeTeamName},#{awayTeamName}," +
+            "#{homeTeamScore},#{awayTeamScore},#{lineUp},#{updatedAt})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
-    public Integer insert(FootballMatch footballMatch);
+    Integer insert(FootballMatch footballMatch);
 
     @Select("select max(id) from football_match")
     Integer getMaxId();
@@ -22,39 +26,75 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     @Select("select max(updated_at) from football_match")
     Integer getMaxUpdatedAt();
 
-    @Update("update football_match set season_id=#{seasonId},competition_id=#{competitionId},status_id=#{statusId},match_time=#{matchTime},home_team_score=#{homeTeamScore},away_team_score=#{awayTeamScore},updated_at=#{updatedAt} where id=#{id}")
-    public void updateDataById(FootballMatch footballMatch);
+    @Update("update football_match set season_id=#{seasonId},competition_id=#{competitionId}," +
+            "status_id=#{statusId},match_time=#{matchTime},home_team_score=#{homeTeamScore}," +
+            "away_team_score=#{awayTeamScore},updated_at=#{updatedAt} where id=#{id}")
+    void updateDataById(FootballMatch footballMatch);
 
     @Select("select line_up from football_match where id=#{id}")
-    public FootballMatch getFootballMatch(@Param("id")Integer id);
+    FootballMatch getFootballMatch(@Param("id") Integer id);
 
     @Select("select * from football_match where id=#{id}")
-    public FootballMatch getFootballMatchById(@Param("id")Integer id);
+    FootballMatch getFootballMatchById(@Param("id") Integer id);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.status_id = 8 and t1.id=#{id}")
-    public FootballMatchVo getFootballMatchVoById(@Param("id")Integer id);
+    @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id,t1.home_team_name," +
+            "t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score," +
+            "t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up " +
+            "from live_stream.football_match t1 left join live_stream.football_competition fc " +
+            "on t1.competition_id = fc.id where t1.status_id = 8 and t1.id=#{id}")
+    FootballMatchVo getFootballMatchVoById(@Param("id") Integer id);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where fc.name_zh like'%${competitionName}%'  and t1.status_id in(2,3,4,5) and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id from live_stream.football_match t1 left join live_stream.football_competition fc on " +
+            "t1.competition_id = fc.id where fc.name_zh like'%${competitionName}%'  a" +
+            "nd t1.status_id in(2,3,4,5) and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} " +
+            "order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByCompetitionName(@Param("competitionName") String competitionName, @Param("nowSeconds")Long nowSeconds, @Param("tomorrowSeconds")Long tomorrowSeconds);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id from football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.home_team_name like '%${teamName}%' or t1.away_team_name like'%${teamName}%' and t1.match_time >#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id from football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id " +
+            "where t1.home_team_name like '%${teamName}%' or t1.away_team_name like'%${teamName}%' " +
+            "and t1.match_time >#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByTeamName(@Param("teamName") String teamName,@Param("nowSeconds")Long nowSeconds,@Param("tomorrowSeconds")Long tomorrowSeconds);
 
-    @Update("update football_match set home_formation=#{homeFormation},away_formation=#{awayFormation} where id=#{matchId}")
+    @Update("update football_match set home_formation=#{homeFormation},away_formation=#{awayFormation} " +
+            "where id=#{matchId}")
     void updateFormation(@Param("homeFormation") String homeFormation, @Param("awayFormation") String awayFormation,@Param("matchId")Integer matchId);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.status_id in(2,3,4,5) and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition " +
+            "fc on t1.competition_id = fc.id where t1.status_id in(2,3,4,5) and t1.match_time >=#{nowSeconds} and " +
+            "t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByTime(@Param("nowSeconds")Long nowSeconds, @Param("tomorrowSeconds")Long tomorrowSeconds);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.status_id = 8 and t1.match_time >=#{pastSeconds} and t1.match_time<#{nowSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            " on t1.competition_id = fc.id where t1.status_id = 8 and t1.match_time >=#{pastSeconds} " +
+            "and t1.match_time<#{nowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchesPast(@Param("pastSeconds")Long pastSeconds, @Param("nowSeconds")Long nowSeconds);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.status_id >= 1 and t1.status_id <=5 and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            " on t1.competition_id = fc.id where t1.status_id >= 1 and t1.status_id <=5 and t1.match_time >=#{nowSeconds} " +
+            "and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchesStart(@Param("nowSeconds")Long nowSeconds, @Param("tomorrowSeconds")Long tomorrowSeconds);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.status_id = 1 and t1.match_time >=#{tomorrowSeconds} and t1.match_time<#{futureSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            " on t1.competition_id = fc.id where t1.status_id = 1 and t1.match_time >=#{tomorrowSeconds} " +
+            "and t1.match_time<#{futureSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchesFuture(@Param("tomorrowSeconds")Long tomorrowSeconds, @Param("futureSeconds")Long futureSeconds);
 
-    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo,t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id where t1.match_time >=#{currentSeconds} and t1.match_time<#{deadlineSeconds} order by t1.match_time asc")
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            " on t1.competition_id = fc.id where t1.match_time >=#{currentSeconds} and " +
+            "t1.match_time<#{deadlineSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByDate(@Param("currentSeconds") Long currentSeconds, @Param("deadlineSeconds") Long deadlineSeconds);
 }

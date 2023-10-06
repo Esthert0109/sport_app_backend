@@ -1,9 +1,9 @@
 package com.maindark.livestream.dao;
 
 public interface BasicDao<T> {
-    public Integer insert(T t);
-    public Integer getMaxId();
-    public Integer getMaxUpdatedAt();
+    Integer insert(T t);
+    Integer getMaxId();
+    Integer getMaxUpdatedAt();
 
-    public void updateDataById(T t);
+    void updateDataById(T t);
 }

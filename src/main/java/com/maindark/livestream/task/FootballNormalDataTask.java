@@ -68,6 +68,10 @@ public class FootballNormalDataTask {
             String result = HttpUtil.getNaMiData(url);
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
+            if (code == null){
+                log.error("nami error:{}",resultObj.get("err"));
+                break;
+            }
             if (code == 0) {
                 Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
                 Integer total = (Integer)query.get("total");
@@ -99,6 +103,10 @@ public class FootballNormalDataTask {
             String result = HttpUtil.getNaMiData(url);
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
+            if (code == null){
+                log.error("nami error:{}",resultObj.get("err"));
+                break;
+            }
             if (code == 0) {
                 Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
                 Integer total = (Integer)query.get("total");
@@ -140,6 +148,10 @@ public class FootballNormalDataTask {
             String result = HttpUtil.getNaMiData(url);
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
+            if (code == null){
+                log.error("nami error:{}",resultObj.get("err"));
+                break;
+            }
             if (code == 0) {
                 Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
                 Integer total = (Integer)query.get("total");
@@ -171,6 +183,10 @@ public class FootballNormalDataTask {
             String result = HttpUtil.getNaMiData(url);
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
+            if (code == null){
+                log.error("nami error:{}",resultObj.get("err"));
+                break;
+            }
             if (code == 0) {
                 Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
                 Integer total = (Integer)query.get("total");
@@ -212,6 +228,10 @@ public class FootballNormalDataTask {
             String result = HttpUtil.getNaMiData(url);
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
+            if (code == null){
+                log.error("nami error:{}",resultObj.get("err"));
+                break;
+            }
             if (code == 0) {
                 Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
                 Integer total = (Integer)query.get("total");
@@ -243,6 +263,10 @@ public class FootballNormalDataTask {
             String result = HttpUtil.getNaMiData(url);
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
+            if (code == null){
+                log.error("nami error:{}",resultObj.get("err"));
+                break;
+            }
             if (code == 0) {
                 Map<String,Object> query = (Map<String,Object>)resultObj.get("query");
                 Integer total = (Integer)query.get("total");
@@ -282,7 +306,7 @@ public class FootballNormalDataTask {
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
             if (code == null){
-                log.error("nami error:",resultObj.get("err"));
+                log.error("nami error:{}",resultObj.get("err"));
                 break;
             }
             if (code == 0) {
@@ -317,7 +341,7 @@ public class FootballNormalDataTask {
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer) resultObj.get("code");
             if (code == null){
-                log.error("nami error:",resultObj.get("err"));
+                log.error("nami error:{}",resultObj.get("err"));
                 break;
             }
             if (code == 0) {
@@ -361,7 +385,7 @@ public class FootballNormalDataTask {
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer)resultObj.get("code");
             if (code == null){
-                log.error("nami error:",resultObj.get("err"));
+                log.error("nami error:{}",resultObj.get("err"));
                 break;
             }
             if (code == 0) {
@@ -398,7 +422,7 @@ public class FootballNormalDataTask {
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer)resultObj.get("code");
             if (code == null){
-                log.error("nami error:",resultObj.get("err"));
+                log.error("nami error:{}",resultObj.get("err"));
                 break;
             }
             if (code == 0) {

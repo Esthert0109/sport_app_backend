@@ -98,7 +98,7 @@ public class LiveStreamUserService {
         liveStreamUserDao.update(toBeUpdate);
 
         //manage cache
-        redisService.delete(UserKey.getById, ""+id);
+        redisService.delete(LoginKey.token, token);
         user.setPassword(toBeUpdate.getPassword());
         redisService.set(LoginKey.token, token, user);
         return true;
@@ -135,7 +135,7 @@ public class LiveStreamUserService {
         liveStreamUserDao.updateHead(toBeUpdate);
 
         //manage cache
-        redisService.delete(UserKey.getById, ""+id);
+        redisService.delete(LoginKey.token, token);
         user.setHead(toBeUpdate.getHead());
         redisService.set(LoginKey.token, token, user);
         return true;

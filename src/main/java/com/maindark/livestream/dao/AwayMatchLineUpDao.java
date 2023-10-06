@@ -12,15 +12,15 @@ public interface AwayMatchLineUpDao {
     @Insert("insert into away_match_line_up(id,match_id,team_id,first,captain,player_name,player_logo,shirt_number,position,rating)values("
             + "#{id},#{matchId},#{teamId},#{first},#{captain},#{playerName},#{playerLogo},#{shirtNumber},#{position},#{rating})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
-    public Integer insert(AwayMatchLineUp awayMatchLineUp);
+    Integer insert(AwayMatchLineUp awayMatchLineUp);
 
     @Update("update away_match_line_up set first=#{first},captain=#{captain},player_name=#{playerName},player_logo=#{playerLogo},shirt_number=#{shirtNumber},position=#{position},rating=#{rating} where id = #{id}")
-    public void updateAwayMatchLineUp(AwayMatchLineUp awayMatchLineUp);
+    void updateAwayMatchLineUp(AwayMatchLineUp awayMatchLineUp);
 
     @Select("select * from away_match_line_up where id=#{id} and match_id=#{matchId}")
-    public AwayMatchLineUp getAwayMatchLineUp(@Param("id")Integer id,@Param("matchId")Integer matchId);
+    AwayMatchLineUp getAwayMatchLineUp(@Param("id") Integer id, @Param("matchId") Integer matchId);
 
     @Select("select * from away_match_line_up where match_id=#{matchId}")
-    public List<AwayMatchLineUp> getAwayMatchLineUpByMatchId(@Param("matchId")Integer matchId);
+    List<AwayMatchLineUp> getAwayMatchLineUpByMatchId(@Param("matchId") Integer matchId);
 }
 

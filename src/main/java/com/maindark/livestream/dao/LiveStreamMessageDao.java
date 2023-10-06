@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface LiveStreamMessageDao {
     @Select("select * from live_stream_message where status = '0' and id=#{id}")
-    public LiveStreamMessage getById(@Param("id")Integer id);
+    LiveStreamMessage getById(@Param("id") Integer id);
 
 }

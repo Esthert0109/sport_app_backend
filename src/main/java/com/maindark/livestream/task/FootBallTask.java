@@ -92,7 +92,7 @@ public class FootBallTask {
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer)resultObj.get("code");
             if (code == null){
-                log.error("nami error:",resultObj.get("err"));
+                log.error("nami error:{}",resultObj.get("err"));
                 break;
             }
             if (code == 0) {
@@ -141,7 +141,7 @@ public class FootBallTask {
             Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
             Integer code = (Integer)resultObj.get("code");
             if (code == null){
-                log.error("nami error:",resultObj.get("err"));
+                log.error("nami error:{}",resultObj.get("err"));
                 break;
             }
             if (code == 0) {
@@ -194,7 +194,7 @@ public class FootBallTask {
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         Integer code = (Integer) resultObj.get("code");
         if (code == null){
-            log.error("nami error:",resultObj.get("err"));
+            log.error("nami error:{}",resultObj.get("err"));
             throw new GlobalException(CodeMsg.FOOT_BALL_ERROR);
         }
         if(code == 0) {
@@ -235,7 +235,7 @@ public class FootBallTask {
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         Integer code = (Integer) resultObj.get("code");
         if (code == null){
-            log.error("nami error:",resultObj.get("err"));
+            log.error("nami error:{}",resultObj.get("err"));
             throw new GlobalException(CodeMsg.FOOT_BALL_ERROR);
         }
         if(code == 0)
@@ -453,7 +453,7 @@ public class FootBallTask {
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         Integer code = (Integer) resultObj.get("code");
         if (code == null){
-            log.error("nami error:",resultObj.get("err"));
+            log.error("nami error:{}",resultObj.get("err"));
             throw new GlobalException(CodeMsg.FOOT_BALL_ERROR);
         }
         if(code ==0){
