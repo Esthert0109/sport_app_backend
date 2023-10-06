@@ -30,7 +30,7 @@ public class StorageService {
     @Value("${application.bucket.host}")
     private String host;
     @Resource
-   private AmazonS3 amazonS3;
+    private AmazonS3 amazonS3;
 
     public void uploadFile(MultipartFile file,String fileName) {
         File fileObj = convertMultiPartFileToFile(file);
@@ -54,7 +54,6 @@ public class StorageService {
 
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(bucketName, folder+fileName);
-
     }
 
 
