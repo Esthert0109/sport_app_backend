@@ -5,6 +5,7 @@ import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.*;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.nami.NamiConfig;
+import com.maindark.livestream.redis.FootballListKey;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
@@ -96,25 +97,28 @@ public class FootBallService {
   public Map<String,List<FootballMatchVo>> getFootballMatchesInSevenDays() {
     // get all start matches
     LocalDate now = LocalDate.now();
-    LocalDate tomorrow = now.plusDays(1);
-    LocalDate future = now.plusDays(6);
-    LocalDate past = now.minusDays(6);
-
     Long nowSeconds = DateUtil.convertDateToLongTime(now);
-    Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
-    Long futureSeconds = DateUtil.convertDateToLongTime(future);
-    Long pastSeconds = DateUtil.convertDateToLongTime(past);
-    log.info("get past date:{},now date:{},tomorrow date:{},future date:{}",pastSeconds,nowSeconds,tomorrowSeconds,futureSeconds);
-    List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds,nowSeconds);
-    pastMatches = getFootballMatchVos(pastMatches);
-    List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds,tomorrowSeconds);
-    startMatches = getFootballMatchVos(startMatches);
-    List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds,futureSeconds);
-    futureMatches = getFootballMatchVos(futureMatches);
-    Map<String,List<FootballMatchVo>> results = new HashMap<>();
-    results.put("pass",pastMatches);
-    results.put("start",startMatches);
-    results.put("future",futureMatches);
+    Map<String,List<FootballMatchVo>> results = redisService.get(FootballListKey.listKey,String.valueOf(nowSeconds),Map.class);
+    if (results == null) {
+      LocalDate tomorrow = now.plusDays(1);
+      LocalDate future = now.plusDays(6);
+      LocalDate past = now.minusDays(6);
+      Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+      Long futureSeconds = DateUtil.convertDateToLongTime(future);
+      Long pastSeconds = DateUtil.convertDateToLongTime(past);
+      log.info("get past date:{},now date:{},tomorrow date:{},future date:{}",pastSeconds,nowSeconds,tomorrowSeconds,futureSeconds);
+      List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds,nowSeconds);
+      pastMatches = getFootballMatchVos(pastMatches);
+      List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds,tomorrowSeconds);
+      startMatches = getFootballMatchVos(startMatches);
+      List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds,futureSeconds);
+      futureMatches = getFootballMatchVos(futureMatches);
+      results = new HashMap<>();
+      results.put("pass",pastMatches);
+      results.put("start",startMatches);
+      results.put("future",futureMatches);
+      redisService.set(FootballListKey.listKey,String.valueOf(nowSeconds),results);
+    }
     return results;
   }
 
