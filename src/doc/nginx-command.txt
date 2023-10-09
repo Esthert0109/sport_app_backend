@@ -1,0 +1,3 @@
+start-nginx-server:sudo systemctl start nginx.service
+check-nginx-server:sudo systemctl status nginx.service
+stop-nginx-server:sudo systemctl stop nginx.service
