@@ -7,7 +7,7 @@ import java.util.Date;
 public class LiveStreamUserForm {
     //id equals mobile
     @NotNull(message = "mobile can be not empty")
-    private Long id;
+    private String id;
     @NotNull(message = "username can be not empty")
     private String nickName;
     @NotNull(message = "password can be not empty")

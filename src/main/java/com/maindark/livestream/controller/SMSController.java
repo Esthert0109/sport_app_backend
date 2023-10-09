@@ -13,8 +13,8 @@ public class SMSController {
     SMSService smsService;
 
     @GetMapping ("/send/{mobile}")
-    public Result<Boolean> sendMsg(@PathVariable Long mobile){
-        Boolean result = smsService.sendSMS(String.valueOf(mobile));
+    public Result<Boolean> sendMsg(@PathVariable String mobile){
+        Boolean result = smsService.sendSMS(mobile);
         return Result.success(result);
     }
 }

@@ -61,7 +61,7 @@ public class LiveStreamUserService {
 
 
     public LiveStreamUser save(LiveStreamUserForm liveStreamUserForm) {
-        LiveStreamUser checkUser = getById(liveStreamUserForm.getId());
+        LiveStreamUser checkUser = getById(Long.parseLong(liveStreamUserForm.getId()));
         if(checkUser != null) {
             throw new GlobalException(CodeMsg.MOBILE_EXIST);
         }
