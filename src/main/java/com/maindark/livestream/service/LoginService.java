@@ -15,6 +15,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class LoginService {
 
@@ -26,7 +29,8 @@ public class LoginService {
     RedisService redisService;
 
 
-    public String login(HttpServletResponse response, LoginVo loginVo) {
+    public Map<String,String> login(HttpServletResponse response, LoginVo loginVo) {
+        Map<String,String> map = new HashMap<>();
         if(loginVo == null) {
             throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
@@ -51,7 +55,8 @@ public class LoginService {
         cookie.setMaxAge(LoginKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
-        return token;
+        map.put("token",token);
+        return map;
     }
 
 }

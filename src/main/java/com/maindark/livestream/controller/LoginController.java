@@ -9,6 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -19,8 +23,8 @@ public class LoginController {
     LoginService loginService;
 
     @PostMapping (value = "/do-login")
-    public Result<String> doLogin(HttpServletResponse response, @RequestBody @Valid LoginVo loginVo){
-        String token = loginService.login(response,loginVo);
-        return Result.success(token);
+    public Result<Map<String,String>> doLogin(HttpServletResponse response, @RequestBody @Valid LoginVo loginVo){
+        Map<String,String> map = loginService.login(response,loginVo);
+        return Result.success(map);
     }
 }
