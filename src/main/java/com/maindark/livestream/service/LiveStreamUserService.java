@@ -68,6 +68,7 @@ public class LiveStreamUserService {
         LiveStreamUser liveStreamUser = new LiveStreamUser();
         BeanUtils.copyProperties(liveStreamUserForm,liveStreamUser);
         liveStreamUser.setSalt(SALT);
+        liveStreamUser.setId(Long.parseLong(liveStreamUserForm.getId()));
         liveStreamUser.setPassword(MD5Util.formPassToDBPass(liveStreamUserForm.getPassword(),SALT));
         liveStreamUser.setRegisterDate(new Date());
         liveStreamUserDao.insert(liveStreamUser);
