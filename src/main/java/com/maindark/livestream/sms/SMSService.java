@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.*;
 import java.nio.charset.Charset;
@@ -40,10 +41,15 @@ public class SMSService {
                 + "&messageContent=" + messageContent
                 + "&recipients=" + mobileNumber
                 + "&referenceID=" + referenceID;
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         String url =  smsConfig.getUrl() + param;
         url = URLDecoder.decode(url, Charset.forName(StandardCharsets.UTF_8.name()));
-        String result = restTemplate.getForObject(url, String.class);
+        WebClient webClient = WebClient.create();
+        WebClient.ResponseSpec responseSpec = webClient.get()
+                .uri(url)
+                .retrieve();
+        String result = responseSpec.bodyToMono(String.class).block();
+        //String result = restTemplate.getForObject(url, String.class);
         log.info("sms result:{}",result);
         JSONObject resultObj = JSON.parseObject(result);
         String status = (String)resultObj.get("status");

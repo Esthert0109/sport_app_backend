@@ -3,16 +3,20 @@ package com.maindark.livestream.redis;
 import com.maindark.livestream.vo.FootballMatchLineUpVo;
 
 public class FootballMatchKey extends BasePrefix{
-    public FootballMatchKey(String prefix) {
+    private FootballMatchKey(String prefix) {
         super(prefix);
     }
 
-    public static FootballMatchKey  matchLiveKey = new FootballMatchKey("matchLive");
+    public FootballMatchKey(int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+    public static final int expiredSeconds = 3600 * 24;
+    public static FootballMatchKey  matchLiveKey = new FootballMatchKey(expiredSeconds,"matchLive");
     public static FootballMatchKey matchKey = new FootballMatchKey("match");
 
-    public static FootballMatchKey matchVoKey =  new FootballMatchKey("matchVo");
+    public static FootballMatchKey matchVoKey =  new FootballMatchKey(expiredSeconds,"matchVo");
 
-    public static FootballMatchKey matchLiveVoKey = new FootballMatchKey("matchLiveVo");
+    public static FootballMatchKey matchLiveVoKey = new FootballMatchKey(expiredSeconds,"matchLiveVo");
 
-    public static FootballMatchKey matchLineUpKey = new FootballMatchKey("matchLineUp");
+    public static FootballMatchKey matchLineUpKey = new FootballMatchKey(expiredSeconds,"matchLineUp");
 }
