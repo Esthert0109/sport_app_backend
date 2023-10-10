@@ -36,8 +36,8 @@ public class LiveStreamUserController {
     }
 
     @GetMapping("/{id}")
-    public Result<LiveStreamUserVo> findUserById(@PathVariable Long id) {
-       LiveStreamUserVo liveStreamUserVo = liveStreamUserService.findById(id);
+    public Result<LiveStreamUserVo> findUserById(@PathVariable String id) {
+       LiveStreamUserVo liveStreamUserVo = liveStreamUserService.findById(Long.parseLong(id));
        return Result.success(liveStreamUserVo);
     }
     @PatchMapping("/updateNickName/{token}/{nickName}")
