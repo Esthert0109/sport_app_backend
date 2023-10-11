@@ -3,6 +3,7 @@ package com.maindark.livestream.controller;
 
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.FootBallService;
+import com.maindark.livestream.vo.FootballLiveAddressVo;
 import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
@@ -107,10 +108,10 @@ public class FootballController {
      *  test get data live address from nami
      *
      */
-    @GetMapping("/address")
-    public Result<Map<String,Object>> getLiveAddress(){
-        Map<String,Object> map = footBallService.getLiveAddress();
-        return Result.success(map);
+    @GetMapping("/address/{matchId}")
+    public Result<FootballLiveAddressVo> getLiveAddress(@PathVariable("matchId")Integer matchId){
+        FootballLiveAddressVo footballLiveAddressVo = footBallService.getFootballLiveAddressByMatchId(matchId);
+        return Result.success(footballLiveAddressVo);
     }
 
 

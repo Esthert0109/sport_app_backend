@@ -1,6 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.FootballLiveAddress;
+import com.maindark.livestream.vo.FootballLiveAddressVo;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
@@ -20,6 +21,9 @@ public interface FootballLiveAddressDao {
             "comp=#{comp},home_team=#{homeTeam},away_team=#{awayTeam},push_url1=#{pushUrl1},push_url2=#{pushUrl2},push_url3=#{pushUrl3}" +
             " where match_id=#{matchId}")
     void updateFootballLiveAddressByMatchId(FootballLiveAddress footballLiveAddress);
+
+    @Select("select sport_id,match_id,push_url1,push_url2,push_url3 from football_live_address where match_id=#{matchId}")
+    FootballLiveAddressVo getLiveAddressByMatchId(@Param("matchId") Integer matchId);
 
 
 }

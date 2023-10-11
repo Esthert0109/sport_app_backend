@@ -4,11 +4,11 @@ package com.maindark.livestream.sms;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.maindark.livestream.exception.GlobalException;
+import com.maindark.livestream.form.SMSValidateForm;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.redis.SMSKey;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.UUIDUtil;
-import com.maindark.livestream.vo.SMSValidateVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -67,9 +67,9 @@ public class SMSService {
         }
     }
 
-    public Boolean verifyCode(SMSValidateVo smsValidateVo) {
-        String mobile = smsValidateVo.getMobile();
-        String code = smsValidateVo.getCode();
+    public Boolean verifyCode(SMSValidateForm smsValidateForm) {
+        String mobile = smsValidateForm.getMobile();
+        String code = smsValidateForm.getCode();
         String redisCode = redisService.get(SMSKey.smsKey,mobile,String.class);
         if(!StringUtils.isBlank(redisCode)){
             if(StringUtils.equals(code,redisCode)) {

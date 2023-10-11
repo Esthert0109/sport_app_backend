@@ -12,10 +12,7 @@ import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
-import com.maindark.livestream.vo.FootballMatchLineUpVo;
-import com.maindark.livestream.vo.FootballMatchLiveDataVo;
-import com.maindark.livestream.vo.FootballMatchVo;
-import com.maindark.livestream.vo.FootballTeamVo;
+import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -288,6 +285,10 @@ public class FootBallService {
         redisService.set(FootballMatchKey.matchLineUpKey,String.valueOf(matchId),footballMatchLineUpVo);
       }
       return footballMatchLineUpVo;
+    }
+
+    public FootballLiveAddressVo getFootballLiveAddressByMatchId(Integer matchId){
+      return footballLiveAddressDao.getLiveAddressByMatchId(matchId);
     }
 
   public Map<String, Object> getMatchLineUp(Integer matchId) {

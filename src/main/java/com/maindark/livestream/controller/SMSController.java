@@ -1,5 +1,6 @@
 package com.maindark.livestream.controller;
 
+import com.maindark.livestream.form.SMSValidateForm;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.sms.SMSService;
 import com.maindark.livestream.vo.SMSValidateVo;
@@ -19,8 +20,8 @@ public class SMSController {
         return Result.success(result);
     }
     @PostMapping("/verify/mobile")
-    public Result<Boolean> validateCode(@RequestBody SMSValidateVo validateVo){
-        Boolean result = smsService.verifyCode(validateVo);
+    public Result<Boolean> validateCode(@RequestBody SMSValidateForm validateForm){
+        Boolean result = smsService.verifyCode(validateForm);
         return Result.success(result);
     }
 
