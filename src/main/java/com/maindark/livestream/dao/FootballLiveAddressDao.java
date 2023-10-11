@@ -6,17 +6,19 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface FootballLiveAddressDao {
 
-    @Insert("insert into football_live_address(id, match_id, match_time, comp, home_team, away_team, " +
-            "mobile_link, pc_link)values(#{matchId},#{matchTime},#{comp},#{homeTeam},#{awayTeam}," +
-            "#{mobileLink},#{pcLink})")
+    @Insert("insert into football_live_address(id,match_id,match_time,match_status,comp_id,comp,home_team, " +
+            "away_team,push_url_1,push_url_2,push_url_3" +
+            ")values(#{id},#{matchId},#{matchTime},#{matchStatus},#{compId},#{comp},#{homeTeam},#{awayTeam}," +
+            "#{pushUrl1},#{pushUrl2},#{pushUrl3})")
+    @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     Integer insert(FootballLiveAddress footballLiveAddress);
 
     @Select("select * from football_live_address where match_id=#{matchId}")
     FootballLiveAddress getFootballLiveAddressByMatchId(@Param("matchId") Integer matchId);
 
-    @Update("update football_live_address set match_time=#{matchTime}," +
-            "comp=#{comp},home_team=#{homeTeam},away_team=#{awayTeam},mobile_link=#{mobileLink}," +
-            "pc_link=#{pcLink} where match_id=#{matchId}")
+    @Update("update football_live_address set match_time=#{matchTime},match_status=#{matchStatus},comp_id=#{compId}" +
+            "comp=#{comp},home_team=#{homeTeam},away_team=#{awayTeam},push_url_1=#{pushUrl1},push_url_2=#{pushUrl2},push_url_3=#{pushUrl3}" +
+            " where match_id=#{matchId}")
     void updateFootballLiveAddressByMatchId(FootballLiveAddress footballLiveAddress);
 
 

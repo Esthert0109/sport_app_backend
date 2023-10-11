@@ -13,10 +13,13 @@ public class FootballLiveAddress {
     private Integer id;
     private Integer matchId;
     private Long matchTime;
+    private Integer matchStatus;
+    private Integer compId;
     private String comp;
     private String homeTeam;
     private String awayTeam;
-    private String mobileLink;
-    private String pcLink;
+    private String pushUrl1;
+    private String pushUrl2;
+    private String pushUrl3;
     private Date createDate;
 }

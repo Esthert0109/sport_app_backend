@@ -26,6 +26,7 @@ public class NamiConfig {
     private String footballVenueUrl;
     private String footballRefereeUrl;
     private String footballCoachUrl;
+    private String footballLiveAddress;
 
 
 
@@ -41,6 +42,10 @@ public class NamiConfig {
 
     public String getNormalUrl(String normalUrl){
         return this.getHost() + normalUrl + "?user=" + this.getUser() +"&secret=" + this.getSecretKey();
+    }
+
+    public String getFootballLiveAddress(String normalUrl){
+        return normalUrl + "?user=" + this.getUser() +"&secret=" + this.getSecretKey();
     }
 
 

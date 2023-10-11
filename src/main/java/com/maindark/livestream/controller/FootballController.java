@@ -102,4 +102,17 @@ public class FootballController {
         List<Map<String,Object>> result = footBallService.getMatchList(competitionDate);
         return Result.success(result);
     }
+
+    /**
+     *  test get data live address from nami
+     *
+     */
+    @GetMapping("/address")
+    public Result<Map<String,Object>> getLiveAddress(){
+        Map<String,Object> map = footBallService.getLiveAddress();
+        return Result.success(map);
+    }
+
+
+
 }

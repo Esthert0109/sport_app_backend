@@ -52,10 +52,9 @@ public class FootBallService {
   @Resource
   FootballMatchLiveDataDao footballMatchLiveDataDao;
 
+  @Resource
+  FootballLiveAddressDao footballLiveAddressDao;
 
-  private Integer maxCompetitionIdFromApi = 0;
-
-  private Integer maxCompetitionTimeFromApi = 0;
 
   public String getNormalUrl(String normalUrl){
     return namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
@@ -595,6 +594,28 @@ public class FootBallService {
      return null;
   }
 
+  public Map<String,Object> getLiveAddress() {
+    String url = namiConfig.getFootballLiveAddress() + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
+    String result = HttpUtil.getNaMiData(url);
+    Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+    Integer code = (Integer) resultObj.get("code");
+    if (code != null) {
+      List<Map<String,Object>> results = (List<Map<String,Object>>)resultObj.get("data");
+      if(results != null && !results.isEmpty()){
+        results.stream().forEach(m ->{
+          FootballLiveAddress footballLiveAddress = getFootballLiveAddress(m);
+          FootballLiveAddress footballLiveAddressFromDb = footballLiveAddressDao.getFootballLiveAddressByMatchId(footballLiveAddress.getMatchId());
+          if(footballLiveAddressFromDb == null){
+            footballLiveAddressDao.insert(footballLiveAddress);
+          } else {
+            footballLiveAddressDao.updateFootballLiveAddressByMatchId(footballLiveAddress);
+          }
+        });
+      }
+    }
+    return null;
+  }
+
 
   public static <T> ArrayList<T>
   getArrayListFromStream(Stream<T> stream)
@@ -604,6 +625,33 @@ public class FootBallService {
     ArrayList<T> arrayList = new ArrayList<T>(list);
     // Return the ArrayList
     return arrayList;
+  }
+
+  private FootballLiveAddress getFootballLiveAddress(Map<String,Object> m){
+    Integer id = (Integer)m.get("sport_id");
+    Integer matchId = (Integer)m.get("match_id");
+    Long matchTime = Long.valueOf((Integer) m.get("match_time"));
+    Integer matchStatus = (Integer)m.get("match_status");
+    Integer compId = (Integer)m.get("comp_id");
+    String comp = (String)m.get("comp");
+    String homeTeam = (String)m.get("home");
+    String awayTeam = (String)m.get("away");
+    String pushUrl1 = (String)m.get("pushurl1");
+    String pushUrl2 = (String)m.get("pushurl2");
+    String pushUrl3 = (String)m.get("pushurl3");
+    FootballLiveAddress footballLiveAddress = new FootballLiveAddress();
+    footballLiveAddress.setId(id);
+    footballLiveAddress.setMatchId(matchId);
+    footballLiveAddress.setMatchTime(matchTime);
+    footballLiveAddress.setMatchStatus(matchStatus);
+    footballLiveAddress.setCompId(compId);
+    footballLiveAddress.setComp(comp);
+    footballLiveAddress.setHomeTeam(homeTeam);
+    footballLiveAddress.setAwayTeam(awayTeam);
+    footballLiveAddress.setPushUrl1(pushUrl1);
+    footballLiveAddress.setPushUrl2(pushUrl2);
+    footballLiveAddress.setPushUrl3(pushUrl3);
+    return footballLiveAddress;
   }
 
 

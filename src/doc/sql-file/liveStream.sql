@@ -173,18 +173,23 @@ CREATE TABLE `football_match_live_data` (
 
 
 DROP TABLE IF EXISTS `football_live_address`;
+DROP TABLE IF EXISTS `football_live_address`;
 CREATE TABLE `football_live_address` (
-  `id` int NOT NULL auto_increment   COMMENT 'id',
+  `id` int NOT NULL COMMENT 'id',
   `match_id` int not null COMMENT 'match id',
   `match_time` bigint COMMENT 'match time',
+  `match_status` int not null COMMENT 'match status',
+  `comp_id` int not null COMMENT 'competition id',
   `comp` varchar(255) COMMENT 'competition description ',
   `home_team` varchar(255) COMMENT 'home team description',
   `away_team` varchar(255)  COMMENT 'away team description',
-  `mobile_link` varchar(255)  COMMENT 'mobile link',
-  `pc_link` varchar(255) COMMENT 'pc link',
+  `push_url_1` varchar(255)  COMMENT 'push url 1',
+  `push_url_2` varchar(255)  COMMENT 'push url 2',
+  `push_url_3` varchar(255) COMMENT 'push url 2',
   `create_date` datetime DEFAULT current_timestamp()  COMMENT 'create time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 DROP TABLE IF EXISTS `football_live_video`;
 CREATE TABLE `football_live_video` (
@@ -240,5 +245,6 @@ create index away_match_line_up_indexMatch on away_match_line_up(match_id);
 create index football_match_live_data_indexMatch on football_match_live_data(match_id);
 create index football_competition_index_name on football_competition(name_zh);
 create index update_football_data_index_uniqueKey on update_football_data(unique_key);
- 
+create index football_live_address_index_matchId on football_live_address(match_id);
+
  
