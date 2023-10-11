@@ -31,7 +31,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
             "away_team_score=#{awayTeamScore},updated_at=#{updatedAt} where id=#{id}")
     void updateDataById(FootballMatch footballMatch);
 
-    @Select("select line_up from football_match where id=#{id}")
+    @Select("select * from football_match where id=#{id}")
     FootballMatch getFootballMatch(@Param("id") Integer id);
 
     @Select("select * from football_match where id=#{id}")
@@ -56,7 +56,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
             "t1.home_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
             "t1.status_id from football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id " +
             "where t1.home_team_name like '%${teamName}%' or t1.away_team_name like'%${teamName}%' " +
-            "and t1.match_time >#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
+            "and t1.status_id in(2,3,4,5) and t1.match_time >#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByTeamName(@Param("teamName") String teamName,@Param("nowSeconds")Long nowSeconds,@Param("tomorrowSeconds")Long tomorrowSeconds);
 
     @Update("update football_match set home_formation=#{homeFormation},away_formation=#{awayFormation} " +
