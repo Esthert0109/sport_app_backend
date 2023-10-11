@@ -174,7 +174,8 @@ CREATE TABLE `football_match_live_data` (
 
 DROP TABLE IF EXISTS `football_live_address`;
 CREATE TABLE `football_live_address` (
-  `id` int NOT NULL COMMENT 'id',
+  `id` int NOT NULL auto_increment COMMENT 'id',
+  `sport_id` int not null COMMENT '1-足球、2-篮球、3-网球',
   `match_id` int not null COMMENT 'match id',
   `match_time` bigint COMMENT 'match time',
   `match_status` int not null COMMENT 'match status',
@@ -182,9 +183,9 @@ CREATE TABLE `football_live_address` (
   `comp` varchar(255) COMMENT 'competition description ',
   `home_team` varchar(255) COMMENT 'home team description',
   `away_team` varchar(255)  COMMENT 'away team description',
-  `push_url_1` varchar(255)  COMMENT 'push url 1',
-  `push_url_2` varchar(255)  COMMENT 'push url 2',
-  `push_url_3` varchar(255) COMMENT 'push url 2',
+  `push_url1` varchar(255)  COMMENT 'push url 1',
+  `push_url2` varchar(255)  COMMENT 'push url 2',
+  `push_url3` varchar(255) COMMENT 'push url 3',
   `create_date` datetime DEFAULT current_timestamp()  COMMENT 'create time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -681,7 +681,7 @@ public class FootBallTask {
     }
 
     private FootballLiveAddress getFootballLiveAddress(Map<String,Object> m){
-        Integer id = (Integer)m.get("sport_id");
+        Integer sportId = (Integer)m.get("sport_id");
         Integer matchId = (Integer)m.get("match_id");
         Long matchTime = Long.valueOf((Integer) m.get("match_time"));
         Integer matchStatus = (Integer)m.get("match_status");
@@ -693,7 +693,7 @@ public class FootBallTask {
         String pushUrl2 = (String)m.get("pushurl2");
         String pushUrl3 = (String)m.get("pushurl3");
         FootballLiveAddress footballLiveAddress = new FootballLiveAddress();
-        footballLiveAddress.setId(id);
+        footballLiveAddress.setSportId(sportId);
         footballLiveAddress.setMatchId(matchId);
         footballLiveAddress.setMatchTime(matchTime);
         footballLiveAddress.setMatchStatus(matchStatus);

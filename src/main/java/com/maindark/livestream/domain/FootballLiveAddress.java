@@ -11,6 +11,7 @@ import java.util.Date;
 public class FootballLiveAddress {
     @Id
     private Integer id;
+    private Integer sportId;
     private Integer matchId;
     private Long matchTime;
     private Integer matchStatus;

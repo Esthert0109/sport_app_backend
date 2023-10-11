@@ -613,7 +613,7 @@ public class FootBallService {
         });
       }
     }
-    return null;
+    return resultObj;
   }
 
 
@@ -640,7 +640,7 @@ public class FootBallService {
     String pushUrl2 = (String)m.get("pushurl2");
     String pushUrl3 = (String)m.get("pushurl3");
     FootballLiveAddress footballLiveAddress = new FootballLiveAddress();
-    footballLiveAddress.setId(id);
+    footballLiveAddress.setSportId(id);
     footballLiveAddress.setMatchId(matchId);
     footballLiveAddress.setMatchTime(matchTime);
     footballLiveAddress.setMatchStatus(matchStatus);
