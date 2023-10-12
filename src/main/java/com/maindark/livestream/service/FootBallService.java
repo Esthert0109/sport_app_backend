@@ -245,10 +245,12 @@ public class FootBallService {
         FootballTeam homeTeam = footballTeamDao.getTeam(footballMatch.getHomeTeamId());
         if(homeTeam != null) {
           footballMatch.setHomeTeamName(homeTeam.getNameZh());
+          footballMatch.setHomeTeamLogo(homeTeam.getLogo());
         }
         FootballTeam awayTeam = footballTeamDao.getTeam(footballMatch.getAwayTeamId());
         if(awayTeam != null) {
           footballMatch.setAwayTeamName(awayTeam.getNameZh());
+          footballMatch.setAwayTeamLogo(awayTeam.getLogo());
         }
         FootballMatch footballMatchFromDb = footballMatchDao.getFootballMatchById(id);
         if(footballMatchFromDb == null) {
