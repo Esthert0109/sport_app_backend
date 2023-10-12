@@ -1,3 +1,5 @@
 tengxunyun-website:https://www.tencentcloud.com/zh/search/?wd=sdk&lang=zh&pg=
 tengxunyu-account:mindarkdaniel@gmail.com
 tengxunyu-password:mindark888
+tengxun-push-domain:rtmp://190299.push.tlivecloud.com/live/sd-1-4020772
+tengxun-play-domain:rtmp://play.mindark.cloud/live/sd-1-4020772
