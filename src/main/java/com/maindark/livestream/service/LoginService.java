@@ -56,6 +56,8 @@ public class LoginService {
         cookie.setPath("/");
         response.addCookie(cookie);
         map.put("token",token);
+        map.put("username",liveStreamUser.getNickName());
+        map.put("head",liveStreamUser.getHead());
         return map;
     }
 
