@@ -58,6 +58,7 @@ public class LoginService {
         map.put("token",token);
         map.put("username",liveStreamUser.getNickName());
         map.put("head",liveStreamUser.getHead());
+        map.put("mobile",String.valueOf(liveStreamUser.getId()));
         return map;
     }
 

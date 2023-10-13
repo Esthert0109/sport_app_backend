@@ -79,8 +79,6 @@ public class AllSportsApiService {
                             footballMatchVo.setAwayTeamScore(0);
                         } else {
                             String[] scoreArr = scores.split("-");
-                            String score1 = scoreArr[0];
-                            String score2 = scoreArr[1];
                             footballMatchVo.setHomeTeamScore(Integer.parseInt(scoreArr[0].trim()));
                             footballMatchVo.setAwayTeamScore(Integer.parseInt(scoreArr[1].trim()));
                         }
