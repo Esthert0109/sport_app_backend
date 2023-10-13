@@ -20,4 +20,6 @@ public class FootballMatchVo {
     private Integer lineUp;
     private String refereeName;
     private String venueName;
+    private String homeFormation;
+    private String awayFormation;
 }

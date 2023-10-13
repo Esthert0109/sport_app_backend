@@ -14,4 +14,7 @@ public interface AllSportsFootballTeamDao {
 
     @Select("select * from all_sports_football_team where id=#{id}")
     AllSportsFootballTeam getAllSportsTeamById(@Param("id")Integer id);
+
+    @Select("select id from all_sports_football_team where team_name=#{teamName} limit 1")
+    Integer getAllSportsTeamByName(@Param("teamName")String teamName);
 }

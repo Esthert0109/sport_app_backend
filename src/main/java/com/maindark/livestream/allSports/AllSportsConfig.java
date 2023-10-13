@@ -12,7 +12,8 @@ public class AllSportsConfig {
     private String leagues;
     private String host;
     private String teams;
-    private String fixtures;
+    private String fixturesLeagueId;
+    private String fixturesTeamId;
 
     public String getAllSportsApi(String url){
         return this.host + url + this.secretKey;

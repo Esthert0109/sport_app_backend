@@ -1,8 +1,12 @@
 package com.maindark.livestream.controller;
 
 import com.maindark.livestream.domain.LiveStreamUser;
+import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.form.LiveStreamUserForm;
 import com.maindark.livestream.form.ResetHeadForm;
+import com.maindark.livestream.redis.LoginKey;
+import com.maindark.livestream.redis.RedisService;
+import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.LiveStreamUserService;
 import com.maindark.livestream.vo.LiveStreamUserVo;
@@ -19,8 +23,14 @@ public class LiveStreamUserController {
 
     @Resource
     public LiveStreamUserService liveStreamUserService;
+    @Resource
+    RedisService redisService;
    @PatchMapping ("/updatePass/{token}")
-    public Result<Boolean> updatePasswordById(LiveStreamUser liveStreamUser, @Valid @RequestBody ResetPasswordVo resetPasswordVo, @PathVariable("token") String token){
+    public Result<Boolean> updatePasswordById( @Valid @RequestBody ResetPasswordVo resetPasswordVo, @PathVariable("token") String token){
+        LiveStreamUser liveStreamUser = redisService.get(LoginKey.token,token,LiveStreamUser.class);
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         String password = resetPasswordVo.getPassword();
         String verifyCode = resetPasswordVo.getMsgCode();
@@ -41,16 +51,24 @@ public class LiveStreamUserController {
        return Result.success(liveStreamUserVo);
     }
     @PatchMapping("/updateNickName/{token}/{nickName}")
-    public Result<Boolean> updateNickName(LiveStreamUser liveStreamUser,@PathVariable String token,@PathVariable String nickName){
-       Long id = liveStreamUser.getId();
-       liveStreamUserService.updateNickName(token,id,nickName);
-       return Result.success(true);
+    public Result<Boolean> updateNickName(@PathVariable String token,@PathVariable String nickName){
+        LiveStreamUser liveStreamUser = redisService.get(LoginKey.token,token,LiveStreamUser.class);
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        Long id = liveStreamUser.getId();
+        liveStreamUserService.updateNickName(token,id,nickName);
+        return Result.success(true);
     }
 
     @PatchMapping("/updateHead/{token}")
-    public Result<Boolean> updateHead(LiveStreamUser liveStreamUser,@PathVariable String token,@RequestBody @Valid ResetHeadForm resetHeadForm){
-        String head = resetHeadForm.getHead();
+    public Result<Boolean> updateHead(@PathVariable String token,@RequestBody @Valid ResetHeadForm resetHeadForm){
+        LiveStreamUser liveStreamUser = redisService.get(LoginKey.token,token,LiveStreamUser.class);
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long id = liveStreamUser.getId();
+        String head = resetHeadForm.getHead();
         liveStreamUserService.updateHead(token,id,head);
         return Result.success(true);
     }

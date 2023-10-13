@@ -73,6 +73,16 @@ public class FootballController {
     }
 
     /**
+     * get match live address
+     *
+     */
+    @GetMapping("/address/{matchId}")
+    public Result<FootballLiveAddressVo> getLiveAddress(@PathVariable("matchId")Integer matchId){
+        FootballLiveAddressVo footballLiveAddressVo = footBallService.getFootballLiveAddressByMatchId(matchId);
+        return Result.success(footballLiveAddressVo);
+    }
+
+    /**
      *  test match live-up api
      *
      */
@@ -104,15 +114,12 @@ public class FootballController {
         return Result.success(result);
     }
 
+
     /**
      *  test get data live address from nami
      *
      */
-    @GetMapping("/address/{matchId}")
-    public Result<FootballLiveAddressVo> getLiveAddress(@PathVariable("matchId")Integer matchId){
-        FootballLiveAddressVo footballLiveAddressVo = footBallService.getFootballLiveAddressByMatchId(matchId);
-        return Result.success(footballLiveAddressVo);
-    }
+
 
 
 

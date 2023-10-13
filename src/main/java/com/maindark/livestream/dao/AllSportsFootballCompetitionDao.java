@@ -13,4 +13,7 @@ public interface AllSportsFootballCompetitionDao {
 
     @Select("select * from all_sports_football_competition where id=#{id}")
     AllSportsFootballCompetition getAllSportsFootballCompetitionById(@Param("id")Integer id);
+
+    @Select("select id from all_sports_football_competition where competition_name = #{competitionName} limit 1")
+    Integer getAllSportsFootballCompetitionByName(@Param("competitionName")String competitionName);
 }

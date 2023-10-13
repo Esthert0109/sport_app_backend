@@ -87,7 +87,7 @@ public class AllSportsService {
     }
 
     public Map<String,Object> getAllFixtures(String from,String to){
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures()) +"&from="+ from + "&to=" + to;
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixturesLeagueId()) +"&from="+ from + "&to=" + to;
         String result = HttpUtil.getNaMiData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         return resultObj;

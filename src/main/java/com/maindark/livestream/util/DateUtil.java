@@ -31,4 +31,11 @@ public class DateUtil {
         LocalDate date = LocalDate.parse(str,formatter);
         return date;
     }
+
+    public static String convertDateToStr(LocalDate localDate){
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String currentDate = localDate.toString();
+        String str = LocalDate.parse(currentDate,dateFormatter).toString();
+        return str;
+    }
 }

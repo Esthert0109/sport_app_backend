@@ -37,7 +37,7 @@ public class CodeMsg {
     public static CodeMsg BASKET_BALL_ERROR = new CodeMsg(500610,"basketball service is wrong, please connect to our administrator!");
 
     // football match error
-    public static CodeMsg FOOT_BALL_MATCH_PARAMS_ERROR = new CodeMsg(500710,"competition name or team name can not be empty!");
+    public static CodeMsg FOOT_BALL_MATCH_PARAMS_ERROR = new CodeMsg(500710,"competition name or team name can be not empty!");
 
 
     private CodeMsg(int code,String msg){
