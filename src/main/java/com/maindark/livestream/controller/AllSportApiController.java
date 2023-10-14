@@ -52,7 +52,7 @@ public class AllSportApiController {
      *
      */
     @GetMapping("/line-up/{matchId}")
-    public Result<FootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")Integer matchId){
+    public Result<FootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")String matchId){
         FootballMatchLineUpVo footballMatchLineUpVo = allSportsApiService.getFootballMatchLineUpByMatchId(matchId);
         return Result.success(footballMatchLineUpVo);
     }
@@ -62,8 +62,8 @@ public class AllSportApiController {
      *
      */
     @GetMapping("/livedata/{matchId}")
-    public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")Integer matchId){
-        FootballMatchLiveDataVo footballMatchLiveData = allSportsApiService.getMatchLiveData(matchId);
+    public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")String matchId){
+        FootballMatchLiveDataVo footballMatchLiveData = allSportsApiService.getMatchLiveData(Integer.parseInt(matchId));
         return Result.success(footballMatchLiveData);
     }
 

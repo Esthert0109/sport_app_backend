@@ -8,6 +8,9 @@ import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +28,12 @@ public class FootballController {
     * get today's all matches via competition's name or team's name
     * */
     @GetMapping("/now-list")
-    public Result<List<FootballMatchVo>> getList(@RequestParam(required = false) String competitionName, @RequestParam(required = false) String teamName){
-        List<FootballMatchVo> result = footBallService.getFootBallMatchList(competitionName,teamName);
+    public Result<List<FootballMatchVo>> getList(@RequestParam(required = false) String competitionName,
+                                                 @RequestParam(required = false) String teamName,
+                                                 @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                 @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
+        List<FootballMatchVo> result = footBallService.getFootBallMatchList(competitionName,teamName, request);
         return Result.success(result);
     }
 
@@ -36,8 +43,10 @@ public class FootballController {
     * get all matches in seven days
     * */
     @GetMapping("/list")
-    public Result<Map<String,List<FootballMatchVo>>> getAllMatches(){
-        Map<String,List<FootballMatchVo>> results = footBallService.getFootballMatchesInSevenDays();
+    public Result<Map<String,List<FootballMatchVo>>> getAllMatches( @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
+        Map<String,List<FootballMatchVo>> results = footBallService.getFootballMatchesInSevenDays(request);
         return Result.success(results);
     }
 
@@ -46,8 +55,11 @@ public class FootballController {
      *
      */
     @GetMapping("/list/{date}")
-    public Result<List<FootballMatchVo>> getMatchesByDate(@PathVariable("date")String date){
-        List<FootballMatchVo> footballMatchVos = footBallService.getMatchListByDate(date);
+    public Result<List<FootballMatchVo>> getMatchesByDate(@PathVariable("date")String date,
+                                                          @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
+        List<FootballMatchVo> footballMatchVos = footBallService.getMatchListByDate(date,request);
         return Result.success(footballMatchVos);
     }
 
@@ -57,8 +69,8 @@ public class FootballController {
      *
      */
     @GetMapping("/line-up/{matchId}")
-    public Result<FootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")Integer matchId){
-        FootballMatchLineUpVo footballMatchLineUpVo = footBallService.getFootballMatchLineUpByMatchId(matchId);
+    public Result<FootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")String matchId){
+        FootballMatchLineUpVo footballMatchLineUpVo = footBallService.getFootballMatchLineUpByMatchId(Integer.parseInt(matchId));
         return Result.success(footballMatchLineUpVo);
     }
 
@@ -67,8 +79,8 @@ public class FootballController {
      *
      */
     @GetMapping("/livedata/{matchId}")
-    public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")Integer matchId){
-        FootballMatchLiveDataVo footballMatchLiveData = footBallService.getMatchLiveData(matchId);
+    public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")String matchId){
+        FootballMatchLiveDataVo footballMatchLiveData = footBallService.getMatchLiveData(Integer.parseInt(matchId));
         return Result.success(footballMatchLiveData);
     }
 

@@ -22,7 +22,7 @@ public class DateUtil {
         Date sol = new Date(time);
         DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
         String timeStr = obj.format(sol);
-        timeStr = timeStr.substring(12,16);
+        timeStr = timeStr.substring(11,16);
         return timeStr;
     }
 
@@ -38,4 +38,6 @@ public class DateUtil {
         String str = LocalDate.parse(currentDate,dateFormatter).toString();
         return str;
     }
+
+
 }

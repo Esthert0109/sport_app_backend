@@ -16,7 +16,9 @@ import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -57,7 +59,9 @@ public class FootBallService {
     return namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
   }
 
-    public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName){
+    public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName,Pageable pageable){
+      long offset = pageable.getOffset();
+      Integer limit = pageable.getPageSize();
       List<FootballMatchVo> list = null;
       if(StringUtils.isBlank(competitionName) && StringUtils.isBlank(teamName)) {
         throw new GlobalException(CodeMsg.FOOT_BALL_MATCH_PARAMS_ERROR);
@@ -67,9 +71,9 @@ public class FootBallService {
       long nowSeconds = DateUtil.convertDateToLongTime(now);
       long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
       if(!StringUtils.isBlank(competitionName)){
-          list = footballMatchDao.getFootballMatchByCompetitionName(competitionName,nowSeconds,tomorrowSeconds);
+          list = footballMatchDao.getFootballMatchByCompetitionName(competitionName,nowSeconds,tomorrowSeconds,limit,offset);
       } else if(!StringUtils.isBlank(teamName)){
-          list = footballMatchDao.getFootballMatchByTeamName(teamName,nowSeconds,tomorrowSeconds);
+          list = footballMatchDao.getFootballMatchByTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
       }
       if(list != null && !list.isEmpty()){
         int size = list.size();
@@ -90,12 +94,14 @@ public class FootBallService {
     *
     * get all matches in seven days
     * */
-  public Map<String,List<FootballMatchVo>> getFootballMatchesInSevenDays() {
+  public Map<String,List<FootballMatchVo>> getFootballMatchesInSevenDays(Pageable pageable) {
+    Long offset = pageable.getOffset();
+    Integer limit = pageable.getPageSize();
     // get all start matches
     LocalDate now = LocalDate.now();
     Long nowSeconds = DateUtil.convertDateToLongTime(now);
-    Map<String,List<FootballMatchVo>> results = redisService.get(FootballListKey.listKey,String.valueOf(nowSeconds),Map.class);
-    if (results == null) {
+   // Map<String,List<FootballMatchVo>> results = redisService.get(FootballListKey.listKey,String.valueOf(nowSeconds),Map.class);
+   // if (results == null) {
       LocalDate tomorrow = now.plusDays(1);
       LocalDate future = now.plusDays(6);
       LocalDate past = now.minusDays(6);
@@ -103,18 +109,18 @@ public class FootBallService {
       Long futureSeconds = DateUtil.convertDateToLongTime(future);
       Long pastSeconds = DateUtil.convertDateToLongTime(past);
       log.info("get past date:{},now date:{},tomorrow date:{},future date:{}",pastSeconds,nowSeconds,tomorrowSeconds,futureSeconds);
-      List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds,nowSeconds);
+      List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds,nowSeconds,limit,offset);
       pastMatches = getFootballMatchVos(pastMatches);
-      List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds,tomorrowSeconds);
+      List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds,tomorrowSeconds,limit,offset);
       startMatches = getFootballMatchVos(startMatches);
-      List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds,futureSeconds);
+      List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds,futureSeconds,limit,offset);
       futureMatches = getFootballMatchVos(futureMatches);
-      results = new HashMap<>();
+      Map<String,List<FootballMatchVo>> results = new HashMap<>();
       results.put("pass",pastMatches);
       results.put("start",startMatches);
       results.put("future",futureMatches);
-      redisService.set(FootballListKey.listKey,String.valueOf(nowSeconds),results);
-    }
+      //redisService.set(FootballListKey.listKey,String.valueOf(nowSeconds),results);
+   // }
     return results;
   }
 
@@ -131,12 +137,14 @@ public class FootBallService {
     return futureMatches;
   }
 
-  public List<FootballMatchVo> getMatchListByDate(String date) {
+  public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable) {
+    long offset = pageable.getOffset();
+    Integer limit = pageable.getPageSize();
     LocalDate currentDate = DateUtil.convertStringToDate(date);
     LocalDate deadline = currentDate.plusDays(1);
     Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
     Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
-    List<FootballMatchVo> footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds);
+    List<FootballMatchVo> footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds,limit,offset);
     footballMatchVos = getFootballMatchVos(footballMatchVos);
     return footballMatchVos;
   }

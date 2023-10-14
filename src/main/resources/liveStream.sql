@@ -237,6 +237,9 @@ CREATE TABLE `football_coach` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
+
+
 --create index
 create index football_match_indexTime on football_match(match_time);
 create index football_match_indexHomeTeamName on football_match(home_team_name);
