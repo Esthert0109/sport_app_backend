@@ -144,6 +144,7 @@ public class AllSportsService {
                         allSportsFootballMatch.setAwayTeamLogo((String)ml.get("away_team_logo"));
                         allSportsFootballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsFootballMatch.setAwayTeamName((String)ml.get("event_away_team"));
+                        allSportsFootballMatch.setMatchDate((String)ml.get("event_date"));
                         String matchStatus = (String)ml.get("event_status");
                         String eventLive = (String)ml.get("event_live");
                         if(StringUtils.equals(matchStatus,"")){
