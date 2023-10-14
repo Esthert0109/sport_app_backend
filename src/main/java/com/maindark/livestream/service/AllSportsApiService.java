@@ -13,6 +13,7 @@ import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
+import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
@@ -157,7 +158,7 @@ public class AllSportsApiService {
                     footballMatchVo.setCompetitionId((Integer)ml.get("league_key"));
                     return footballMatchVo;
                 });
-                list = getArrayListFromStream(footballMatchVoStream);
+                list = StreamToListUtil.getArrayListFromStream(footballMatchVoStream);
             }
         }
         return list;
@@ -207,15 +208,7 @@ public class AllSportsApiService {
     }
 
 
-    public static <T> ArrayList<T>
-    getArrayListFromStream(Stream<T> stream)
-    {
-        List<T> list = stream.toList();
-        // Create an ArrayList of the List
-        //ArrayList<T> arrayList = new ArrayList<T>(list);
-        // Return the ArrayList
-        return new ArrayList<T>(list);
-    }
+
 
 
 }

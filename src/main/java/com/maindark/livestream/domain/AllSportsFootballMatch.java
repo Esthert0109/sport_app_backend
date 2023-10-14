@@ -1,26 +1,33 @@
-package com.maindark.livestream.vo;
+package com.maindark.livestream.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Data;
 
+@Entity
 @Data
-public class FootballMatchVo {
-    private Integer id;
+public class AllSportsFootballMatch {
+    @Id
+    private Long id;
     private Integer competitionId;
+    private Long homeTeamId;
+    private Long awayTeamId;
     private String homeTeamName;
     private String awayTeamName;
     private Integer homeTeamScore;
     private Integer awayTeamScore;
-    private Long matchTime;
     private String competitionName;
     private String homeTeamLogo;
     private String awayTeamLogo;
-    private Integer statusId;
-    private String matchTimeStr;
-    private String statusStr;
+    private String matchTime;
+    private String status;
     private Integer lineUp;
     private String refereeName;
     private String venueName;
     private String homeFormation;
     private String awayFormation;
     private String matchDate;
+    private String eventLive;
+
+
 }

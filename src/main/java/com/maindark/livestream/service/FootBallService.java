@@ -82,6 +82,7 @@ public class FootBallService {
           Long matchTime = footballMatchVo.getMatchTime() * 1000;
           String timeStr = DateUtil.interceptTime(matchTime);
           footballMatchVo.setMatchTimeStr(timeStr);
+          footballMatchVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(matchTime));
           Integer statusId = footballMatchVo.getStatusId();
           footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
         }
@@ -130,6 +131,7 @@ public class FootBallService {
         vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
         vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
         vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
+        vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
         return vo;
       });
       futureMatches = getArrayListFromStream(footballMatchVoStream);

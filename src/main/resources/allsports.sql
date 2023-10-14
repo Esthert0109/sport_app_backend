@@ -48,6 +48,31 @@ CREATE TABLE `all_sports_away_match_line_up` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `all_sports_football_match`;
+CREATE TABLE `all_sports_football_match` (
+  `id` bigint NOT NULL  COMMENT 'id',
+  `competition_id` bigint NOT NULL COMMENT 'competition_id',
+  `status` int  COMMENT 'finished,',
+  `match_time` varchar(8) COMMENT 'match time',
+  `match_date` varchar(32) COMMENT 'match date',
+  `home_team_id` bigint  COMMENT ' home team id',
+  `away_team_id` bigint  COMMENT ' away team id',
+  `home_team_name` varchar(255) COMMENT 'home team name',
+  `away_team_name` varchar(255) COMMENT 'away home name',
+  `home_team_logo` varchar(255) COMMENT 'home team logo',
+  `away_team_logo` varchar(255) COMMENT 'away home logo',
+  `home_team_score` int  COMMENT ' home team score',
+  `away_team_score` int  COMMENT ' away team score',
+  `home_formation` varchar(255) COMMENT 'home formation',
+  `away_formation` varchar(255) COMMENT 'away formation',
+  `referee` varchar(64) COMMENT 'referee name',
+  `venue` varchar(255) COMMENT 'venue name',
+  `event_live` char(2) COMMENT 'event live 0 not yet playing 1 is playing',
+  `line_up` int COMMENT 'if there is a line-up, 0 no 1 yes',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 
 
