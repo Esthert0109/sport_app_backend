@@ -180,7 +180,9 @@ public class AllSportsService {
                         allSportsFootballMatch.setVenueName((String)ml.get("event_stadium"));
                         allSportsFootballMatch.setRefereeName((String)ml.get("event_referee"));
                         allSportsFootballMatch.setCompetitionName((String)ml.get("league_name"));
-                        allSportsFootballMatch.setCompetitionId((Integer)ml.get("league_key"));
+                        allSportsFootballMatch.setHomeFormation((String)ml.get("event_home_formation"));
+                        allSportsFootballMatch.setAwayFormation((String)ml.get("event_away_formation"));
+                        allSportsFootballMatch.setCompetitionId(((Number)ml.get("league_key")).longValue());
                         allSportsFootballMatch.setEventLive(eventLive);
                         return allSportsFootballMatch;
                     });

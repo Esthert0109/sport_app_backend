@@ -9,7 +9,7 @@ import lombok.Data;
 public class AllSportsFootballMatch {
     @Id
     private Long id;
-    private Integer competitionId;
+    private Long competitionId;
     private Long homeTeamId;
     private Long awayTeamId;
     private String homeTeamName;
