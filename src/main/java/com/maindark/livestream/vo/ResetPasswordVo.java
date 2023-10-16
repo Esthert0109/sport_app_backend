@@ -5,20 +5,12 @@ import jakarta.validation.constraints.NotNull;
 public class ResetPasswordVo {
 
 
-    @NotNull(message = "msgCode can be not empty!")
 
-    private String msgCode;
-    @NotNull
+    @NotNull(message = "password can be not empty!")
     private String password;
 
 
-    public String getMsgCode() {
-        return msgCode;
-    }
 
-    public void setMsgCode(String msgCode) {
-        this.msgCode = msgCode;
-    }
 
     public String getPassword() {
         return password;

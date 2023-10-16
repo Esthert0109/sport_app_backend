@@ -1,7 +1,7 @@
 package com.maindark.livestream.controller;
 
 import com.maindark.livestream.result.Result;
-import com.maindark.livestream.service.AllSportsApiService;
+import com.maindark.livestream.service.AllSportsService;
 import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
@@ -15,13 +15,13 @@ import java.util.Map;
 @RequestMapping("/api/v1/footballs/match/en")
 public class AllSportsController {
     @Resource
-    AllSportsApiService allSportsApiService;
+    AllSportsService allSportsService;
     /**
      * get today's all matches via competition's name or team's name
      * */
     @GetMapping("/now-list")
     public Result<List<FootballMatchVo>> getList(@RequestParam(required = false) String competitionName, @RequestParam(required = false) String teamName){
-        List<FootballMatchVo> result = allSportsApiService.getFootBallMatchList(competitionName,teamName);
+        List<FootballMatchVo> result = allSportsService.getFootBallMatchList(competitionName,teamName);
         return Result.success(result);
     }
 
@@ -32,7 +32,7 @@ public class AllSportsController {
      * */
     @GetMapping("/list")
     public Result<Map<String,List<FootballMatchVo>>> getAllMatches(){
-        Map<String,List<FootballMatchVo>> results = allSportsApiService.getFootballMatchesInSevenDays();
+        Map<String,List<FootballMatchVo>> results = allSportsService.getFootballMatchesInSevenDays();
         return Result.success(results);
     }
 
@@ -42,7 +42,7 @@ public class AllSportsController {
      */
     @GetMapping("/list/{date}")
     public Result<List<FootballMatchVo>> getMatchesByDate(@PathVariable("date")String date){
-        List<FootballMatchVo> footballMatchVos = allSportsApiService.getMatchListByDate(date);
+        List<FootballMatchVo> footballMatchVos = allSportsService.getMatchListByDate(date);
         return Result.success(footballMatchVos);
     }
 
@@ -53,7 +53,7 @@ public class AllSportsController {
      */
     @GetMapping("/line-up/{matchId}")
     public Result<FootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")String matchId){
-        FootballMatchLineUpVo footballMatchLineUpVo = allSportsApiService.getFootballMatchLineUpByMatchId(matchId);
+        FootballMatchLineUpVo footballMatchLineUpVo = allSportsService.getFootballMatchLineUpByMatchId(matchId);
         return Result.success(footballMatchLineUpVo);
     }
 
@@ -63,7 +63,7 @@ public class AllSportsController {
      */
     @GetMapping("/livedata/{matchId}")
     public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")String matchId){
-        FootballMatchLiveDataVo footballMatchLiveData = allSportsApiService.getMatchLiveData(Integer.parseInt(matchId));
+        FootballMatchLiveDataVo footballMatchLiveData = allSportsService.getMatchLiveData(Integer.parseInt(matchId));
         return Result.success(footballMatchLiveData);
     }
 

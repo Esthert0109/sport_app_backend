@@ -65,7 +65,7 @@ public class DemoController {
     @GetMapping("/sms/send")
     public Result<Boolean> sendSMS(String mobile){
         log.info(mobile);
-        Boolean result =smsService.sendSMS(mobile);
+        Boolean result =smsService.sendSMS("1",mobile);
         return Result.success(result);
     }
 }

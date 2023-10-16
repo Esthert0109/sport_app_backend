@@ -75,22 +75,12 @@ public class LiveStreamUserService {
         return liveStreamUser;
     }
 
-    public boolean updatePassword(String token, long id, String formPass,String msgCode) {
+    public boolean updatePassword(String token, long id, String formPass) {
         //get user
         LiveStreamUser user = getById(id);
         if(user == null) {
             throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
         }
-        //checkout msgCode
-        String redisSMSCode = redisService.get(SMSKey.smsKey,String.valueOf(id),String.class);
-        if(StringUtils.isEmpty(redisSMSCode)) {
-            throw new GlobalException(CodeMsg.SMS_CODE_NOT_EXIST);
-        }
-        if(!StringUtils.equals(redisSMSCode,msgCode)) {
-            throw new GlobalException(CodeMsg.SMS_CODE_ERROR);
-        }
-        //delete redis msg cache
-        redisService.delete(SMSKey.smsKey,String.valueOf(id));
 
         //update database
         LiveStreamUser toBeUpdate = new LiveStreamUser();
@@ -120,6 +110,7 @@ public class LiveStreamUserService {
         //manage cache
         redisService.delete(UserKey.getById, ""+id);
         user.setNickName(toBeUpdate.getNickName());
+        token = UUIDUtil.uuid();
         redisService.set(LoginKey.token, token, user);
         return true;
     }

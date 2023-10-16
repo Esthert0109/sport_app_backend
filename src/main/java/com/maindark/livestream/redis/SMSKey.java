@@ -10,7 +10,12 @@ public class SMSKey extends BasePrefix{
 
     public static final int limitTime = 3600 * 24;
 
+    /*register msgCode*/
     public static SMSKey smsKey = new SMSKey(expiredSeconds,"sms");
 
     public static SMSKey smsLimit = new SMSKey(limitTime,"smsLimit");
+
+    public static SMSKey resetPass = new SMSKey(expiredSeconds,"resetPass");
+
+    public static SMSKey forgotPass = new SMSKey(expiredSeconds,"forgotPass");
 }

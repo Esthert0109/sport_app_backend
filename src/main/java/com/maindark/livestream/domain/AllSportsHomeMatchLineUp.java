@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class AllSportsHomeMatchLineUp {
+public class AllSportsHomeMatchLineUp extends BaseFootballMatchLineup {
     @Id
     private Long id;
     private Long matchId;

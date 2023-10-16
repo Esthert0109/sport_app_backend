@@ -9,6 +9,8 @@ import com.maindark.livestream.dao.AllSportsHomeMatchLineUpDao;
 import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
 import com.maindark.livestream.domain.AllSportsFootballMatch;
 import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
+import com.maindark.livestream.enums.IsFirst;
+import com.maindark.livestream.enums.TeamEnum;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +39,7 @@ public class AllSportsFootballTask {
    AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
 
-    //@Scheduled(cron = "0 */10 * * * ? ")
+    @Scheduled(cron = "0 */5 * * * ? ")
     public void getAllSportsFootballMatchLineUp(){
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getNaMiData(url);
@@ -53,23 +55,30 @@ public class AllSportsFootballTask {
                         String eventLive = (String)ml.get("event_live");
                         if(StringUtils.equals("1",eventLive)){
                             AllSportsFootballMatch allSportsFootballMatch = getAllSportsMatch(ml);
-                            allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);
+                            int exists = allSportsFootballMatchDao.queryMatchIsExists(allSportsFootballMatch.getId());
+                            if(exists < 0){
+                                allSportsFootballMatchDao.insert(allSportsFootballMatch);
+                            } else {
+                                allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);
+                            }
                             Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
                             Number matchId = (Number) ml.get("event_key");
                             Number homeTeamId = (Number) ml.get("home_team_key");
                             Number awayTeamId = (Number) ml.get("away_team_key");
-                            if(lineups != null && !lineups.isEmpty()) {
-                                Map<String,Object> homeTeam = (Map<String,Object>)lineups.get("home_team");
-                                if(homeTeam != null && !homeTeam.isEmpty()){
+                            if (lineups != null && !lineups.isEmpty()) {
+                                // set home team line-up
+                                Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+                                if (homeTeam != null && !homeTeam.isEmpty()) {
                                     JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
                                     JSONArray substitutes = (JSONArray) homeTeam.get("substitutes");
-                                    getHomeMatchLineUp(startingLineups,matchId.longValue(),substitutes,homeTeamId.longValue());
+                                    getMatchLineUp(startingLineups, matchId.longValue(), substitutes, homeTeamId.longValue(), TeamEnum.HOME.getCode());
                                 }
-                                Map<String,Object> awayTeam = (Map<String,Object>)lineups.get("away_team");
-                                if(awayTeam != null && !awayTeam.isEmpty()){
+                                // set away team line-up
+                                Map<String, Object> awayTeam = (Map<String, Object>) lineups.get("away_team");
+                                if (awayTeam != null && !awayTeam.isEmpty()) {
                                     JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
                                     JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
-                                    getHomeMatchLineUp(startingLineups,matchId.longValue(),substitutes,awayTeamId.longValue());
+                                    getMatchLineUp(startingLineups, matchId.longValue(), substitutes, awayTeamId.longValue(),TeamEnum.AWAY.getCode());
                                 }
                             }
                         }
@@ -81,9 +90,13 @@ public class AllSportsFootballTask {
 
 
 
-    private void getHomeMatchLineUp(JSONArray startingLineups,Long matchId,JSONArray substitutes,Long teamId){
-        setAllSportsFootballMatchLineUp(startingLineups, matchId, teamId,1,"0");
-        setAllSportsFootballMatchLineUp(substitutes, matchId, teamId,0,"1");
+    /**
+     *  set match line-up
+     *
+     */
+    private void getMatchLineUp(JSONArray startingLineups,Long matchId,JSONArray substitutes,Long teamId,String teamType){
+        setAllSportsFootballMatchLineUp(startingLineups, matchId, teamId, IsFirst.YES.getCode(),teamType);
+        setAllSportsFootballMatchLineUp(substitutes, matchId, teamId,IsFirst.NO.getCode(), teamType);
     }
 
 
@@ -135,7 +148,8 @@ public class AllSportsFootballTask {
         if (resultObj != null && !resultObj.isEmpty()) {
             int success = (Integer) resultObj.get("success");
             if(1 == success){
-                Map<String,Object> playMap = (Map<String,Object>)resultObj.get("result");
+                JSONArray playArray = (JSONArray)resultObj.get("result");
+                Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
                 String captain = (String)playMap.get("player_is_captain");
                 if(StringUtils.isBlank(captain)){
                     allSportsHomeMatchLineUp.setCaptain(0);
@@ -167,7 +181,8 @@ public class AllSportsFootballTask {
         if (resultObj != null && !resultObj.isEmpty()) {
             int success = (Integer) resultObj.get("success");
             if(1 == success){
-                Map<String,Object> playMap = (Map<String,Object>)resultObj.get("result");
+                JSONArray playArray = (JSONArray)resultObj.get("result");
+                Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
                 String captain = (String)playMap.get("player_is_captain");
                 if(StringUtils.isBlank(captain)){
                     allSportsAwayMatchLineUp.setCaptain(0);
