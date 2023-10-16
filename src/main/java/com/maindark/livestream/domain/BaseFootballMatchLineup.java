@@ -4,6 +4,10 @@ import lombok.Data;
 
 @Data
 public abstract class BaseFootballMatchLineup {
+
+    public BaseFootballMatchLineup(){
+
+    }
     private Long id;
     private Long matchId;
     private Long teamId;

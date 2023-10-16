@@ -3,9 +3,11 @@ package com.maindark.livestream.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class AllSportsHomeMatchLineUp extends BaseFootballMatchLineup {
     @Id
     private Long id;
@@ -18,4 +20,5 @@ public class AllSportsHomeMatchLineUp extends BaseFootballMatchLineup {
     private int shirtNumber;
     private int position;
     private String rating;
+
 }

@@ -326,7 +326,7 @@ public class AllSportsApiService {
     }
 
 
-    private AllSportsAwayMatchLineUp getAllSportsAwayLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
+    /*private AllSportsAwayMatchLineUp getAllSportsAwayLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
         AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = new AllSportsAwayMatchLineUp();
         allSportsAwayMatchLineUp.setId(playerId);
         allSportsAwayMatchLineUp.setMatchId(matchId);
@@ -357,7 +357,7 @@ public class AllSportsApiService {
         }
         return allSportsAwayMatchLineUp;
     }
-
+*/
 
     private AllSportsFootballMatch getAllSportsMatchByMatchId(Map<String,Object> ml) {
         AllSportsFootballMatch allSportsFootballMatch = new AllSportsFootballMatch();

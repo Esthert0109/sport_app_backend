@@ -9,6 +9,7 @@ import com.maindark.livestream.dao.AllSportsHomeMatchLineUpDao;
 import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
 import com.maindark.livestream.domain.AllSportsFootballMatch;
 import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
+import com.maindark.livestream.domain.BaseFootballMatchLineup;
 import com.maindark.livestream.enums.IsFirst;
 import com.maindark.livestream.enums.TeamEnum;
 import com.maindark.livestream.util.HttpUtil;
@@ -117,14 +118,14 @@ public class AllSportsFootballTask {
                 if(StringUtils.equals("0",teamType)){
                     int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue());
                     if(exist <=0){
-                        AllSportsHomeMatchLineUp allSportsHomeMatchLineUp = getAllSportsHomeLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first);
-                        allSportsHomeMatchLineUpDao.insert(allSportsHomeMatchLineUp);
+                        BaseFootballMatchLineup allSportsHomeMatchLineUp = getAllSportsLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first,TeamEnum.HOME.getCode());
+                        allSportsHomeMatchLineUpDao.insert((AllSportsHomeMatchLineUp) allSportsHomeMatchLineUp);
                     }
                 } else {
                     int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue());
                     if(exist <=0){
-                        AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = getAllSportsAwayLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first);
-                        allSportsAwayMatchLineUpDao.insert(allSportsAwayMatchLineUp);
+                        BaseFootballMatchLineup allSportsAwayMatchLineUp = getAllSportsLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first,TeamEnum.AWAY.getCode());
+                        allSportsAwayMatchLineUpDao.insert((AllSportsAwayMatchLineUp) allSportsAwayMatchLineUp);
                     }
                 }
 
@@ -133,8 +134,13 @@ public class AllSportsFootballTask {
     }
 
 
-    private AllSportsHomeMatchLineUp getAllSportsHomeLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
-        AllSportsHomeMatchLineUp allSportsHomeMatchLineUp = new AllSportsHomeMatchLineUp();
+    private BaseFootballMatchLineup getAllSportsLineUp(Long playerId, Integer playNumber, Integer playPosition, Long matchId, Long teamId, String playerName, Integer first, String teamType) {
+        BaseFootballMatchLineup  allSportsHomeMatchLineUp = null;
+        if(StringUtils.equals("0",teamType)){
+            allSportsHomeMatchLineUp = new AllSportsHomeMatchLineUp();
+        } else {
+            allSportsHomeMatchLineUp = new AllSportsAwayMatchLineUp();
+        }
         allSportsHomeMatchLineUp.setId(playerId);
         allSportsHomeMatchLineUp.setMatchId(matchId);
         allSportsHomeMatchLineUp.setTeamId(teamId);
@@ -164,7 +170,6 @@ public class AllSportsFootballTask {
         }
         return allSportsHomeMatchLineUp;
     }
-
 
     private AllSportsAwayMatchLineUp getAllSportsAwayLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
         AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = new AllSportsAwayMatchLineUp();

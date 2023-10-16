@@ -17,6 +17,6 @@ public interface AllSportsFootballMatchDao {
     @Select("select count(1) from all_sports_football_match where id = #{id} ")
     int queryMatchIsExists(@Param("id")Long id);
 
-    @Update("update all_sports_football_match set status=#{status},event_live=#{eventLive},line_up=#{lineUp} where id = #{id}")
+    @Update("update all_sports_football_match set status=#{status},event_live=#{eventLive},home_team_score=#{homeTeamScore},away_team_score=#{awayTeamScore},home_formation=#{homeFormation},away_formation=#{awayFormation},line_up=#{lineUp} where id = #{id}")
     void updateAllSportsMatch(AllSportsFootballMatch allSportsFootballMatch);
 }
