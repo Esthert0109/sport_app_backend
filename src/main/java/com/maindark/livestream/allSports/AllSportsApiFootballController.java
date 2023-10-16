@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/allSports")
-public class AllSportsFootballController {
+public class AllSportsApiFootballController {
 
     @Resource
     AllSportsService allSportsService;

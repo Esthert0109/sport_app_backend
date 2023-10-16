@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/footballs/match/en")
-public class AllSportApiController {
+public class AllSportsController {
     @Resource
     AllSportsApiService allSportsApiService;
     /**

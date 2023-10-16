@@ -48,14 +48,6 @@ public class SMSService {
         log.info("sms result:{}",result);
         JSONObject resultObj = JSON.parseObject(result);
         String status = (String)resultObj.get("status");
-        Integer maxCount = redisService.get(SMSKey.smsLimit,mobileNumber,Integer.class);
-        // check message limit
-        if(maxCount != null) {
-            if(maxCount > 10) {
-                throw new GlobalException(CodeMsg.SMS_CODE_SEND_ERROR);
-            }
-        }
-
         if(StringUtils.equals("ok",status)) {
             redisService.incr(SMSKey.smsLimit,mobileNumber,0);
             redisService.set(SMSKey.smsKey,mobileNumber,String.valueOf(OTPNumber));
@@ -73,6 +65,7 @@ public class SMSService {
         String redisCode = redisService.get(SMSKey.smsKey,mobile,String.class);
         if(!StringUtils.isBlank(redisCode)){
             if(StringUtils.equals(code,redisCode)) {
+                redisService.delete(SMSKey.smsKey,mobile);
                 return true;
             } else {
                 throw  new GlobalException(CodeMsg.SMS_CODE_ERROR);
