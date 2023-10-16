@@ -13,6 +13,6 @@ public interface AllSportsAwayMatchLineUpDao {
             "#{id},#{matchId},#{teamId},#{first},#{captain},#{playerName},#{playerLogo},#{shirtNumber},#{position},#{rating})")
     Integer insert(AllSportsAwayMatchLineUp allSportsAwayMatchLineUp);
 
-    @Select("select * from all_sports_away_match_line_up where id=#{id}")
-    AllSportsAwayMatchLineUp getAwayMatchLineUpById(@Param("id")Long id);
+    @Select("select count(1) from all_sports_away_match_line_up where id=#{id}")
+    int queryExists(@Param("id")Long id);
 }

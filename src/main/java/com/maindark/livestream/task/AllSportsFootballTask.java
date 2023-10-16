@@ -9,9 +9,7 @@ import com.maindark.livestream.dao.AllSportsHomeMatchLineUpDao;
 import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
 import com.maindark.livestream.domain.AllSportsFootballMatch;
 import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
-import com.maindark.livestream.domain.HomeMatchLineUp;
 import com.maindark.livestream.util.HttpUtil;
-import com.maindark.livestream.util.StreamToListUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -40,8 +37,8 @@ public class AllSportsFootballTask {
    AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
 
-   // @Scheduled(cron = "0 */10 * * * ? ")
-   /* public void getAllSportsFootballMatchLineUp(){
+    //@Scheduled(cron = "0 */10 * * * ? ")
+    public void getAllSportsFootballMatchLineUp(){
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getNaMiData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
@@ -72,30 +69,30 @@ public class AllSportsFootballTask {
                                 if(awayTeam != null && !awayTeam.isEmpty()){
                                     JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
                                     JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
+                                    getHomeMatchLineUp(startingLineups,matchId.longValue(),substitutes,awayTeamId.longValue());
                                 }
-
-
                             }
                         }
                     }
                 }
             }
         }
-    }*/
-
-
-
-    private List<AllSportsHomeMatchLineUp> getHomeMatchLineUp(JSONArray startingLineups,Long matchId,JSONArray substitutes,Long teamId){
-        setAllSportsFootballMatchLineUp(startingLineups, matchId, teamId,1);
-        setAllSportsFootballMatchLineUp(substitutes, matchId, teamId,0);
-        return null;
     }
+
+
+
+    private void getHomeMatchLineUp(JSONArray startingLineups,Long matchId,JSONArray substitutes,Long teamId){
+        setAllSportsFootballMatchLineUp(startingLineups, matchId, teamId,1,"0");
+        setAllSportsFootballMatchLineUp(substitutes, matchId, teamId,0,"1");
+    }
+
+
 
     /**
      * first 0 no 1 yes
-     *
+     * teamType 0 homeTam 1 awayTeam
      */
-    private void setAllSportsFootballMatchLineUp(JSONArray jsonArray, Long matchId,Long teamId,Integer first) {
+    private void setAllSportsFootballMatchLineUp(JSONArray jsonArray, Long matchId,Long teamId,Integer first,String teamType) {
         if(jsonArray != null){
             int size = jsonArray.size();
             for(int i=0;i<size;i++){
@@ -104,25 +101,35 @@ public class AllSportsFootballTask {
                 Integer playerNumber = (Integer)map.get("player_number");
                 Integer playerPosition = (Integer)map.get("player_position");
                 Number playerKey = (Number)map.get("player_key");
-                int exist = allSportsHomeMatchLineUpDao.getAwayMatchLineUpById(playerKey.longValue());
-                if(exist <=0){
-                    AllSportsHomeMatchLineUp allSportsHomeMatchLineUp = getAllSportsHomeLineUp(playerKey.toString(),playerNumber,playerPosition,matchId,teamId,playerName,first);
-                    allSportsHomeMatchLineUpDao.insert(allSportsHomeMatchLineUp);
+                if(StringUtils.equals("0",teamType)){
+                    int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue());
+                    if(exist <=0){
+                        AllSportsHomeMatchLineUp allSportsHomeMatchLineUp = getAllSportsHomeLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first);
+                        allSportsHomeMatchLineUpDao.insert(allSportsHomeMatchLineUp);
+                    }
+                } else {
+                    int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue());
+                    if(exist <=0){
+                        AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = getAllSportsAwayLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first);
+                        allSportsAwayMatchLineUpDao.insert(allSportsAwayMatchLineUp);
+                    }
                 }
+
             }
         }
     }
 
-    private AllSportsHomeMatchLineUp getAllSportsHomeLineUp(String playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
+
+    private AllSportsHomeMatchLineUp getAllSportsHomeLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
         AllSportsHomeMatchLineUp allSportsHomeMatchLineUp = new AllSportsHomeMatchLineUp();
-        allSportsHomeMatchLineUp.setId(Long.parseLong(playerId));
+        allSportsHomeMatchLineUp.setId(playerId);
         allSportsHomeMatchLineUp.setMatchId(matchId);
         allSportsHomeMatchLineUp.setTeamId(teamId);
         allSportsHomeMatchLineUp.setShirtNumber(playNumber);
         allSportsHomeMatchLineUp.setPosition(playPosition);
         allSportsHomeMatchLineUp.setPlayerName(playerName);
         allSportsHomeMatchLineUp.setFirst(first);
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",playerId);
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",String.valueOf(playerId));
         String result = HttpUtil.getNaMiData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
@@ -137,13 +144,45 @@ public class AllSportsFootballTask {
                 }
                 String playerImage = (String)playMap.get("player_image");
                 String playerRating = (String)playMap.get("player_rating");
-                allSportsHomeMatchLineUp.setFirst(1);
                 allSportsHomeMatchLineUp.setPlayerLogo(playerImage);
                 allSportsHomeMatchLineUp.setRating(playerRating);
             }
         }
         return allSportsHomeMatchLineUp;
     }
+
+
+    private AllSportsAwayMatchLineUp getAllSportsAwayLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
+        AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = new AllSportsAwayMatchLineUp();
+        allSportsAwayMatchLineUp.setId(playerId);
+        allSportsAwayMatchLineUp.setMatchId(matchId);
+        allSportsAwayMatchLineUp.setTeamId(teamId);
+        allSportsAwayMatchLineUp.setShirtNumber(playNumber);
+        allSportsAwayMatchLineUp.setPosition(playPosition);
+        allSportsAwayMatchLineUp.setPlayerName(playerName);
+        allSportsAwayMatchLineUp.setFirst(first);
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",String.valueOf(playerId));
+        String result = HttpUtil.getNaMiData(url);
+        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+        if (resultObj != null && !resultObj.isEmpty()) {
+            int success = (Integer) resultObj.get("success");
+            if(1 == success){
+                Map<String,Object> playMap = (Map<String,Object>)resultObj.get("result");
+                String captain = (String)playMap.get("player_is_captain");
+                if(StringUtils.isBlank(captain)){
+                    allSportsAwayMatchLineUp.setCaptain(0);
+                } else {
+                    allSportsAwayMatchLineUp.setCaptain(1);
+                }
+                String playerImage = (String)playMap.get("player_image");
+                String playerRating = (String)playMap.get("player_rating");
+                allSportsAwayMatchLineUp.setPlayerLogo(playerImage);
+                allSportsAwayMatchLineUp.setRating(playerRating);
+            }
+        }
+        return allSportsAwayMatchLineUp;
+    }
+
 
 
     private AllSportsFootballMatch getAllSportsMatch(Map<String,Object> ml) {

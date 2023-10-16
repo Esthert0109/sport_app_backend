@@ -15,5 +15,5 @@ public interface AllSportsHomeMatchLineUpDao {
     Integer insert(AllSportsHomeMatchLineUp allSportsAwayMatchLineUp);
 
     @Select("select count(1) from all_sports_home_match_line_up where id=#{id}")
-    int getAwayMatchLineUpById(@Param("id")Long id);
+    int queryExists(@Param("id")Long id);
 }
