@@ -58,7 +58,7 @@ public class AllSportsFootballTask {
                             if(StringUtils.equals("1",eventLive)){
                                 AllSportsFootballMatch allSportsFootballMatch = getAllSportsMatch(ml);
                                 int exists = allSportsFootballMatchDao.queryMatchIsExists(allSportsFootballMatch.getId());
-                                if(exists < 0){
+                                if(exists <= 0){
                                     allSportsFootballMatchDao.insert(allSportsFootballMatch);
                                 } else {
                                     allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);

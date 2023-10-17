@@ -37,4 +37,10 @@ public class AllSportsApiFootballController {
         Map<String,Object> map = allSportsApiService.getLiveMatchByMatchId(matchId);
         return Result.success(map);
     }
+
+    @GetMapping("/fixtures/livedata/{matchId}")
+    public Result<Map<String,Object>> getLiveData(@PathVariable("matchId") String matchId){
+        Map<String,Object> map = allSportsApiService.getLiveData(matchId);
+        return Result.success(map);
+    }
 }

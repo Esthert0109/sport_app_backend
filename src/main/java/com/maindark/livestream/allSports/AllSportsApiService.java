@@ -36,6 +36,9 @@ public class AllSportsApiService {
     @Resource
     AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
+    @Resource
+    AllSportsFootballLiveDataDao allSportsFootballLiveDataDao;
+
     public Map<String, Object> getAllLeagues() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLeagues());
         String result = HttpUtil.getNaMiData(url);
@@ -325,40 +328,6 @@ public class AllSportsApiService {
         return allSportsHomeMatchLineUp;
     }
 
-
-    /*private AllSportsAwayMatchLineUp getAllSportsAwayLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
-        AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = new AllSportsAwayMatchLineUp();
-        allSportsAwayMatchLineUp.setId(playerId);
-        allSportsAwayMatchLineUp.setMatchId(matchId);
-        allSportsAwayMatchLineUp.setTeamId(teamId);
-        allSportsAwayMatchLineUp.setShirtNumber(playNumber);
-        allSportsAwayMatchLineUp.setPosition(playPosition);
-        allSportsAwayMatchLineUp.setPlayerName(playerName);
-        allSportsAwayMatchLineUp.setFirst(first);
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",String.valueOf(playerId));
-        String result = HttpUtil.getNaMiData(url);
-        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        if (resultObj != null && !resultObj.isEmpty()) {
-            int success = (Integer) resultObj.get("success");
-            if(1 == success){
-                JSONArray playArray = (JSONArray)resultObj.get("result");
-                Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
-                String captain = (String)playMap.get("player_is_captain");
-                if(StringUtils.isBlank(captain)){
-                    allSportsAwayMatchLineUp.setCaptain(0);
-                } else {
-                    allSportsAwayMatchLineUp.setCaptain(1);
-                }
-                String playerImage = (String)playMap.get("player_image");
-                String playerRating = (String)playMap.get("player_rating");
-                allSportsAwayMatchLineUp.setPlayerLogo(playerImage);
-                allSportsAwayMatchLineUp.setRating(playerRating);
-            }
-        }
-        return allSportsAwayMatchLineUp;
-    }
-*/
-
     private AllSportsFootballMatch getAllSportsMatchByMatchId(Map<String,Object> ml) {
         AllSportsFootballMatch allSportsFootballMatch = new AllSportsFootballMatch();
         Number eventKey = (Number) ml.get("event_key");
@@ -414,8 +383,220 @@ public class AllSportsApiService {
     }
 
 
+    public Map<String, Object> getLiveData(String matchId) {
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore()) + "&matchId=" + matchId;
+        String result = HttpUtil.getNaMiData(url);
+        Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
+        if (resultObj != null && !resultObj.isEmpty()) {
+            int success = (Integer) resultObj.get("success");
+            if (1 == success) {
+                List<Map<String, Object>> matches = (List<Map<String, Object>>) resultObj.get("result");
+                if (matches != null && !matches.isEmpty()) {
+                    matches.stream().forEach(ml ->{
+                        String eventLive = (String)ml.get("event_live");
+                        if(StringUtils.equals("1",eventLive)) {
+                            //Number matchId = (Number) ml.get("event_key");
+                            int exist = allSportsFootballLiveDataDao.queryExist(Long.valueOf(matchId));
+                            AllSportsFootballMatchLiveData footballMatchLiveData = getAllSportsLiveData(ml);
+                            if(exist <=0) {
+                                allSportsFootballLiveDataDao.insert(footballMatchLiveData);
+                            } else {
+                                allSportsFootballLiveDataDao.updateData(footballMatchLiveData);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        return null;
+    }
 
+    private AllSportsFootballMatchLiveData getAllSportsLiveData(Map<String, Object> ml) {
+        AllSportsFootballMatchLiveData footballMatchLiveData = new AllSportsFootballMatchLiveData();
+        Number matchId = (Number) ml.get("event_key");
+        String status = (String)ml.get("event_status");
+        String matchDate = (String)ml.get("event_date");
+        String matchTime = (String)ml.get("event_time");
+        String homeTeamName = (String)ml.get("event_home_team");
+        String awayTeamName = (String)ml.get("event_away_team");
+        String homeTeamLogo = (String)ml.get("home_team_logo");
+        String awayTeamLogo = (String)ml.get("away_team_logo");
+        String homeFormation = (String)ml.get("home_formation");
+        String awayFormation = (String)ml.get("away_formation");
+        String refereeName = (String)ml.get("event_referee");
+        String venueName = (String)ml.get("event_stadium");
+        JSONArray statistics= (JSONArray) ml.get("statistics");
+        String homeAttackNum = "0";
+        String awayAttackNum = "0";
+        String homeAttackDangerNum = "0";
+        String awayAttackDangerNum = "0";
+        String homePossessionRate = "0";
+        String awayPossessionRate = "0";
+        String homeShootGoalNum = "0";
+        String awayShootGoalNum = "0";
+        String homeBiasNum = "0";
+        String awayBiasNum = "0";
+        String homeCornerKickNum = "0";
+        String awayCornerKickNum = "0";
+        Integer homeRedCardNum = 0;
+        Integer awayRedCardNum = 0;
+        Integer homeYellowCardNum = 0;
+        Integer awayYellowCardNum = 0;
+        Integer homeScore = 0;
+        Integer awayScore = 0;
+        if(statistics != null && !statistics.isEmpty()){
+            for(int i = 0;i<statistics.size();i++){
+                Map<String,Object> statistic = (Map<String,Object>)statistics.get(i);
+                String type = (String)statistic.get("type");
+                switch (type){
+                    case "Attacks":
+                        homeAttackNum = (String)statistic.get("home");
+                        awayAttackNum = (String)statistic.get("away");
+                        break;
+                    case "Dangerous Attacks":
+                        homeAttackDangerNum = (String)statistic.get("home");
+                        awayAttackDangerNum = (String)statistic.get("away");
+                        break;
+                    case "Off Target":
+                        homeBiasNum = (String)statistic.get("home");
+                        awayBiasNum = (String)statistic.get("away");
+                        break;
+                    case "Shots Total":
+                        homeShootGoalNum = (String)statistic.get("home");
+                        awayShootGoalNum = (String)statistic.get("away");
+                        break;
+                    case "Ball Possession":
+                        homePossessionRate = (String)statistic.get("home");
+                        awayPossessionRate = (String)statistic.get("away");
+                        break;
+                    case "Corners":
+                        homeCornerKickNum = (String)statistic.get("home");
+                        awayCornerKickNum = (String)statistic.get("away");
+                        break;
+                }
+            }
+        }
 
+        //  get home and away team card number
+        JSONArray cards = (JSONArray) ml.get("cards");
+        if(cards != null){
+            int size = cards.size();
+            for(int i=0;i<size;i++) {
+                Map<String,Object> card = (Map<String,Object>)cards.get(i);
+                String homeFault = (String)card.get("home_fault");
+                String cardColor = (String)card.get("card");
+                String awayFault = (String)card.get("away_fault");
+                if(!StringUtils.equals("",homeFault)){
+                    if(StringUtils.equals("yellow card",cardColor)) {
+                        homeYellowCardNum +=1;
+                    } else if(StringUtils.equals("red card",cardColor)){
+                        homeRedCardNum += 1;
+                    }
+                }
+                if(!StringUtils.equals("",awayFault)){
+                    if(StringUtils.equals("yellow card",cardColor)) {
+                       awayYellowCardNum +=1;
+                    } else if(StringUtils.equals("red card",cardColor)){
+                        awayRedCardNum += 1;
+                    }
+                }
+            }
+        }
+        // get home and away team score
+        String scores = (String)ml.get("event_final_result");
+        if(!StringUtils.equals("",scores)){
+            String[] scoreArr = scores.split("-");
+            if(scoreArr != null && scoreArr.length >0) {
+                homeScore = Integer.parseInt(scoreArr[0].trim());
+                awayScore = Integer.parseInt(scoreArr[1].trim());
+            }
+        }
+        footballMatchLiveData.setMatchId(matchId.longValue());
+        footballMatchLiveData.setMatchTime(matchTime);
+        footballMatchLiveData.setMatchDate(matchDate);
+        footballMatchLiveData.setHomeTeamName(homeTeamName);
+        footballMatchLiveData.setAwayTeamName(awayTeamName);
+        footballMatchLiveData.setHomeTeamLogo(homeTeamLogo);
+        footballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
+        footballMatchLiveData.setHomeFormation(homeFormation);
+        footballMatchLiveData.setAwayFormation(awayFormation);
+        footballMatchLiveData.setRefereeName(refereeName);
+        footballMatchLiveData.setVenueName(venueName);
+        footballMatchLiveData.setStatus(status);
+        footballMatchLiveData.setHomeAttackNum(Integer.parseInt(homeAttackNum));
+        footballMatchLiveData.setAwayAttackNum(Integer.parseInt(awayAttackNum));
+        footballMatchLiveData.setHomeAttackDangerNum(Integer.parseInt(homeAttackDangerNum));
+        footballMatchLiveData.setAwayAttackDangerNum(Integer.parseInt(awayAttackDangerNum));
+        footballMatchLiveData.setHomeBiasNum(Integer.parseInt(homeBiasNum));
+        footballMatchLiveData.setAwayBiasNum(Integer.parseInt(awayBiasNum));
+        footballMatchLiveData.setHomeCornerKickNum(Integer.parseInt(homeCornerKickNum));
+        footballMatchLiveData.setAwayCornerKickNum(Integer.parseInt(awayCornerKickNum));
+        footballMatchLiveData.setHomePossessionRate(Integer.parseInt(homePossessionRate));
+        footballMatchLiveData.setAwayPossessionRate(Integer.parseInt(awayPossessionRate));
+        footballMatchLiveData.setHomeShootGoalNum(Integer.parseInt(homeShootGoalNum));
+        footballMatchLiveData.setAwayShootGoalNum(Integer.parseInt(awayShootGoalNum));
+        footballMatchLiveData.setHomeYellowCardNum(homeYellowCardNum);
+        footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
+        footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
+        footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
+        footballMatchLiveData.setHomeScore(homeScore);
+        footballMatchLiveData.setAwayScore(awayScore);
+        return footballMatchLiveData;
+    }
 
+    private Integer[] getReadOrYellowCard(JSONArray startingLineups, JSONArray substitutes) {
+        Integer yellowCardNum = 0;
+        Integer redCardNum = 0;
+        Integer[] cards = {0,0};
+        if(startingLineups != null){
+            for(int i=0;i<startingLineups.size();i++){
+                Map<String,Object> map = (Map<String,Object>)startingLineups.get(i);
+                Number playerKey = (Number)map.get("player_key");
+                Integer[] cardsArr = getPlayerCardById(playerKey.toString());
+                yellowCardNum += cardsArr[0];
+                redCardNum += cardsArr[2];
+            }
+        }
+        if(substitutes != null){
+            for(int i=0;i<substitutes.size();i++){
+                Map<String,Object> map = (Map<String,Object>)startingLineups.get(i);
+                Number playerKey = (Number)map.get("player_key");
+                Integer[] cardsArr = getPlayerCardById(playerKey.toString());
+                yellowCardNum += cardsArr[0];
+                redCardNum += cardsArr[2];
+            }
+        }
+        cards[0] = yellowCardNum;
+        cards[1] = redCardNum;
+        return cards;
+    }
 
+    private Integer[] getPlayerCardById(String playId) {
+        Integer[] arr = {0,0};
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",playId);
+        String result = HttpUtil.getNaMiData(url);
+        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+        if (resultObj != null && !resultObj.isEmpty()) {
+            Integer success = (Integer) resultObj.get("success");
+            if (success != null) {
+                if (1 == success) {
+                    JSONArray playArray = (JSONArray) resultObj.get("result");
+                    if (playArray != null && !playArray.isEmpty()) {
+                        Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
+                        String yellowCards = (String)playMap.get("player_yellow_cards");
+                        if(StringUtils.equals("",yellowCards)){
+                            yellowCards = "0";
+                        }
+                        String redCards = (String)playMap.get("player_red_cards");
+                        if(StringUtils.equals("",redCards)){
+                            redCards = "0";
+                        }
+                        arr[0] = Integer.parseInt(yellowCards);
+                        arr[1] = Integer.parseInt(redCards);
+                    }
+                }
+            }
+        }
+        return arr;
+    }
 }

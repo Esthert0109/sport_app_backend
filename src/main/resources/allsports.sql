@@ -84,8 +84,12 @@ CREATE TABLE `all_sports_football_match_live_data` (
   `match_date` varchar(32) COMMENT 'match_date',
   `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
   `away_team_name` varchar(255) NOT NULL COMMENT 'home team name',
-  `home_team_logo` varchar(255) NOT NULL COMMENT 'home team logo',
-  `away_team_logo` varchar(255) NOT NULL COMMENT 'away team logo',
+  `home_team_logo` varchar(255) COMMENT 'home team logo',
+  `away_team_logo` varchar(255) COMMENT 'away team logo',
+  `referee_name` varchar(255)  COMMENT 'referee name',
+  `venue_name` varchar(255)  COMMENT 'stadium name',
+  `home_formation` varchar(255)  COMMENT 'home formation',
+  `away_formation` varchar(255)  COMMENT 'away formation',
   `home_attack_num` int COMMENT 'homeAttackNum',
   `away_attack_num` int COMMENT 'awayAttackNum',
   `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
@@ -106,6 +110,8 @@ CREATE TABLE `all_sports_football_match_live_data` (
   `away_score` int COMMENT 'awayScore',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+create index all_sports_football_match_live_data_index_matchId on all_sports_football_match_live_data(match_id);
 
 
 

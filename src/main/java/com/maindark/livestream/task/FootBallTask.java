@@ -30,20 +30,13 @@ import java.util.Map;
 @EnableScheduling
 public class FootBallTask {
 
-
     private Integer maxMatchIdFromApi = 0;
     private Integer maxMatchTimeFromApi = 0;
-
-
-
-
-
     @Resource
     NamiConfig namiConfig;
 
     @Resource
     RedisService redisService;
-
 
     @Resource
     FootballTeamDao footballTeamDao;

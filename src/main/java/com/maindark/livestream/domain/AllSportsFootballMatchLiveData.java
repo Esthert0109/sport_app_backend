@@ -13,10 +13,14 @@ public class AllSportsFootballMatchLiveData {
     private String status;
     private String matchDate;
     private String matchTime;
-    private Long homeTeamId;
-    private Long awayTeamId;
     private String homeTeamName;
     private String awayTeamName;
+    private String homeTeamLogo;
+    private String awayTeamLogo;
+    private String refereeName;
+    private String venueName;
+    private String homeFormation;
+    private String awayFormation;
     private Integer homeAttackNum;
     private Integer awayAttackNum;
     private Integer homeAttackDangerNum;
@@ -35,5 +39,4 @@ public class AllSportsFootballMatchLiveData {
     private Integer awayYellowCardNum;
     private Integer homeScore;
     private Integer awayScore;
-
 }
