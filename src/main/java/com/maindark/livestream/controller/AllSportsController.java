@@ -6,6 +6,8 @@ import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +22,12 @@ public class AllSportsController {
      * get today's all matches via competition's name or team's name
      * */
     @GetMapping("/now-list")
-    public Result<List<FootballMatchVo>> getList(@RequestParam(required = false) String competitionName, @RequestParam(required = false) String teamName){
-        List<FootballMatchVo> result = allSportsService.getFootBallMatchList(competitionName,teamName);
+    public Result<List<FootballMatchVo>> getList(@RequestParam(required = false) String competitionName,
+                                                 @RequestParam(required = false) String teamName,
+                                                 @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                 @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
+        List<FootballMatchVo> result = allSportsService.getFootBallMatchList(competitionName,teamName,request);
         return Result.success(result);
     }
 
@@ -31,8 +37,10 @@ public class AllSportsController {
      * get all matches in seven days
      * */
     @GetMapping("/list")
-    public Result<Map<String,List<FootballMatchVo>>> getAllMatches(){
-        Map<String,List<FootballMatchVo>> results = allSportsService.getFootballMatchesInSevenDays();
+    public Result<Map<String,List<FootballMatchVo>>> getAllMatches( @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
+        Map<String,List<FootballMatchVo>> results = allSportsService.getFootballMatchesInSevenDays(request);
         return Result.success(results);
     }
 
@@ -41,8 +49,11 @@ public class AllSportsController {
      *
      */
     @GetMapping("/list/{date}")
-    public Result<List<FootballMatchVo>> getMatchesByDate(@PathVariable("date")String date){
-        List<FootballMatchVo> footballMatchVos = allSportsService.getMatchListByDate(date);
+    public Result<List<FootballMatchVo>> getMatchesByDate(@PathVariable("date")String date,
+                                                          @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
+        List<FootballMatchVo> footballMatchVos = allSportsService.getMatchListByDate(date,request);
         return Result.success(footballMatchVos);
     }
 

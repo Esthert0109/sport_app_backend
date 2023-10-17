@@ -2,9 +2,7 @@ package com.maindark.livestream.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
-import com.maindark.livestream.allSports.AllSportsConfig;
-import com.maindark.livestream.dao.AllSportsFootballCompetitionDao;
-import com.maindark.livestream.dao.AllSportsFootballTeamDao;
+import com.maindark.livestream.dao.AllSportsFootballMatchDao;
 import com.maindark.livestream.domain.AwayMatchLineUp;
 import com.maindark.livestream.domain.HomeMatchLineUp;
 import com.maindark.livestream.exception.GlobalException;
@@ -20,6 +18,7 @@ import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,70 +31,66 @@ import java.util.stream.Stream;
 @Slf4j
 public class AllSportsService {
 
-    @Resource
-    AllSportsConfig allSportsConfig;
+
+
+
 
     @Resource
-    AllSportsFootballCompetitionDao allSportsFootballCompetitionDao;
-    @Resource
-    AllSportsFootballTeamDao allSportsFootballTeamDao;
+    AllSportsFootballMatchDao allSportsFootballMatchDao;
 
     @Resource
     RedisService redisService;
 
-    public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName) {
+    public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName, Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        Long offset = pageable.getOffset();
         if(StringUtils.isBlank(competitionName) && StringUtils.isBlank(teamName)) {
             throw new GlobalException(CodeMsg.FOOT_BALL_MATCH_PARAMS_ERROR);
         }
-        List<FootballMatchVo> list;
-        Integer leagueId ;
-        Integer teamId ;
-        String url = "";
+        List<FootballMatchVo> list = null;
         LocalDate now = LocalDate.now();
         LocalDate tomorrow = now.plusDays(1);
         String from = DateUtil.convertDateToStr(now);
         String to = DateUtil.convertDateToStr(tomorrow);
         if (!StringUtils.isBlank(competitionName)){
-            leagueId = allSportsFootballCompetitionDao.getAllSportsFootballCompetitionByName(competitionName.trim());
-            url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixturesLeagueId()).replace("{}",String.valueOf(leagueId))+"&from="+ from + "&to=" + to;
+            list = allSportsFootballMatchDao.getAllSportsFootMatchByCompetitionName(competitionName,from,to,pageSize,offset);
         } else if (!StringUtils.isBlank(teamName)) {
-            teamId = allSportsFootballTeamDao.getAllSportsTeamByName(teamName.trim());
-            url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixturesTeamId()).replace("{}",String.valueOf(teamId))+"&from="+ from + "&to=" + to;
+            list = allSportsFootballMatchDao.getAllSportsFootMatchByTeamName(teamName,from,to,pageSize,offset);
         }
-        list = getFootballMatchVos(url);
         return list;
     }
 
-    public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays() {
+    public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
         LocalDate now = LocalDate.now();
-        String nowSeconds = DateUtil.convertDateToStr(now);
-        Map<String,List<FootballMatchVo>> results = redisService.get(FootballListKey.listKey,nowSeconds,Map.class);
+        String nowDate = DateUtil.convertDateToStr(now);
+        Map<String,List<FootballMatchVo>> results = redisService.get(FootballListKey.listKey,nowDate,Map.class);
         if (results == null) {
             LocalDate tomorrow = now.plusDays(1);
             LocalDate future = now.plusDays(6);
             LocalDate past = now.minusDays(6);
-            String tomorrowS = DateUtil.convertDateToStr(tomorrow);
-            String futureSeconds = DateUtil.convertDateToStr(future);
-            String pastSeconds = DateUtil.convertDateToStr(past);
-            String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures())+"&from="+ pastSeconds + "&to=" + nowSeconds;
-            List<FootballMatchVo> pastMatches = getFootballMatchVos(url);
-            url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures())+"&from="+ nowSeconds + "&to=" + tomorrowS;
-            List<FootballMatchVo> startMatches = getFootballMatchVos(url);
-            url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures())+"&from="+ nowSeconds + "&to=" + futureSeconds;
-            List<FootballMatchVo> futureMatches = getFootballMatchVos(url);
+            String tomorrowDate = DateUtil.convertDateToStr(tomorrow);
+            String futureDate = DateUtil.convertDateToStr(future);
+            String pastDate = DateUtil.convertDateToStr(past);
+            List<FootballMatchVo> pastMatches = allSportsFootballMatchDao.getAllSportsPast(pastDate,nowDate,pageSize,offset);
+            List<FootballMatchVo> startMatches = allSportsFootballMatchDao.getAllSportsStart(nowDate,tomorrowDate,pageSize,offset);
+            List<FootballMatchVo> futureMatches = allSportsFootballMatchDao.getAllSportsFuture(tomorrowDate,futureDate,pageSize,offset);
             results = new HashMap<>();
             results.put("pass",pastMatches);
             results.put("start",startMatches);
             results.put("future",futureMatches);
-            redisService.set(FootballListKey.listKey,nowSeconds,results);
+            redisService.set(FootballListKey.listKey,nowDate,results);
         }
         return results;
     }
 
-    public List<FootballMatchVo> getMatchListByDate(String date) {
-        String expectedDate = DateUtil.convertDateToStr(DateUtil.convertStringToDate(date));
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures())+"&from="+ expectedDate + "&to=" + expectedDate;
-        return getFootballMatchVos(url);
+    public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable) {
+        date = DateUtil.convertDateToStr(DateUtil.convertStringToDate(date));
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        List<FootballMatchVo> list = allSportsFootballMatchDao.getAllSportsByDate(date,pageSize,offset);
+        return list;
     }
 
     public FootballMatchLineUpVo getFootballMatchLineUpByMatchId(String matchId) {

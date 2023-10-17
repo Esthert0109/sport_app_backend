@@ -113,6 +113,9 @@ CREATE TABLE `all_sports_football_match_live_data` (
 
 create index all_sports_football_match_live_data_index_matchId on all_sports_football_match_live_data(match_id);
 
+create index all_sports_football_match_matchDate on all_sports_football_match(match_date);
+
+
 
 
 
