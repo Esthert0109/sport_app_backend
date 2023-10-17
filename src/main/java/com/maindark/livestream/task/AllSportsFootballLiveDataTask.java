@@ -24,7 +24,7 @@ public class AllSportsFootballLiveDataTask {
     AllSportsConfig allSportsConfig;
     @Resource
     AllSportsFootballLiveDataDao allSportsFootballLiveDataDao;
-    //@Scheduled(cron = "0 */2 * * * ? ")
+    @Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballLiveData() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getNaMiData(url);
