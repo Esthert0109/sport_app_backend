@@ -46,44 +46,48 @@ public class AllSportsFootballTask {
         String result = HttpUtil.getNaMiData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
-            int success = (Integer) resultObj.get("success");
-            if(1 == success){
-                List<Map<String,Object>> matches = (List<Map<String, Object>>) resultObj.get("result");
-                if(matches != null && !matches.isEmpty()){
-                    int size = matches.size();
-                    for(int i=0;i<size;i++){
-                        Map<String,Object> ml = matches.get(i);
-                        String eventLive = (String)ml.get("event_live");
-                        if(StringUtils.equals("1",eventLive)){
-                            AllSportsFootballMatch allSportsFootballMatch = getAllSportsMatch(ml);
-                            int exists = allSportsFootballMatchDao.queryMatchIsExists(allSportsFootballMatch.getId());
-                            if(exists < 0){
-                                allSportsFootballMatchDao.insert(allSportsFootballMatch);
-                            } else {
-                                allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);
-                            }
-                            Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
-                            Number matchId = (Number) ml.get("event_key");
-                            Number homeTeamId = (Number) ml.get("home_team_key");
-                            Number awayTeamId = (Number) ml.get("away_team_key");
-                            if (lineups != null && !lineups.isEmpty()) {
-                                // set home team line-up
-                                Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
-                                if (homeTeam != null && !homeTeam.isEmpty()) {
-                                    JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
-                                    JSONArray substitutes = (JSONArray) homeTeam.get("substitutes");
-                                    getMatchLineUp(startingLineups, matchId.longValue(), substitutes, homeTeamId.longValue(), TeamEnum.HOME.getCode());
+            Integer success = (Integer) resultObj.get("success");
+            if(success != null){
+                if(1 == success){
+                    List<Map<String,Object>> matches = (List<Map<String, Object>>) resultObj.get("result");
+                    if(matches != null && !matches.isEmpty()){
+                        int size = matches.size();
+                        for(int i=0;i<size;i++){
+                            Map<String,Object> ml = matches.get(i);
+                            String eventLive = (String)ml.get("event_live");
+                            if(StringUtils.equals("1",eventLive)){
+                                AllSportsFootballMatch allSportsFootballMatch = getAllSportsMatch(ml);
+                                int exists = allSportsFootballMatchDao.queryMatchIsExists(allSportsFootballMatch.getId());
+                                if(exists < 0){
+                                    allSportsFootballMatchDao.insert(allSportsFootballMatch);
+                                } else {
+                                    allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);
                                 }
-                                // set away team line-up
-                                Map<String, Object> awayTeam = (Map<String, Object>) lineups.get("away_team");
-                                if (awayTeam != null && !awayTeam.isEmpty()) {
-                                    JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
-                                    JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
-                                    getMatchLineUp(startingLineups, matchId.longValue(), substitutes, awayTeamId.longValue(),TeamEnum.AWAY.getCode());
+                                Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
+                                Number matchId = (Number) ml.get("event_key");
+                                Number homeTeamId = (Number) ml.get("home_team_key");
+                                Number awayTeamId = (Number) ml.get("away_team_key");
+                                if (lineups != null && !lineups.isEmpty()) {
+                                    // set home team line-up
+                                    Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+                                    if (homeTeam != null && !homeTeam.isEmpty()) {
+                                        JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
+                                        JSONArray substitutes = (JSONArray) homeTeam.get("substitutes");
+                                        getMatchLineUp(startingLineups, matchId.longValue(), substitutes, homeTeamId.longValue(), TeamEnum.HOME.getCode());
+                                    }
+                                    // set away team line-up
+                                    Map<String, Object> awayTeam = (Map<String, Object>) lineups.get("away_team");
+                                    if (awayTeam != null && !awayTeam.isEmpty()) {
+                                        JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
+                                        JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
+                                        getMatchLineUp(startingLineups, matchId.longValue(), substitutes, awayTeamId.longValue(),TeamEnum.AWAY.getCode());
+                                    }
                                 }
                             }
                         }
                     }
+                } else {
+                    log.info("there is no live data now!");
                 }
             }
         }
@@ -152,58 +156,26 @@ public class AllSportsFootballTask {
         String result = HttpUtil.getNaMiData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
-            int success = (Integer) resultObj.get("success");
-            if(1 == success){
-                JSONArray playArray = (JSONArray)resultObj.get("result");
-                Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
-                String captain = (String)playMap.get("player_is_captain");
-                if(StringUtils.isBlank(captain)){
-                    allSportsHomeMatchLineUp.setCaptain(0);
-                } else {
-                    allSportsHomeMatchLineUp.setCaptain(1);
+            Integer success = (Integer) resultObj.get("success");
+            if(success != null){
+                if(1 == success){
+                    JSONArray playArray = (JSONArray)resultObj.get("result");
+                    Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
+                    String captain = (String)playMap.get("player_is_captain");
+                    if(StringUtils.isBlank(captain)){
+                        allSportsHomeMatchLineUp.setCaptain(0);
+                    } else {
+                        allSportsHomeMatchLineUp.setCaptain(1);
+                    }
+                    String playerImage = (String)playMap.get("player_image");
+                    String playerRating = (String)playMap.get("player_rating");
+                    allSportsHomeMatchLineUp.setPlayerLogo(playerImage);
+                    allSportsHomeMatchLineUp.setRating(playerRating);
                 }
-                String playerImage = (String)playMap.get("player_image");
-                String playerRating = (String)playMap.get("player_rating");
-                allSportsHomeMatchLineUp.setPlayerLogo(playerImage);
-                allSportsHomeMatchLineUp.setRating(playerRating);
             }
         }
         return allSportsHomeMatchLineUp;
     }
-
-    private AllSportsAwayMatchLineUp getAllSportsAwayLineUp(Long playerId,Integer playNumber,Integer playPosition,Long matchId,Long teamId,String playerName,Integer first) {
-        AllSportsAwayMatchLineUp allSportsAwayMatchLineUp = new AllSportsAwayMatchLineUp();
-        allSportsAwayMatchLineUp.setId(playerId);
-        allSportsAwayMatchLineUp.setMatchId(matchId);
-        allSportsAwayMatchLineUp.setTeamId(teamId);
-        allSportsAwayMatchLineUp.setShirtNumber(playNumber);
-        allSportsAwayMatchLineUp.setPosition(playPosition);
-        allSportsAwayMatchLineUp.setPlayerName(playerName);
-        allSportsAwayMatchLineUp.setFirst(first);
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",String.valueOf(playerId));
-        String result = HttpUtil.getNaMiData(url);
-        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        if (resultObj != null && !resultObj.isEmpty()) {
-            int success = (Integer) resultObj.get("success");
-            if(1 == success){
-                JSONArray playArray = (JSONArray)resultObj.get("result");
-                Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
-                String captain = (String)playMap.get("player_is_captain");
-                if(StringUtils.isBlank(captain)){
-                    allSportsAwayMatchLineUp.setCaptain(0);
-                } else {
-                    allSportsAwayMatchLineUp.setCaptain(1);
-                }
-                String playerImage = (String)playMap.get("player_image");
-                String playerRating = (String)playMap.get("player_rating");
-                allSportsAwayMatchLineUp.setPlayerLogo(playerImage);
-                allSportsAwayMatchLineUp.setRating(playerRating);
-            }
-        }
-        return allSportsAwayMatchLineUp;
-    }
-
-
 
     private AllSportsFootballMatch getAllSportsMatch(Map<String,Object> ml) {
         AllSportsFootballMatch allSportsFootballMatch = new AllSportsFootballMatch();

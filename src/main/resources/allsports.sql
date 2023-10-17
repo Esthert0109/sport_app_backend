@@ -75,6 +75,40 @@ CREATE TABLE `all_sports_football_match` (
 
 
 
+DROP TABLE IF EXISTS `all_sports_football_match_live_data`;
+CREATE TABLE `all_sports_football_match_live_data` (
+  `id` int auto_increment NOT NULL   COMMENT 'id',
+  `match_id` bigint not null COMMENT 'match id',
+  `status` bigint COMMENT 'football status',
+  `match_time` varchar(8) COMMENT 'match time',
+  `match_date` varchar(32) COMMENT 'match_date',
+  `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
+  `away_team_name` varchar(255) NOT NULL COMMENT 'home team name',
+  `home_team_logo` varchar(255) NOT NULL COMMENT 'home team logo',
+  `away_team_logo` varchar(255) NOT NULL COMMENT 'away team logo',
+  `home_attack_num` int COMMENT 'homeAttackNum',
+  `away_attack_num` int COMMENT 'awayAttackNum',
+  `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
+  `away_attack_danger_num` int COMMENT 'awayAttackDangerNum',
+  `home_possession_rate` int COMMENT 'homePossessionRate',
+  `away_possession_rate` int COMMENT 'awayPossessionRate',
+  `home_shoot_goal_num` int COMMENT 'homeShootGoalNum',
+  `away_shoot_goal_num` int COMMENT 'awayShootGoalNum',
+  `home_bias_num` int COMMENT 'homeBiasNum',
+  `away_bias_num` int COMMENT 'awayBiasNum',
+  `home_corner_kick_num` int COMMENT 'homeCornerKickNum',
+  `away_corner_kick_num` int COMMENT 'awayCornerKickNum',
+  `home_red_card_num` int COMMENT 'homeRedCardNum',
+  `away_red_card_num` int COMMENT 'awayRedCardNum',
+  `home_yellow_card_num` int COMMENT 'homeYellowCardNum',
+  `away_yellow_card_num` int COMMENT 'awayYellowCardNum',
+  `home_score` int COMMENT 'homeScore',
+  `away_score` int COMMENT 'awayScore',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
 
 
 
