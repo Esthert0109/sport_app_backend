@@ -81,10 +81,10 @@ public class AllSportsFootballLiveDataTask {
         String awayBiasNum = "0";
         String homeCornerKickNum = "0";
         String awayCornerKickNum = "0";
-        Integer homeRedCardNum = 0;
-        Integer awayRedCardNum = 0;
-        Integer homeYellowCardNum = 0;
-        Integer awayYellowCardNum = 0;
+        String homeRedCardNum = "0";
+        String awayRedCardNum = "0";
+        String homeYellowCardNum = "0";
+        String awayYellowCardNum = "0";
         Integer homeScore = 0;
         Integer awayScore = 0;
         if(statistics != null && !statistics.isEmpty()){
@@ -104,7 +104,7 @@ public class AllSportsFootballLiveDataTask {
                         homeBiasNum = (String)statistic.get("home");
                         awayBiasNum = (String)statistic.get("away");
                         break;
-                    case "Shots Total":
+                    case "Shots On Goal":
                         homeShootGoalNum = (String)statistic.get("home");
                         awayShootGoalNum = (String)statistic.get("away");
                         break;
@@ -116,12 +116,20 @@ public class AllSportsFootballLiveDataTask {
                         homeCornerKickNum = (String)statistic.get("home");
                         awayCornerKickNum = (String)statistic.get("away");
                         break;
+                    case "Yellow Cards":
+                        homeYellowCardNum = (String)statistic.get("home");
+                        awayYellowCardNum = (String)statistic.get("away");
+                        break;
+                    case "Red Cards":
+                        homeRedCardNum = (String)statistic.get("home");
+                        awayRedCardNum = (String)statistic.get("away");
+
                 }
             }
         }
 
         //  get home and away team card number
-        JSONArray cards = (JSONArray) ml.get("cards");
+        /*JSONArray cards = (JSONArray) ml.get("cards");
         if(cards != null){
             int size = cards.size();
             for(int i=0;i<size;i++) {
@@ -144,7 +152,7 @@ public class AllSportsFootballLiveDataTask {
                     }
                 }
             }
-        }
+        }*/
         //Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
         /*if (lineups != null && !lineups.isEmpty()) {
             // get home team red and yellow cards number
@@ -199,10 +207,10 @@ public class AllSportsFootballLiveDataTask {
         footballMatchLiveData.setAwayPossessionRate(Integer.parseInt(awayPossessionRate));
         footballMatchLiveData.setHomeShootGoalNum(Integer.parseInt(homeShootGoalNum));
         footballMatchLiveData.setAwayShootGoalNum(Integer.parseInt(awayShootGoalNum));
-        footballMatchLiveData.setHomeYellowCardNum(homeYellowCardNum);
-        footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
-        footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
-        footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
+        footballMatchLiveData.setHomeYellowCardNum(Integer.parseInt(homeYellowCardNum));
+        footballMatchLiveData.setAwayYellowCardNum(Integer.parseInt(awayYellowCardNum));
+        footballMatchLiveData.setHomeRedCardNum(Integer.parseInt(homeRedCardNum));
+        footballMatchLiveData.setAwayRedCardNum(Integer.parseInt(awayRedCardNum));
         footballMatchLiveData.setHomeScore(homeScore);
         footballMatchLiveData.setAwayScore(awayScore);
         return footballMatchLiveData;
