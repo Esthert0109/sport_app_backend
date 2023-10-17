@@ -160,17 +160,19 @@ public class AllSportsFootballTask {
             if(success != null){
                 if(1 == success){
                     JSONArray playArray = (JSONArray)resultObj.get("result");
-                    Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
-                    String captain = (String)playMap.get("player_is_captain");
-                    if(StringUtils.isBlank(captain)){
-                        allSportsHomeMatchLineUp.setCaptain(0);
-                    } else {
-                        allSportsHomeMatchLineUp.setCaptain(1);
+                    if(playArray != null && !playArray.isEmpty()){
+                        Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
+                        String captain = (String)playMap.get("player_is_captain");
+                        if(StringUtils.isBlank(captain)){
+                            allSportsHomeMatchLineUp.setCaptain(0);
+                        } else {
+                            allSportsHomeMatchLineUp.setCaptain(1);
+                        }
+                        String playerImage = (String)playMap.get("player_image");
+                        String playerRating = (String)playMap.get("player_rating");
+                        allSportsHomeMatchLineUp.setPlayerLogo(playerImage);
+                        allSportsHomeMatchLineUp.setRating(playerRating);
                     }
-                    String playerImage = (String)playMap.get("player_image");
-                    String playerRating = (String)playMap.get("player_rating");
-                    allSportsHomeMatchLineUp.setPlayerLogo(playerImage);
-                    allSportsHomeMatchLineUp.setRating(playerRating);
                 }
             }
         }
