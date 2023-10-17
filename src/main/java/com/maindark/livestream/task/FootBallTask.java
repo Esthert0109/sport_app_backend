@@ -11,7 +11,6 @@ import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
-import com.maindark.livestream.vo.FootballMatchLineUpVo;
 import com.maindark.livestream.vo.FootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
@@ -20,7 +19,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -540,6 +538,8 @@ public class FootBallTask {
         Integer shirtNumber = (Integer)ml.get("shirt_number");
         String position = (String)ml.get("position");
         String rating = (String)ml.get("rating");
+        Integer x = (Integer)ml.get("x");
+        Integer y = (Integer)ml.get("y");
         HomeMatchLineUp homeMatchLineUp = new HomeMatchLineUp();
         homeMatchLineUp.setId(id);
         homeMatchLineUp.setTeamId(teamId);
@@ -551,6 +551,8 @@ public class FootBallTask {
         homeMatchLineUp.setShirtNumber(shirtNumber);
         homeMatchLineUp.setPosition(position);
         homeMatchLineUp.setRating(rating);
+        homeMatchLineUp.setX(x);
+        homeMatchLineUp.setY(y);
         return homeMatchLineUp;
     }
 
@@ -564,6 +566,8 @@ public class FootBallTask {
         Integer shirtNumber = (Integer)ml.get("shirt_number");
         String position = (String)ml.get("position");
         String rating = (String)ml.get("rating");
+        Integer x = (Integer)ml.get("x");
+        Integer y = (Integer)ml.get("y");
         AwayMatchLineUp awayMatchLineUp = new AwayMatchLineUp();
         awayMatchLineUp.setId(id);
         awayMatchLineUp.setTeamId(teamId);
@@ -575,6 +579,8 @@ public class FootBallTask {
         awayMatchLineUp.setShirtNumber(shirtNumber);
         awayMatchLineUp.setPosition(position);
         awayMatchLineUp.setRating(rating);
+        awayMatchLineUp.setX(x);
+        awayMatchLineUp.setY(y);
         return awayMatchLineUp;
     }
 
