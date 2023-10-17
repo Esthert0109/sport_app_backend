@@ -94,8 +94,8 @@ CREATE TABLE `all_sports_football_match_live_data` (
   `away_attack_num` int COMMENT 'awayAttackNum',
   `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
   `away_attack_danger_num` int COMMENT 'awayAttackDangerNum',
-  `home_possession_rate` int COMMENT 'homePossessionRate',
-  `away_possession_rate` int COMMENT 'awayPossessionRate',
+  `home_possession_rate` varchar(16) COMMENT 'homePossessionRate',
+  `away_possession_rate` varchar(16) COMMENT 'awayPossessionRate',
   `home_shoot_goal_num` int COMMENT 'homeShootGoalNum',
   `away_shoot_goal_num` int COMMENT 'awayShootGoalNum',
   `home_bias_num` int COMMENT 'homeBiasNum',
@@ -114,7 +114,9 @@ CREATE TABLE `all_sports_football_match_live_data` (
 create index all_sports_football_match_live_data_index_matchId on all_sports_football_match_live_data(match_id);
 
 create index all_sports_football_match_matchDate on all_sports_football_match(match_date);
+alter table all_sports_football_match_live_data modify home_possession_rate varchar(16) COMMENT 'homePossessionRate';
 
+alter table all_sports_football_match_live_data modify away_possession_rate varchar(16) COMMENT 'homePossessionRate';
 
 
 

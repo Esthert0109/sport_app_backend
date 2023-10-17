@@ -531,8 +531,8 @@ public class AllSportsApiService {
         footballMatchLiveData.setAwayBiasNum(Integer.parseInt(awayBiasNum));
         footballMatchLiveData.setHomeCornerKickNum(Integer.parseInt(homeCornerKickNum));
         footballMatchLiveData.setAwayCornerKickNum(Integer.parseInt(awayCornerKickNum));
-        footballMatchLiveData.setHomePossessionRate(Integer.parseInt(homePossessionRate));
-        footballMatchLiveData.setAwayPossessionRate(Integer.parseInt(awayPossessionRate));
+        footballMatchLiveData.setHomePossessionRate(homePossessionRate);
+        footballMatchLiveData.setAwayPossessionRate(awayPossessionRate);
         footballMatchLiveData.setHomeShootGoalNum(Integer.parseInt(homeShootGoalNum));
         footballMatchLiveData.setAwayShootGoalNum(Integer.parseInt(awayShootGoalNum));
         footballMatchLiveData.setHomeYellowCardNum(homeYellowCardNum);

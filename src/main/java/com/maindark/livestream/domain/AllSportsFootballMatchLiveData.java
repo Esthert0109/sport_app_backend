@@ -25,8 +25,8 @@ public class AllSportsFootballMatchLiveData {
     private Integer awayAttackNum;
     private Integer homeAttackDangerNum;
     private Integer awayAttackDangerNum;
-    private Integer homePossessionRate;
-    private Integer awayPossessionRate;
+    private String homePossessionRate;
+    private String awayPossessionRate;
     private Integer homeShootGoalNum;
     private Integer awayShootGoalNum;
     private Integer homeBiasNum;
