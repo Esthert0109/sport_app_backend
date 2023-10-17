@@ -64,8 +64,8 @@ public class AllSportsFootballLiveDataTask {
         String awayTeamName = (String)ml.get("event_away_team");
         String homeTeamLogo = (String)ml.get("home_team_logo");
         String awayTeamLogo = (String)ml.get("away_team_logo");
-        String homeFormation = (String)ml.get("home_formation");
-        String awayFormation = (String)ml.get("away_formation");
+        String homeFormation = (String)ml.get("event_home_formation");
+        String awayFormation = (String)ml.get("event_away_formation");
         String refereeName = (String)ml.get("event_referee");
         String venueName = (String)ml.get("event_stadium");
         JSONArray statistics= (JSONArray) ml.get("statistics");
