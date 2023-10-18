@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -31,7 +32,19 @@ public class Demo {
         }
     }
 
+    public static Long convertDateToLongTime(LocalDate localDate){
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String currentDate = localDate.toString();
+        long nowSeconds = LocalDate.parse(currentDate, dateFormatter)
+                .atStartOfDay(ZoneOffset.UTC)
+                .toInstant()
+                .toEpochMilli() / 1000;
+        return nowSeconds;
+    }
+
     public static void main(String[] args) throws Exception {
-        liveRtmpFeed();
+       // liveRtmpFeed();
+        Long nowDate = convertDateToLongTime(LocalDate.now());
+        System.out.println(nowDate);
     }
 }
