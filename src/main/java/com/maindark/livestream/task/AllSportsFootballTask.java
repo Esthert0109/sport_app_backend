@@ -139,7 +139,7 @@ public class AllSportsFootballTask {
 
 
     private BaseFootballMatchLineup getAllSportsLineUp(Long playerId, Integer playNumber, Integer playPosition, Long matchId, Long teamId, String playerName, Integer first, String teamType) {
-        BaseFootballMatchLineup  allSportsHomeMatchLineUp = null;
+        BaseFootballMatchLineup  allSportsHomeMatchLineUp;
         if(StringUtils.equals("0",teamType)){
             allSportsHomeMatchLineUp = new AllSportsHomeMatchLineUp();
         } else {
@@ -204,7 +204,7 @@ public class AllSportsFootballTask {
                 allSportsFootballMatch.setAwayTeamScore(0);
             } else {
                 String[] scoreArr = scores.split("-");
-                if (scoreArr != null && scoreArr.length > 0) {
+                if (scoreArr.length > 0) {
                     allSportsFootballMatch.setHomeTeamScore(Integer.parseInt(scoreArr[0].trim()));
                     allSportsFootballMatch.setAwayTeamScore(Integer.parseInt(scoreArr[1].trim()));
                 } else {
