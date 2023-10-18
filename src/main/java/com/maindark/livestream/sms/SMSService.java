@@ -36,12 +36,22 @@ public class SMSService {
     @Resource
     RedisService redisService;
     public  Boolean sendSMS(String type,String mobileNumber)  {
-        if(StringUtils.equals(type,SMSEnum.RESET.getCode())){
+        // check the mobile is existed when reset the password or forgot the password.
+        if(StringUtils.equals(type,SMSEnum.RESET.getCode()) || StringUtils.equals(type,SMSEnum.FORGOT.getCode())){
             LiveStreamUser liveStreamUser = liveStreamUserDao.getById(Long.valueOf(mobileNumber));
             if(liveStreamUser == null){
                 throw  new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
             }
         }
+
+        // check the mobile is existed when register
+        if(StringUtils.equals(type,SMSEnum.REGISTER.getCode())){
+            LiveStreamUser liveStreamUser = liveStreamUserDao.getById(Long.valueOf(mobileNumber));
+            if(liveStreamUser != null){
+                throw  new GlobalException(CodeMsg.MOBILE_EXIST);
+            }
+        }
+
         // 随机的四位数OTP
         Random random = new Random();
         int OTPNumber = random.nextInt(9000) + 1000;
