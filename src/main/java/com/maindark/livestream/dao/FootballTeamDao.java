@@ -30,4 +30,7 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
 
     @Select("select id,name_zh as team_name,logo from football_team where id=#{id}")
     FootballTeamVo getTeamLogoAndNameById(@Param("id") Integer id);
+
+    @Select("select * from football_team where name_en=#{teamName} limit 1")
+    FootballTeamVo getTeamBynName(@Param("teamName")String teamName);
 }

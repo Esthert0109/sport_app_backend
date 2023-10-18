@@ -97,4 +97,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
             " on t1.competition_id = fc.id where t1.match_time >=#{currentSeconds} and " +
             "t1.match_time<#{deadlineSeconds} order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchByDate(@Param("currentSeconds") Long currentSeconds, @Param("deadlineSeconds") Long deadlineSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
+
+    @Select("select * from football_match where home_team_id=#{teamId} limit 1")
+    FootballMatch getFootballMatchByHomeTeamId(@Param("teamId") Integer teamId);
 }

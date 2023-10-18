@@ -33,6 +33,11 @@ public class CodeMsg {
 
     //nami football
     public static CodeMsg FOOT_BALL_ERROR = new CodeMsg(500510,"football service is wrong, please connect to nami platform!");
+    public static CodeMsg FOOT_TEAM_IS_NOT_EXISTED = new CodeMsg(500511,"football team is not existed, please choose another team name");
+
+    public static CodeMsg FOOTBALL_MATCH_IS_NOT_EXISTED = new CodeMsg(500512,"football match is not existed, please try again later.");
+    public static CodeMsg FOOTBALL_LIVE_ADDRESS_IS_NOT_EXISTED = new CodeMsg(500513,"football live address is not existed!");
+
     // nami basketball
     public static CodeMsg BASKET_BALL_ERROR = new CodeMsg(500610,"basketball service is wrong, please connect to our administrator!");
 

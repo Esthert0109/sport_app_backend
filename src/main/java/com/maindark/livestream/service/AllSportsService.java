@@ -1,20 +1,16 @@
 package com.maindark.livestream.service;
 
-import com.maindark.livestream.dao.AllSportsAwayMatchLineUpDao;
-import com.maindark.livestream.dao.AllSportsFootballLiveDataDao;
-import com.maindark.livestream.dao.AllSportsFootballMatchDao;
-import com.maindark.livestream.dao.AllSportsHomeMatchLineUpDao;
+import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
 import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
+import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.redis.FootballListKey;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
-import com.maindark.livestream.vo.AllSportsFootballMatchLineUpVo;
-import com.maindark.livestream.vo.AllSportsFootballMatchLiveDataVo;
-import com.maindark.livestream.vo.FootballMatchVo;
+import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +40,15 @@ public class AllSportsService {
 
     @Resource
     RedisService redisService;
+
+    @Resource
+    FootballTeamDao footballTeamDao;
+
+    @Resource
+    FootballMatchDao footballMatchDao;
+
+    @Resource
+    FootballLiveAddressDao footballLiveAddressDao;
 
     public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName, Pageable pageable) {
         int pageSize = pageable.getPageSize();
@@ -111,5 +116,23 @@ public class AllSportsService {
 
     public AllSportsFootballMatchLiveDataVo getMatchLiveData(Long matchId) {
         return allSportsFootballLiveDataDao.getMatchLiveData(matchId);
+    }
+
+    public String getLiveAddress(String teamName) {
+        FootballTeamVo footballTeamVo = footballTeamDao.getTeamBynName(teamName);
+        if(footballTeamVo == null){
+            throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
+        }
+        // get home team id
+        Integer teamId = footballTeamVo.getId();
+        FootballMatch footballMatch = footballMatchDao.getFootballMatchByHomeTeamId(teamId);
+        if(footballMatch == null){
+            throw new GlobalException(CodeMsg.FOOTBALL_MATCH_IS_NOT_EXISTED);
+        }
+        FootballLiveAddressVo footballLiveAddressVo = footballLiveAddressDao.getLiveAddressByMatchId(footballMatch.getId());
+        if(footballLiveAddressVo == null){
+            throw new GlobalException(CodeMsg.FOOTBALL_LIVE_ADDRESS_IS_NOT_EXISTED);
+        }
+        return StringUtils.equals("",footballLiveAddressVo.getPushUrl3()) ? footballLiveAddressVo.getPushUrl1():footballLiveAddressVo.getPushUrl3();
     }
 }
