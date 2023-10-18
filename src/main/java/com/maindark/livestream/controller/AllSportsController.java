@@ -2,8 +2,8 @@ package com.maindark.livestream.controller;
 
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.AllSportsService;
-import com.maindark.livestream.vo.FootballMatchLineUpVo;
-import com.maindark.livestream.vo.FootballMatchLiveDataVo;
+import com.maindark.livestream.vo.AllSportsFootballMatchLineUpVo;
+import com.maindark.livestream.vo.AllSportsFootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -63,8 +63,8 @@ public class AllSportsController {
      *
      */
     @GetMapping("/line-up/{matchId}")
-    public Result<FootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")String matchId){
-        FootballMatchLineUpVo footballMatchLineUpVo = allSportsService.getFootballMatchLineUpByMatchId(matchId);
+    public Result<AllSportsFootballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")String matchId){
+        AllSportsFootballMatchLineUpVo footballMatchLineUpVo = allSportsService.getFootballMatchLineUpByMatchId(matchId);
         return Result.success(footballMatchLineUpVo);
     }
 
@@ -73,8 +73,8 @@ public class AllSportsController {
      *
      */
     @GetMapping("/livedata/{matchId}")
-    public Result<FootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")String matchId){
-        FootballMatchLiveDataVo footballMatchLiveData = allSportsService.getMatchLiveData(Integer.parseInt(matchId));
+    public Result<AllSportsFootballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")String matchId){
+        AllSportsFootballMatchLiveDataVo footballMatchLiveData = allSportsService.getMatchLiveData(Long.parseLong(matchId));
         return Result.success(footballMatchLiveData);
     }
 

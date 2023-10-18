@@ -112,7 +112,8 @@ CREATE TABLE `all_sports_football_match_live_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create index all_sports_football_match_live_data_index_matchId on all_sports_football_match_live_data(match_id);
-
+create index all_sports_home_match_line_up_index_matchId on all_sports_home_match_line_up(match_id);
+create index all_sports_away_match_line_up_index_matchId on all_sports_away_match_line_up(match_id);
 create index all_sports_football_match_matchDate on all_sports_football_match(match_date);
 alter table all_sports_football_match_live_data modify home_possession_rate varchar(16) COMMENT 'homePossessionRate';
 

@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface AllSportsHomeMatchLineUpDao {
 
@@ -16,4 +18,7 @@ public interface AllSportsHomeMatchLineUpDao {
 
     @Select("select count(1) from all_sports_home_match_line_up where id=#{id}")
     int queryExists(@Param("id")Long id);
+
+    @Select("select * from all_sports_home_match_line_up where match_id=#{matchId}")
+    List<AllSportsHomeMatchLineUp> getHomeMatchLineUpByMatchId(@Param("matchId") Long matchId);
 }

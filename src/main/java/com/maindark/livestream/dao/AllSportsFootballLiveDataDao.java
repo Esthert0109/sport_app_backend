@@ -1,6 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.AllSportsFootballMatchLiveData;
+import com.maindark.livestream.vo.AllSportsFootballMatchLiveDataVo;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
@@ -35,4 +36,6 @@ public interface AllSportsFootballLiveDataDao {
     int queryExist(@Param("matchId")Long matchId);
 
 
+    @Select("select * from all_sports_football_match_live_data where match_id=#{matchId}")
+    AllSportsFootballMatchLiveDataVo getMatchLiveData(@Param("matchId") Long matchId);
 }
