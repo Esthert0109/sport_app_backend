@@ -10,12 +10,12 @@ public interface FootballMatchLiveDataDao {
     @Insert("insert into football_match_live_data(match_id,status_id,home_team_id,away_team_id," +
             "home_team_name,away_team_name,home_attack_num,away_attack_num,home_attack_danger_num,away_attack_danger_num,home_possession_rate,away_possession_rate," +
             "home_shoot_goal_num,away_shoot_goal_num,home_bias_num,away_bias_num,home_corner_kick_num,away_corner_kick_num,home_red_card_num,away_red_card_num," +
-            "home_yellow_card_num,away_yellow_card_num,home_score,away_score" +
+            "home_yellow_card_num,away_yellow_card_num,home_score,away_score,home_penalty_Num,away_penalty_Num" +
             " )values("
             + "#{matchId}, #{statusId}, #{homeTeamId}, #{awayTeamId}, #{homeTeamName}," +
             "#{awayTeamName},#{homeAttackNum},#{awayAttackNum},#{homeAttackDangerNum},#{awayAttackDangerNum},#{homePossessionRate},#{awayPossessionRate},#{homeShootGoalNum}" +
             ",#{awayShootGoalNum},#{homeBiasNum},#{awayBiasNum},#{homeCornerKickNum},#{awayCornerKickNum},#{homeRedCardNum},#{awayRedCardNum},#{homeYellowCardNum}," +
-            "#{awayYellowCardNum},#{homeScore},#{awayScore})")
+            "#{awayYellowCardNum},#{homeScore},#{awayScore},#{homePenaltyNum},#{awayPenaltyNum})")
     Integer insert(FootballMatchLiveData footballMatchLiveData);
 
 
@@ -42,7 +42,7 @@ public interface FootballMatchLiveDataDao {
             "home_red_card_num=#{homeRedCardNum},away_red_card_num=#{awayRedCardNum}," +
             "home_yellow_card_num=#{homeYellowCardNum}," +
             "away_yellow_card_num=#{awayYellowCardNum},home_score=#{homeScore}" +
-            ",away_score=#{awayScore} where match_id=#{matchId}")
+            ",away_score=#{awayScore},home_penalty_Num=#{homePenaltyNum},away_penalty_Num=#{awayPenaltyNum} where match_id=#{matchId}")
     void updateFootballMatchLiveData(FootballMatchLiveData footballMatchLiveData);
 
 

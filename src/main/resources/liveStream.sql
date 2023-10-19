@@ -167,6 +167,8 @@ CREATE TABLE `football_match_live_data` (
   `away_red_card_num` int COMMENT 'awayRedCardNum',
   `home_yellow_card_num` int COMMENT 'homeYellowCardNum',
   `away_yellow_card_num` int COMMENT 'awayYellowCardNum',
+  `home_penalty_Num` int COMMENT 'home penalty num',
+  `away_penalty_Num` int COMMENT 'away penalty num',
   `home_score` int COMMENT 'homeScore',
   `away_score` int COMMENT 'awayScore',
   PRIMARY KEY (`id`)
@@ -250,6 +252,10 @@ create index football_match_live_data_indexMatch on football_match_live_data(mat
 create index football_competition_index_name on football_competition(name_zh);
 create index update_football_data_index_uniqueKey on update_football_data(unique_key);
 create index football_live_address_index_matchId on football_live_address(match_id);
+
+alter table football_match_live_data add column `home_penalty_Num` int COMMENT 'home penalty num';
+alter table football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
+  `away_penalty_Num` int COMMENT 'away penalty num',
 
 
 

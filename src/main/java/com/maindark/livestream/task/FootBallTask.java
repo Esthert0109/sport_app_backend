@@ -257,6 +257,8 @@ public class FootBallTask {
                        Integer awayRedCardNum = 0;
                        Integer homeYellowCardNum = 0;
                        Integer awayYellowCardNum = 0;
+                       Integer homePenaltyNum = 0;
+                       Integer awayPenaltyNum = 0;
                        Integer matchId = (Integer)ml.get("id");
                        List<Object> score = (List<Object>) ml.get("score");
                        if(score != null && !score.isEmpty())
@@ -332,6 +334,9 @@ public class FootBallTask {
                                       homeRedCardNum = home;
                                       awayRedCardNum = away;
                                       break;
+                                  case 8:
+                                      homePenaltyNum = home;
+                                      awayPenaltyNum = away;
                               }
                           }
                        }
@@ -393,6 +398,8 @@ public class FootBallTask {
                            footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
                            footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
                            footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
+                           footballMatchLiveData.setHomePenaltyNum(homePenaltyNum);
+                           footballMatchLiveData.setAwayPenaltyNum(awayPenaltyNum);
                            footballMatchLiveDataDao.insert(footballMatchLiveData);
                        }
                    } else {
@@ -420,7 +427,8 @@ public class FootBallTask {
                        footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
                        footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
                        footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
-
+                       footballMatchLiveData.setHomePenaltyNum(homePenaltyNum);
+                       footballMatchLiveData.setAwayPenaltyNum(awayPenaltyNum);
                        // delete redis data and reset data later
                        redisService.delete(FootballMatchKey.matchLiveKey,String.valueOf(matchId));
                        redisService.delete(FootballMatchKey.matchLiveVoKey,String.valueOf(matchId));

@@ -85,6 +85,8 @@ public class AllSportsFootballLiveDataTask {
         String awayRedCardNum = "0";
         String homeYellowCardNum = "0";
         String awayYellowCardNum = "0";
+        String homePenaltyNum = "0";
+        String awayPenaltyNum = "0";
         Integer homeScore = 0;
         Integer awayScore = 0;
         if(statistics != null && !statistics.isEmpty()){
@@ -123,6 +125,11 @@ public class AllSportsFootballLiveDataTask {
                     case "Red Cards":
                         homeRedCardNum = (String)statistic.get("home");
                         awayRedCardNum = (String)statistic.get("away");
+                        break;
+                    case "Penalty":
+                        homePenaltyNum = (String)statistic.get("home");
+                        awayPenaltyNum = (String)statistic.get("away");
+                        break;
 
                 }
             }
@@ -213,6 +220,8 @@ public class AllSportsFootballLiveDataTask {
         footballMatchLiveData.setAwayRedCardNum(StringUtils.equals("",awayRedCardNum)?0:Integer.parseInt(awayRedCardNum));
         footballMatchLiveData.setHomeScore(homeScore);
         footballMatchLiveData.setAwayScore(awayScore);
+        footballMatchLiveData.setHomePenaltyNum(StringUtils.equals("",homePenaltyNum)?0:Integer.parseInt(homePenaltyNum));
+        footballMatchLiveData.setAwayPenaltyNum(StringUtils.equals("",awayPenaltyNum)?0:Integer.parseInt(awayPenaltyNum));
         return footballMatchLiveData;
     }
 

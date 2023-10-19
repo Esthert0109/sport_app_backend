@@ -14,14 +14,14 @@ public interface AllSportsFootballLiveDataDao {
             "away_possession_rate, home_shoot_goal_num, away_shoot_goal_num, home_bias_num, " +
             "away_bias_num, home_corner_kick_num, away_corner_kick_num, " +
             "home_red_card_num, away_red_card_num, home_yellow_card_num, away_yellow_card_num, " +
-            "home_score, away_score) values (" +
+            "home_score, away_score,home_penalty_Num,away_penalty_Num) values (" +
             "#{matchId},#{status},#{matchTime},#{matchDate},#{homeTeamName},#{awayTeamName}," +
             "#{homeFormation},#{awayFormation},#{refereeName},#{venueName},#{homeTeamLogo}," +
             "#{awayTeamLogo},#{homeAttackNum}," +
             "#{awayAttackNum},#{homeAttackDangerNum},#{awayAttackDangerNum},#{homePossessionRate},#{awayPossessionRate}," +
             "#{homeShootGoalNum}," +
             "#{awayShootGoalNum},#{homeBiasNum},#{awayBiasNum},#{homeCornerKickNum},#{awayCornerKickNum},#{homeRedCardNum},#{awayRedCardNum}," +
-            "#{homeYellowCardNum},#{awayYellowCardNum},#{homeScore},#{awayScore})")
+            "#{homeYellowCardNum},#{awayYellowCardNum},#{homeScore},#{awayScore},#{homePenaltyNum},#{awayPenaltyNum})")
     Integer insert(AllSportsFootballMatchLiveData footballMatchLiveData);
 
     @Update("update all_sports_football_match_live_data set status=#{status},home_attack_num=#{homeAttackNum},away_attack_num=#{awayAttackNum}," +
@@ -29,7 +29,7 @@ public interface AllSportsFootballLiveDataDao {
             ",home_shoot_goal_num=#{homeShootGoalNum},away_shoot_goal_num=#{awayShootGoalNum},home_bias_num=#{homeBiasNum}," +
             "away_bias_num=#{awayBiasNum},home_corner_kick_num=#{homeCornerKickNum},away_corner_kick_num=#{awayCornerKickNum}," +
             "home_red_card_num=#{homeRedCardNum},away_red_card_num=#{awayRedCardNum},home_yellow_card_num=#{homeYellowCardNum}," +
-            "away_yellow_card_num=#{awayYellowCardNum},home_score=#{homeScore},away_score=#{awayScore} where match_id=#{matchId}")
+            "away_yellow_card_num=#{awayYellowCardNum},home_score=#{homeScore},away_score=#{awayScore},home_penalty_Num=#{homePenaltyNum},away_penalty_Num=#{awayPenaltyNum} where match_id=#{matchId}")
     void updateData(AllSportsFootballMatchLiveData allSportsFootballMatchLiveData);
 
     @Select("select count(1) from all_sports_football_match_live_data where match_id=#{matchId}")

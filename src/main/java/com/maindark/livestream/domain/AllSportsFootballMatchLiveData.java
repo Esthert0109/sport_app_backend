@@ -39,4 +39,7 @@ public class AllSportsFootballMatchLiveData {
     private Integer awayYellowCardNum;
     private Integer homeScore;
     private Integer awayScore;
+    private Integer homePenaltyNum;
+    private Integer awayPenaltyNum;
+
 }

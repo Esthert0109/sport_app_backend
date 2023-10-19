@@ -119,7 +119,8 @@ alter table all_sports_football_match_live_data modify home_possession_rate varc
 
 alter table all_sports_football_match_live_data modify away_possession_rate varchar(16) COMMENT 'homePossessionRate';
 
-
+alter table all_sports_football_match_live_data add column `home_penalty_Num` int COMMENT 'home penalty num';
+alter table all_sports_football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
 
 
 
