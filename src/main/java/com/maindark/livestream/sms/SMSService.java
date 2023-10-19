@@ -70,7 +70,12 @@ public class SMSService {
         JSONObject resultObj = JSON.parseObject(result);
         String status = (String)resultObj.get("status");
         if(StringUtils.equals("ok",status)) {
-            redisService.incr(SMSKey.smsLimit,mobileNumber,0);
+            Integer count = redisService.get(SMSKey.smsLimit,mobileNumber,Integer.class);
+            if(count != null) {
+                redisService.incr(SMSKey.smsLimit,mobileNumber,0);
+            } else {
+                redisService.set(SMSKey.smsLimit,mobileNumber,0);
+            }
             if(StringUtils.equals(type, SMSEnum.REGISTER.getCode())){
                 redisService.set(SMSKey.smsKey,mobileNumber,String.valueOf(OTPNumber));
             } else if (StringUtils.equals(type,SMSEnum.RESET.getCode())) {
