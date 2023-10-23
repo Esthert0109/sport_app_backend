@@ -89,6 +89,53 @@ public class FootBallService {
     }
 
 
+
+  public Map<String,List<FootballMatchVo>> getFootballMatchesStarts(Pageable pageable) {
+    Long offset = pageable.getOffset();
+    Integer limit = pageable.getPageSize();
+    // get all today's start matches
+    LocalDate now = LocalDate.now();
+    Long nowSeconds = DateUtil.convertDateToLongTime(now);
+    LocalDate tomorrow = now.plusDays(1);
+    Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+    List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds,tomorrowSeconds,limit,offset);
+    startMatches = getFootballMatchVos(startMatches);
+    Map<String,List<FootballMatchVo>> results = new HashMap<>();
+    results.put("start",startMatches);
+    return results;
+  }
+
+  public Map<String,List<FootballMatchVo>> getFootballMatchesPasts(Pageable pageable) {
+    Long offset = pageable.getOffset();
+    Integer limit = pageable.getPageSize();
+    // get all past matches
+    LocalDate now = LocalDate.now();
+    Long nowSeconds = DateUtil.convertDateToLongTime(now);
+    LocalDate past = now.minusDays(6);
+    Long pastSeconds = DateUtil.convertDateToLongTime(past);
+    List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds,nowSeconds,limit,offset);
+    pastMatches = getFootballMatchVos(pastMatches);
+    Map<String,List<FootballMatchVo>> results = new HashMap<>();
+    results.put("pass",pastMatches);
+    return results;
+  }
+
+  public Map<String,List<FootballMatchVo>> getFootballMatchesFuture(Pageable pageable) {
+    Long offset = pageable.getOffset();
+    Integer limit = pageable.getPageSize();
+    // get all future matches in seven days
+    LocalDate now = LocalDate.now();
+    Long nowSeconds = DateUtil.convertDateToLongTime(now);
+    LocalDate future = now.plusDays(6);
+    Long futureSeconds = DateUtil.convertDateToLongTime(future);
+    List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds,futureSeconds,limit,offset);
+    futureMatches = getFootballMatchVos(futureMatches);
+    Map<String,List<FootballMatchVo>> results = new HashMap<>();
+    results.put("future",futureMatches);
+    return results;
+  }
+
+
     /*
     *
     * get all matches in seven days

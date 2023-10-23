@@ -27,7 +27,7 @@ public class AllSportsFootballLiveDataTask {
     @Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballLiveData() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             Integer success = (Integer) resultObj.get("success");
@@ -255,7 +255,7 @@ public class AllSportsFootballLiveDataTask {
     private Integer[] getPlayerCardById(String playId) {
         Integer[] arr = {0,0};
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",playId);
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             Integer success = (Integer) resultObj.get("success");

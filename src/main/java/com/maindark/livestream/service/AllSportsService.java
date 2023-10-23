@@ -69,6 +69,54 @@ public class AllSportsService {
         return list;
     }
 
+
+
+
+    public Map<String,List<FootballMatchVo>> getFootballMatchesStarts(Pageable pageable) {
+        Long offset = pageable.getOffset();
+        Integer pageSize = pageable.getPageSize();
+        // get all today's start matches
+        LocalDate now = LocalDate.now();
+        String nowDate = DateUtil.convertDateToStr(now);
+        LocalDate tomorrow = now.plusDays(1);
+        String tomorrowDate = DateUtil.convertDateToStr(tomorrow);
+        List<FootballMatchVo> startMatches = allSportsFootballMatchDao.getAllSportsStart(nowDate,tomorrowDate,pageSize,offset);
+        Map<String,List<FootballMatchVo>> results = new HashMap<>();
+        results.put("start",startMatches);
+        return results;
+    }
+
+    public Map<String,List<FootballMatchVo>> getFootballMatchesPasts(Pageable pageable) {
+        Long offset = pageable.getOffset();
+        Integer pageSize = pageable.getPageSize();
+        // get all past matches
+        LocalDate now = LocalDate.now();
+        String nowDate = DateUtil.convertDateToStr(now);
+        LocalDate past = now.minusDays(6);
+        String pastDate = DateUtil.convertDateToStr(past);
+        List<FootballMatchVo> pastMatches = allSportsFootballMatchDao.getAllSportsPast(pastDate,nowDate,pageSize,offset);
+        Map<String,List<FootballMatchVo>> results = new HashMap<>();
+        results.put("pass",pastMatches);
+        return results;
+    }
+
+    public Map<String,List<FootballMatchVo>> getFootballMatchesFuture(Pageable pageable) {
+        Long offset = pageable.getOffset();
+        Integer pageSize = pageable.getPageSize();
+        // get all future matches in seven days
+        LocalDate now = LocalDate.now();
+        LocalDate tomorrow = now.plusDays(1);
+        String tomorrowDate = DateUtil.convertDateToStr(tomorrow);
+        LocalDate future = now.plusDays(6);
+        String futureDate = DateUtil.convertDateToStr(future);
+        List<FootballMatchVo> futureMatches = allSportsFootballMatchDao.getAllSportsFuture(tomorrowDate,futureDate,pageSize,offset);
+        Map<String,List<FootballMatchVo>> results = new HashMap<>();
+        results.put("future",futureMatches);
+        return results;
+    }
+
+
+
     public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays(Pageable pageable) {
         int pageSize = pageable.getPageSize();
         long offset = pageable.getOffset();

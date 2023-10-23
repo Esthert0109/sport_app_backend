@@ -19,4 +19,11 @@ public class HttpUtil {
         String result = restTemplate.getForObject(url,String.class);
         return result;
     }
+
+    public static String getAllSportsData(String url){
+        log.info("send allSports url:{}",url);
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(url,String.class);
+        return result;
+    }
 }

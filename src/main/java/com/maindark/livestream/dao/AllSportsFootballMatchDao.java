@@ -31,7 +31,7 @@ public interface AllSportsFootballMatchDao {
             "home_team_name like '%${teamName}$' or away_team_name like '%${teamName}%' and t.match_date >= #{from} and t.match_date <#{to} order by t.id asc limit #{pageSize} offset #{offset}")
     List<FootballMatchVo> getAllSportsFootMatchByTeamName(@Param("teamName")String teamName, @Param("from")String from, @Param("to")String to,@Param("pageSize")Integer pageSize,@Param("offset")long offset);
     @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation from all_sports_football_match t where  " +
-            "t.match_date >= #{pastDate} and t.match_date <#{nowDate} order by t.id asc limit #{pageSize} offset #{offset}")
+            "t.match_date >= #{pastDate} and t.match_date <#{nowDate} and t.status = 'Finished' order by t.id asc limit #{pageSize} offset #{offset}")
     List<FootballMatchVo> getAllSportsPast(@Param("pastDate") String pastDate, @Param("nowDate") String nowDate, @Param("pageSize") int pageSize, @Param("offset") long offset);
     @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation from all_sports_football_match t where  " +
             "t.match_date >= #{nowDate} and t.match_date <#{tomorrowDate} order by t.id asc limit #{pageSize} offset #{offset}")

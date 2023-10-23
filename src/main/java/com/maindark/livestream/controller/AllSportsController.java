@@ -45,6 +45,52 @@ public class AllSportsController {
     }
 
     /**
+     * get all today's start matches
+     *
+     */
+
+    @GetMapping("/list-start")
+    public Result<Map<String,List<FootballMatchVo>>> getAllMatchesStarts( @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
+        Map<String,List<FootballMatchVo>> results = allSportsService.getFootballMatchesStarts(request);
+        return Result.success(results);
+    }
+
+    /**
+     * get all past matches seven days ago
+     *
+     */
+
+    @GetMapping("/list-past")
+    public Result<Map<String,List<FootballMatchVo>>> getAllMatchesPasts( @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                         @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
+        Map<String,List<FootballMatchVo>> results = allSportsService.getFootballMatchesPasts(request);
+        return Result.success(results);
+    }
+
+
+    /**
+     * get all future matches in seven days
+     *
+     */
+
+    @GetMapping("/list-future")
+    public Result<Map<String,List<FootballMatchVo>>> getFootballMatchesFuture( @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                               @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
+        Map<String,List<FootballMatchVo>> results = allSportsService.getFootballMatchesFuture(request);
+        return Result.success(results);
+    }
+
+
+
+
+
+
+
+    /**
      * get all matches via the date
      *
      */

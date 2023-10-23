@@ -41,7 +41,7 @@ public class AllSportsApiService {
 
     public Map<String, Object> getAllLeagues() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLeagues());
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             List<Map<String, Object>> competitionlist = (List<Map<String, Object>>) resultObj.get("result");
@@ -62,7 +62,7 @@ public class AllSportsApiService {
     public Map<String, Object> getAllTeams(String leagueId) {
         String teamUrl = allSportsConfig.getAllSportsApi(allSportsConfig.getTeams());
         teamUrl = teamUrl.replace("{}", leagueId);
-        String result = HttpUtil.getNaMiData(teamUrl);
+        String result = HttpUtil.getAllSportsData(teamUrl);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             List<Map<String, Object>> teamslist = (List<Map<String, Object>>) resultObj.get("result");
@@ -180,7 +180,7 @@ public class AllSportsApiService {
 
     private List<AllSportsFootballMatch> getAllSportsMatch(String url){
         List<AllSportsFootballMatch> list = null;
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if(resultObj != null && !resultObj.isEmpty()) {
             int success = (Integer)resultObj.get("success");
@@ -385,7 +385,7 @@ public class AllSportsApiService {
 
     public Map<String, Object> getLiveData(String matchId) {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore()) + "&matchId=" + matchId;
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             int success = (Integer) resultObj.get("success");
@@ -438,10 +438,12 @@ public class AllSportsApiService {
         String awayBiasNum = "0";
         String homeCornerKickNum = "0";
         String awayCornerKickNum = "0";
-        Integer homeRedCardNum = 0;
-        Integer awayRedCardNum = 0;
-        Integer homeYellowCardNum = 0;
-        Integer awayYellowCardNum = 0;
+        String homePenaltyNum = "0";
+        String awayPenaltyNum = "0";
+        String homeRedCardNum = "0";
+        String awayRedCardNum = "0";
+        String homeYellowCardNum = "0";
+        String awayYellowCardNum = "0";
         Integer homeScore = 0;
         Integer awayScore = 0;
         if(statistics != null && !statistics.isEmpty()){
@@ -473,6 +475,19 @@ public class AllSportsApiService {
                         homeCornerKickNum = (String)statistic.get("home");
                         awayCornerKickNum = (String)statistic.get("away");
                         break;
+                    case "Yellow Cards":
+                        homeYellowCardNum = (String)statistic.get("home");
+                        awayYellowCardNum = (String)statistic.get("away");
+                        break;
+                    case "Red Cards":
+                        homeRedCardNum = (String)statistic.get("home");
+                        awayRedCardNum = (String)statistic.get("away");
+                        break;
+                    case "Penalty":
+                        homePenaltyNum = (String)statistic.get("home");
+                        awayPenaltyNum = (String)statistic.get("away");
+                        break;
+
                 }
             }
         }
@@ -523,80 +538,26 @@ public class AllSportsApiService {
         footballMatchLiveData.setRefereeName(refereeName);
         footballMatchLiveData.setVenueName(venueName);
         footballMatchLiveData.setStatus(status);
-        footballMatchLiveData.setHomeAttackNum(Integer.parseInt(homeAttackNum));
-        footballMatchLiveData.setAwayAttackNum(Integer.parseInt(awayAttackNum));
-        footballMatchLiveData.setHomeAttackDangerNum(Integer.parseInt(homeAttackDangerNum));
-        footballMatchLiveData.setAwayAttackDangerNum(Integer.parseInt(awayAttackDangerNum));
-        footballMatchLiveData.setHomeBiasNum(Integer.parseInt(homeBiasNum));
-        footballMatchLiveData.setAwayBiasNum(Integer.parseInt(awayBiasNum));
-        footballMatchLiveData.setHomeCornerKickNum(Integer.parseInt(homeCornerKickNum));
-        footballMatchLiveData.setAwayCornerKickNum(Integer.parseInt(awayCornerKickNum));
+        footballMatchLiveData.setHomeAttackNum(StringUtils.equals("",homeAttackNum)?0:Integer.parseInt(homeAttackNum));
+        footballMatchLiveData.setAwayAttackNum(StringUtils.equals("",awayAttackNum)?0:Integer.parseInt(awayAttackNum));
+        footballMatchLiveData.setHomeAttackDangerNum(StringUtils.equals("",homeAttackDangerNum)?0:Integer.parseInt(homeAttackDangerNum));
+        footballMatchLiveData.setAwayAttackDangerNum(StringUtils.equals("",awayAttackDangerNum)?0:Integer.parseInt(awayAttackDangerNum));
+        footballMatchLiveData.setHomeBiasNum(StringUtils.equals("",homeBiasNum)?0:Integer.parseInt(homeBiasNum));
+        footballMatchLiveData.setAwayBiasNum(StringUtils.equals("",awayBiasNum)?0:Integer.parseInt(awayBiasNum));
+        footballMatchLiveData.setHomeCornerKickNum(StringUtils.equals("",homeCornerKickNum)?0:Integer.parseInt(homeCornerKickNum));
+        footballMatchLiveData.setAwayCornerKickNum(StringUtils.equals("",awayCornerKickNum)?0:Integer.parseInt(awayCornerKickNum));
         footballMatchLiveData.setHomePossessionRate(homePossessionRate);
         footballMatchLiveData.setAwayPossessionRate(awayPossessionRate);
-        footballMatchLiveData.setHomeShootGoalNum(Integer.parseInt(homeShootGoalNum));
-        footballMatchLiveData.setAwayShootGoalNum(Integer.parseInt(awayShootGoalNum));
-        footballMatchLiveData.setHomeYellowCardNum(homeYellowCardNum);
-        footballMatchLiveData.setAwayYellowCardNum(awayYellowCardNum);
-        footballMatchLiveData.setHomeRedCardNum(homeRedCardNum);
-        footballMatchLiveData.setAwayRedCardNum(awayRedCardNum);
+        footballMatchLiveData.setHomeShootGoalNum(StringUtils.equals("",awayShootGoalNum)?0:Integer.parseInt(homeShootGoalNum));
+        footballMatchLiveData.setAwayShootGoalNum(StringUtils.equals("",awayShootGoalNum)?0:Integer.parseInt(awayShootGoalNum));
+        footballMatchLiveData.setHomeYellowCardNum(StringUtils.equals("",homeYellowCardNum)?0:Integer.parseInt(homeYellowCardNum));
+        footballMatchLiveData.setAwayYellowCardNum(StringUtils.equals("",awayYellowCardNum)?0:Integer.parseInt(awayYellowCardNum));
+        footballMatchLiveData.setHomeRedCardNum(StringUtils.equals("",homeRedCardNum)?0:Integer.parseInt(homeRedCardNum));
+        footballMatchLiveData.setAwayRedCardNum(StringUtils.equals("",awayRedCardNum)?0:Integer.parseInt(awayRedCardNum));
         footballMatchLiveData.setHomeScore(homeScore);
         footballMatchLiveData.setAwayScore(awayScore);
+        footballMatchLiveData.setHomePenaltyNum(StringUtils.equals("",homePenaltyNum)?0:Integer.parseInt(homePenaltyNum));
+        footballMatchLiveData.setAwayPenaltyNum(StringUtils.equals("",awayPenaltyNum)?0:Integer.parseInt(awayPenaltyNum));
         return footballMatchLiveData;
-    }
-
-    private Integer[] getReadOrYellowCard(JSONArray startingLineups, JSONArray substitutes) {
-        Integer yellowCardNum = 0;
-        Integer redCardNum = 0;
-        Integer[] cards = {0,0};
-        if(startingLineups != null){
-            for(int i=0;i<startingLineups.size();i++){
-                Map<String,Object> map = (Map<String,Object>)startingLineups.get(i);
-                Number playerKey = (Number)map.get("player_key");
-                Integer[] cardsArr = getPlayerCardById(playerKey.toString());
-                yellowCardNum += cardsArr[0];
-                redCardNum += cardsArr[2];
-            }
-        }
-        if(substitutes != null){
-            for(int i=0;i<substitutes.size();i++){
-                Map<String,Object> map = (Map<String,Object>)startingLineups.get(i);
-                Number playerKey = (Number)map.get("player_key");
-                Integer[] cardsArr = getPlayerCardById(playerKey.toString());
-                yellowCardNum += cardsArr[0];
-                redCardNum += cardsArr[2];
-            }
-        }
-        cards[0] = yellowCardNum;
-        cards[1] = redCardNum;
-        return cards;
-    }
-
-    private Integer[] getPlayerCardById(String playId) {
-        Integer[] arr = {0,0};
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",playId);
-        String result = HttpUtil.getNaMiData(url);
-        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        if (resultObj != null && !resultObj.isEmpty()) {
-            Integer success = (Integer) resultObj.get("success");
-            if (success != null) {
-                if (1 == success) {
-                    JSONArray playArray = (JSONArray) resultObj.get("result");
-                    if (playArray != null && !playArray.isEmpty()) {
-                        Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
-                        String yellowCards = (String)playMap.get("player_yellow_cards");
-                        if(StringUtils.equals("",yellowCards)){
-                            yellowCards = "0";
-                        }
-                        String redCards = (String)playMap.get("player_red_cards");
-                        if(StringUtils.equals("",redCards)){
-                            redCards = "0";
-                        }
-                        arr[0] = Integer.parseInt(yellowCards);
-                        arr[1] = Integer.parseInt(redCards);
-                    }
-                }
-            }
-        }
-        return arr;
     }
 }

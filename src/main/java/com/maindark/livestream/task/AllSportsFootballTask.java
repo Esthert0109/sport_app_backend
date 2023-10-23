@@ -43,7 +43,7 @@ public class AllSportsFootballTask {
     @Scheduled(cron = "0 */5 * * * ? ")
     public void getAllSportsFootballMatchLineUp(){
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             Integer success = (Integer) resultObj.get("success");
@@ -153,7 +153,7 @@ public class AllSportsFootballTask {
         allSportsHomeMatchLineUp.setPlayerName(playerName);
         allSportsHomeMatchLineUp.setFirst(first);
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",String.valueOf(playerId));
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             Integer success = (Integer) resultObj.get("success");
