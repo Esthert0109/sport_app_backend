@@ -4,7 +4,6 @@ import com.maindark.livestream.domain.AllSportsFootballMatch;
 import com.maindark.livestream.vo.FootballMatchVo;
 import org.apache.ibatis.annotations.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -42,4 +41,8 @@ public interface AllSportsFootballMatchDao {
     @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation from all_sports_football_match t where  " +
             "t.match_date >= #{date} and t.match_date <=#{date} order by t.id asc limit #{pageSize} offset #{offset}")
     List<FootballMatchVo> getAllSportsByDate(@Param("date") String date, @Param("pageSize") int pageSize, @Param("offset") long offset);
+
+    @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation from all_sports_football_match t where  " +
+            "t.match_date >= #{date} and t.match_date <=#{date}  and t.status= '' order by t.id asc limit #{pageSize} offset #{offset}")
+    List<FootballMatchVo> getTodayNotStartMatches(String date, int pageSize, long offset);
 }

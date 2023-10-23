@@ -100,4 +100,11 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
     @Select("select * from football_match where home_team_id=#{teamId} limit 1")
     FootballMatch getFootballMatchByHomeTeamId(@Param("teamId") Integer teamId);
+
+    @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
+            "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
+            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            " on t1.competition_id = fc.id where t1.match_time >=#{nowSeconds} and " +
+            "t1.match_time<#{tomorrowSeconds} and t1.status_id = 1 order by t1.match_time asc limit #{limit} offset #{offset}")
+    List<FootballMatchVo> getFootballMatchNotStart(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
 }

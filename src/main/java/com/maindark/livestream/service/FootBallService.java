@@ -184,15 +184,27 @@ public class FootBallService {
     return futureMatches;
   }
 
-  public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable) {
+  public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable,String checkData) {
     long offset = pageable.getOffset();
     Integer limit = pageable.getPageSize();
-    LocalDate currentDate = DateUtil.convertStringToDate(date);
-    LocalDate deadline = currentDate.plusDays(1);
-    Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
-    Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
-    List<FootballMatchVo> footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds,limit,offset);
-    footballMatchVos = getFootballMatchVos(footballMatchVos);
+    List<FootballMatchVo> footballMatchVos = null;
+    // query today's matches do not start
+    if(StringUtils.equals("true",checkData)){
+      LocalDate now = LocalDate.now();
+      Long nowSeconds = DateUtil.convertDateToLongTime(now);
+      LocalDate tomorrow = now.plusDays(1);
+      Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+      footballMatchVos = footballMatchDao.getFootballMatchNotStart(nowSeconds,tomorrowSeconds,limit,offset);
+      footballMatchVos = getFootballMatchVos(footballMatchVos);
+    } else {
+      LocalDate currentDate = DateUtil.convertStringToDate(date);
+      LocalDate deadline = currentDate.plusDays(1);
+      Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
+      Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
+      footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds,limit,offset);
+      footballMatchVos = getFootballMatchVos(footballMatchVos);
+    }
+
     return footballMatchVos;
   }
 

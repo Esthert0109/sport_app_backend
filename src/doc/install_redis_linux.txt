@@ -11,7 +11,7 @@ make install
 
 vi redis.conf
 
-modif daemonize yes | bind 0.0.0.0 | requirepass 123456
+modify daemonize yes | bind 0.0.0.0 | requirepass 123456
 
 cd /usr/local/redis/utils
 

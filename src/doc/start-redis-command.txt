@@ -1,0 +1,3 @@
+start-redis:systemctl start redis_6379
+check-redis-status:systemctl status redis_6379
+stop-redis:systemctl stop redis_6379

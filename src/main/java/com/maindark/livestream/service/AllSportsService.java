@@ -142,10 +142,13 @@ public class AllSportsService {
         return results;
     }
 
-    public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable) {
+    public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable,String checkData) {
         date = DateUtil.convertDateToStr(DateUtil.convertStringToDate(date));
         int pageSize = pageable.getPageSize();
         long offset = pageable.getOffset();
+        if(StringUtils.equals("true",checkData)){
+            return allSportsFootballMatchDao.getTodayNotStartMatches(date,pageSize,offset);
+        }
         return allSportsFootballMatchDao.getAllSportsByDate(date,pageSize,offset);
     }
 

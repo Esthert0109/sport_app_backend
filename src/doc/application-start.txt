@@ -1,3 +1,3 @@
 start-application-command:nohup java -jar liveStream-0.0.1-SNAPSHOT.jar
 
-java -cp "bin/*:lib/*" -jar liveStream-0.0.1-SNAPSHOT.jar com.maindark.livestream.LiveStreamApplication
+nohup java -cp "bin/*:lib/*" -jar liveStream-0.0.1-SNAPSHOT.jar com.maindark.livestream.LiveStreamApplication

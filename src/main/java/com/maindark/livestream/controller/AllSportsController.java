@@ -97,9 +97,10 @@ public class AllSportsController {
     @GetMapping("/list/{date}")
     public Result<List<FootballMatchVo>> getMatchesByDate(@PathVariable("date")String date,
                                                           @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
+                                                          @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                                          @RequestParam(required = false) String checkData){
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
-        List<FootballMatchVo> footballMatchVos = allSportsService.getMatchListByDate(date,request);
+        List<FootballMatchVo> footballMatchVos = allSportsService.getMatchListByDate(date,request,checkData);
         return Result.success(footballMatchVos);
     }
 
