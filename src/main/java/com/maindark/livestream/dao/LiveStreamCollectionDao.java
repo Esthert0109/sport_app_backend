@@ -25,8 +25,8 @@ public interface LiveStreamCollectionDao {
     @Select("select * from live_stream_collection where match_id=#{id}")
     LiveStreamCollectionVo getCollectionByMatchId(@Param("id") Integer id);
 
-    @Delete("update live_stream_collection set status='0' where id=#{id}")
-    int deleteCollectionById(@Param("id") Integer id);
+    @Delete("delete from live_stream_collection where user_id=#{userId} and match_id=#{matchId}")
+    int deleteCollectionById(@Param("userId")Long userId,@Param("matchId") Integer matchId);
 
 
     @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id," +

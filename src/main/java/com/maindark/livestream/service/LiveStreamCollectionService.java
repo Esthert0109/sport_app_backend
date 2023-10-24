@@ -5,7 +5,6 @@ import com.maindark.livestream.dao.LiveStreamCollectionDao;
 import com.maindark.livestream.domain.LiveStreamCollection;
 import com.maindark.livestream.enums.StatusEnum;
 import com.maindark.livestream.form.CollectionForm;
-import com.maindark.livestream.nami.NamiConfig;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.vo.FootballMatchVo;
@@ -45,8 +44,8 @@ public class LiveStreamCollectionService {
       return match;
    }
 
-   public void deleteCollectionById(Integer id){
-       liveStreamCollectionDao.deleteCollectionById(id);
+   public void deleteCollectionById(Long userId,Integer id){
+       liveStreamCollectionDao.deleteCollectionById(userId,id);
    }
 
 
