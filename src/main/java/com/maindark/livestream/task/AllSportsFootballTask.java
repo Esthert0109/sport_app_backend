@@ -221,9 +221,16 @@ public class AllSportsFootballTask {
         if (StringUtils.equals("0", eventLive)) {
             allSportsFootballMatch.setLineUp(0);
         } else {
+            // if home team does not equal null, it means that the team has a line-up
             Map<String, Object> lineups = (Map<String, Object>) ml.get("lineups");
             if (lineups != null && !lineups.isEmpty()) {
-                allSportsFootballMatch.setLineUp(1);
+                Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+                if (homeTeam != null && !homeTeam.isEmpty()) {
+                    JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
+                    if(startingLineups != null && !startingLineups.isEmpty()){
+                        allSportsFootballMatch.setLineUp(1);
+                    }
+                }
             }
         }
         allSportsFootballMatch.setVenueName((String) ml.get("event_stadium"));
