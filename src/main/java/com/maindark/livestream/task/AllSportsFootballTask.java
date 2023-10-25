@@ -40,7 +40,7 @@ public class AllSportsFootballTask {
    AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
 
-    @Scheduled(cron = "0 */5 * * * ? ")
+    //@Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballMatchLineUp(){
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getAllSportsData(url);
@@ -120,13 +120,13 @@ public class AllSportsFootballTask {
                 Integer playerPosition = (Integer)map.get("player_position");
                 Number playerKey = (Number)map.get("player_key");
                 if(StringUtils.equals("0",teamType)){
-                    int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue());
+                    int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue(),matchId);
                     if(exist <=0){
                         BaseFootballMatchLineup allSportsHomeMatchLineUp = getAllSportsLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first,TeamEnum.HOME.getCode());
                         allSportsHomeMatchLineUpDao.insert((AllSportsHomeMatchLineUp) allSportsHomeMatchLineUp);
                     }
                 } else {
-                    int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue());
+                    int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue(),matchId);
                     if(exist <=0){
                         BaseFootballMatchLineup allSportsAwayMatchLineUp = getAllSportsLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first,TeamEnum.AWAY.getCode());
                         allSportsAwayMatchLineUpDao.insert((AllSportsAwayMatchLineUp) allSportsAwayMatchLineUp);
@@ -145,7 +145,7 @@ public class AllSportsFootballTask {
         } else {
             allSportsHomeMatchLineUp = new AllSportsAwayMatchLineUp();
         }
-        allSportsHomeMatchLineUp.setId(playerId);
+        allSportsHomeMatchLineUp.setPlayerId(playerId);
         allSportsHomeMatchLineUp.setMatchId(matchId);
         allSportsHomeMatchLineUp.setTeamId(teamId);
         allSportsHomeMatchLineUp.setShirtNumber(playNumber);

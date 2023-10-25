@@ -549,7 +549,7 @@ public class FootBallTask {
         Integer x = (Integer)ml.get("x");
         Integer y = (Integer)ml.get("y");
         HomeMatchLineUp homeMatchLineUp = new HomeMatchLineUp();
-        homeMatchLineUp.setId(id);
+        homeMatchLineUp.setPlayerId(id);
         homeMatchLineUp.setTeamId(teamId);
         homeMatchLineUp.setMatchId(matchId);
         homeMatchLineUp.setFirst(first);
@@ -577,7 +577,7 @@ public class FootBallTask {
         Integer x = (Integer)ml.get("x");
         Integer y = (Integer)ml.get("y");
         AwayMatchLineUp awayMatchLineUp = new AwayMatchLineUp();
-        awayMatchLineUp.setId(id);
+        awayMatchLineUp.setPlayerId(id);
         awayMatchLineUp.setTeamId(teamId);
         awayMatchLineUp.setMatchId(matchId);
         awayMatchLineUp.setFirst(first);

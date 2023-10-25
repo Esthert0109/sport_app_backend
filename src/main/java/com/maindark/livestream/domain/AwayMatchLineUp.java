@@ -9,6 +9,7 @@ import lombok.Data;
 public class AwayMatchLineUp {
     @Id
     private Integer id;
+    private Integer playerId;
     private Integer matchId;
     private Integer teamId;
     /* if first 0 no 1 yes*/

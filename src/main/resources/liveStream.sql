@@ -114,6 +114,7 @@ CREATE TABLE `update_football_data` (
 DROP TABLE IF EXISTS `home_match_line_up`;
 CREATE TABLE `home_match_line_up` (
   `id` int NOT NULL   COMMENT 'id',
+  `player_id` int COMMENT 'player id',
   `match_id` int not null COMMENT 'match id',
   `team_id` int COMMENT 'team id',
   `first` int COMMENT 'first 0 no 1 yes ',
@@ -129,6 +130,7 @@ CREATE TABLE `home_match_line_up` (
 DROP TABLE IF EXISTS `away_match_line_up`;
 CREATE TABLE `away_match_line_up` (
   `id` int NOT NULL   COMMENT 'id',
+  `player_id` int COMMENT 'player id',
   `match_id` int not null COMMENT 'match id',
   `team_id` int COMMENT 'team id',
   `first` int COMMENT 'first 0 no 1 yes ',

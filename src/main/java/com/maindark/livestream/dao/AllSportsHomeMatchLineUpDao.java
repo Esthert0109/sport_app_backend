@@ -12,12 +12,12 @@ import java.util.List;
 @Mapper
 public interface AllSportsHomeMatchLineUpDao {
 
-    @Insert("insert into all_sports_home_match_line_up(id, match_id, team_id, first, captain, player_name, player_logo, shirt_number, position, rating) values (" +
-            "#{id},#{matchId},#{teamId},#{first},#{captain},#{playerName},#{playerLogo},#{shirtNumber},#{position},#{rating})")
-    Integer insert(AllSportsHomeMatchLineUp allSportsAwayMatchLineUp);
+    @Insert("insert into all_sports_home_match_line_up(player_id, match_id, team_id, first, captain, player_name, player_logo, shirt_number, position, rating) values (" +
+            "#{playerId},#{matchId},#{teamId},#{first},#{captain},#{playerName},#{playerLogo},#{shirtNumber},#{position},#{rating})")
+    Integer insert(AllSportsHomeMatchLineUp allSportsHomeMatchLineUp);
 
-    @Select("select count(1) from all_sports_home_match_line_up where id=#{id}")
-    int queryExists(@Param("id")Long id);
+    @Select("select count(1) from all_sports_home_match_line_up where player_id=#{playerId} and match_id=#{matchId}")
+    int queryExists(@Param("playerId")Long playerId,@Param("matchId")Long matchId);
 
     @Select("select * from all_sports_home_match_line_up where match_id=#{matchId}")
     List<AllSportsHomeMatchLineUp> getHomeMatchLineUpByMatchId(@Param("matchId") Long matchId);

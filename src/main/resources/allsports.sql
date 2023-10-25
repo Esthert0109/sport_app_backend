@@ -20,7 +20,8 @@ CREATE TABLE `all_sports_football_team` (
 
 DROP TABLE IF EXISTS `all_sports_home_match_line_up`;
 CREATE TABLE `all_sports_home_match_line_up` (
-  `id` bigint NOT NULL   COMMENT 'id',
+  `id` int auto_increment NOT NULL  COMMENT 'id',
+  `player_id` bigint COMMENT 'player id',
   `match_id` bigint not null COMMENT 'match id',
   `team_id` bigint COMMENT 'team id',
   `first` int COMMENT 'first 0 no 1 yes ',
@@ -35,7 +36,8 @@ CREATE TABLE `all_sports_home_match_line_up` (
 
 DROP TABLE IF EXISTS `all_sports_away_match_line_up`;
 CREATE TABLE `all_sports_away_match_line_up` (
-  `id` bigint NOT NULL   COMMENT 'id',
+  `id` int auto_increment NOT NULL  COMMENT 'id',
+  `player_id` bigint COMMENT 'player id',
   `match_id` bigint not null COMMENT 'match id',
   `team_id` bigint COMMENT 'team id',
   `first` int COMMENT 'first 0 no 1 yes ',
@@ -121,7 +123,8 @@ alter table all_sports_football_match_live_data modify away_possession_rate varc
 
 alter table all_sports_football_match_live_data add column `home_penalty_Num` int COMMENT 'home penalty num';
 alter table all_sports_football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
-
+alter table all_sports_home_match_line_up add column `player_id` bigint COMMENT 'player id';
+alter table all_sports_away_match_line_up add column `player_id` bigint COMMENT 'player id';
 
 
 

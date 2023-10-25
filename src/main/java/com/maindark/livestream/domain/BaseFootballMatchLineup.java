@@ -8,7 +8,8 @@ public abstract class BaseFootballMatchLineup {
     public BaseFootballMatchLineup(){
 
     }
-    private Long id;
+    private Integer id;
+    private Long playerId;
     private Long matchId;
     private Long teamId;
     private int first;
