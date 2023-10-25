@@ -119,6 +119,9 @@ public class AllSportsFootballTask {
                 Integer playerNumber = (Integer)map.get("player_number");
                 Integer playerPosition = (Integer)map.get("player_position");
                 Number playerKey = (Number)map.get("player_key");
+                if(0 == playerKey.longValue()){
+                    continue;
+                }
                 if(StringUtils.equals("0",teamType)){
                     int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue(),matchId);
                     if(exist <=0){
