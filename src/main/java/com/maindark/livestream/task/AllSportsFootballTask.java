@@ -40,7 +40,7 @@ public class AllSportsFootballTask {
    AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
 
-    //@Scheduled(cron = "0 */2 * * * ? ")
+    @Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballMatchLineUp(){
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getAllSportsData(url);
