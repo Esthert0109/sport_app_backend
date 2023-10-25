@@ -96,7 +96,7 @@ public class AllSportsApiService {
 
     public Map<String, Object> getLiveMatchByMatchId(String matchId) {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures()) + "&matchId=" + matchId;
-        String result = HttpUtil.getNaMiData(url);
+        String result = HttpUtil.getAllSportsData(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
             int success = (Integer) resultObj.get("success");
@@ -228,7 +228,13 @@ public class AllSportsApiService {
                         } else {
                             Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
                             if(lineups != null && !lineups.isEmpty()) {
-                                allSportsFootballMatch.setLineUp(1);
+                                Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+                                if (homeTeam != null && !homeTeam.isEmpty()) {
+                                    JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
+                                    if(startingLineups != null && !startingLineups.isEmpty()){
+                                        allSportsFootballMatch.setLineUp(1);
+                                    }
+                                }
                             }
                         }
                         allSportsFootballMatch.setVenueName((String)ml.get("event_stadium"));
