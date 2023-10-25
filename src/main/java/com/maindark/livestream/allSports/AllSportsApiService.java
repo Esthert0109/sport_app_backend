@@ -224,7 +224,18 @@ public class AllSportsApiService {
                         }
                         // if eventLive equals 1 , is playing now
                         if(StringUtils.equals("0",eventLive)){
-                            allSportsFootballMatch.setLineUp(0);
+                            Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
+                            if(lineups != null && !lineups.isEmpty()) {
+                                Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+                                if (homeTeam != null && !homeTeam.isEmpty()) {
+                                    JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
+                                    if(startingLineups != null && !startingLineups.isEmpty()){
+                                        allSportsFootballMatch.setLineUp(1);
+                                    }
+                                } else {
+                                    allSportsFootballMatch.setLineUp(0);
+                                }
+                            }
                         } else {
                             Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
                             if(lineups != null && !lineups.isEmpty()) {
