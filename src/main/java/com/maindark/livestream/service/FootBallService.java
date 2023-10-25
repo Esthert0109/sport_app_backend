@@ -196,6 +196,13 @@ public class FootBallService {
       Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
       footballMatchVos = footballMatchDao.getFootballMatchNotStart(nowSeconds,tomorrowSeconds,limit,offset);
       footballMatchVos = getFootballMatchVos(footballMatchVos);
+    } else if(StringUtils.equals("false",checkData)) {
+      LocalDate currentDate = DateUtil.convertStringToDate(date);
+      LocalDate deadline = currentDate.plusDays(1);
+      Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
+      Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
+      footballMatchVos = footballMatchDao.getFootballMatchFinished(currentSeconds,deadlineSeconds,limit,offset);
+      footballMatchVos = getFootballMatchVos(footballMatchVos);
     } else {
       LocalDate currentDate = DateUtil.convertStringToDate(date);
       LocalDate deadline = currentDate.plusDays(1);

@@ -148,6 +148,8 @@ public class AllSportsService {
         long offset = pageable.getOffset();
         if(StringUtils.equals("true",checkData)){
             return allSportsFootballMatchDao.getTodayNotStartMatches(date,pageSize,offset);
+        } else if(StringUtils.equals("false",checkData)){
+            return allSportsFootballMatchDao.getTodayFinishedMatches(date,pageSize,offset);
         }
         return allSportsFootballMatchDao.getAllSportsByDate(date,pageSize,offset);
     }
