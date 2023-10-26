@@ -25,7 +25,7 @@ public interface FootballMatchLiveDataDao {
     @Select("select * from football_match_live_data where match_id = #{matchId}")
     FootballMatchLiveData getFootballMatchLiveData(@Param("matchId") Integer matchId);
 
-    @Select("select match_id,status_id,home_team_name,away_team_name,home_attack_num," +
+    @Select("select match_id,status_id,home_team_id,away_team_id,home_team_name,away_team_name,home_attack_num," +
             "away_attack_num,home_attack_danger_num,home_attack_danger_num,home_possession_rate,away_possession_rate," +
             "home_shoot_goal_num,away_shoot_goal_num,home_bias_num,away_bias_num,home_corner_kick_num,away_corner_kick_num," +
             "home_red_card_num,away_red_card_num,home_yellow_card_num,away_yellow_card_num,home_score,away_score from " +

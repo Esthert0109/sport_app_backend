@@ -16,6 +16,8 @@ public class AllSportsFootballMatchLiveDataVo {
     private String venueName;
     private String homeFormation;
     private String awayFormation;
+    private String homeCoach;
+    private String awayCoach;
     private Integer homeAttackNum;
     private Integer awayAttackNum;
     private Integer homeAttackDangerNum;

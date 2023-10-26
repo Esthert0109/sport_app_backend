@@ -6,8 +6,12 @@ import lombok.Data;
 public class FootballMatchLiveDataVo {
     private Integer matchId;
     private Integer statusId;
+    private Integer homeTeamId;
+    private Integer awayTeamId;
     private String homeTeamName;
     private String awayTeamName;
+    private String homeCoach;
+    private String awayCoach;
     private Integer homeAttackNum;
     private Integer awayAttackNum;
     private Integer homeAttackDangerNum;

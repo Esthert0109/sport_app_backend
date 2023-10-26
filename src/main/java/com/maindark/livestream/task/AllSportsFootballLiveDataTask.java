@@ -89,6 +89,8 @@ public class AllSportsFootballLiveDataTask {
         String awayPenaltyNum = "0";
         Integer homeScore = 0;
         Integer awayScore = 0;
+        String homeCoach = "";
+        String awayCoach = "";
         if(statistics != null && !statistics.isEmpty()){
             for(int i = 0;i<statistics.size();i++){
                 Map<String,Object> statistic = (Map<String,Object>)statistics.get(i);
@@ -135,53 +137,28 @@ public class AllSportsFootballLiveDataTask {
             }
         }
 
-        //  get home and away team card number
-        /*JSONArray cards = (JSONArray) ml.get("cards");
-        if(cards != null){
-            int size = cards.size();
-            for(int i=0;i<size;i++) {
-                Map<String,Object> card = (Map<String,Object>)cards.get(i);
-                String homeFault = (String)card.get("home_fault");
-                String cardColor = (String)card.get("card");
-                String awayFault = (String)card.get("away_fault");
-                if(!StringUtils.equals("",homeFault)){
-                    if(StringUtils.equals("yellow card",cardColor)) {
-                        homeYellowCardNum +=1;
-                    } else if(StringUtils.equals("red card",cardColor)){
-                        homeRedCardNum += 1;
-                    }
-                }
-                if(!StringUtils.equals("",awayFault)){
-                    if(StringUtils.equals("yellow card",cardColor)) {
-                        awayYellowCardNum +=1;
-                    } else if(StringUtils.equals("red card",cardColor)){
-                        awayRedCardNum += 1;
-                    }
-                }
-            }
-        }*/
-        //Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
-        /*if (lineups != null && !lineups.isEmpty()) {
-            // get home team red and yellow cards number
+
+        Map<String, Object> lineups = (Map<String, Object>) ml.get("lineups");
+        if (lineups != null && !lineups.isEmpty()) {
+            // set home coach
             Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
             if (homeTeam != null && !homeTeam.isEmpty()) {
-                JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
-                JSONArray substitutes = (JSONArray) homeTeam.get("substitutes");
-                Integer[] cards = getReadOrYellowCard(startingLineups,substitutes);
-                homeYellowCardNum = cards[0];
-                homeRedCardNum = cards[1];
-
+                JSONArray coaches = (JSONArray) homeTeam.get("coaches");
+                if(coaches != null && !coaches.isEmpty()){
+                    Map<String,Object> coachMap = (Map<String,Object>)coaches.get(0);
+                    homeCoach = (String)coachMap.get("coache");
+                }
             }
-            // get away team red and yellow cards number
+            // set away coach
             Map<String, Object> awayTeam = (Map<String, Object>) lineups.get("away_team");
             if (awayTeam != null && !awayTeam.isEmpty()) {
-                JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
-                JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
-                Integer[] cards = getReadOrYellowCard(startingLineups,substitutes);
-                awayYellowCardNum = cards[0];
-                awayRedCardNum = cards[1];
+                JSONArray coaches = (JSONArray) awayTeam.get("coaches");
+                if(coaches != null && !coaches.isEmpty()){
+                    Map<String,Object> coachMap = (Map<String,Object>)coaches.get(0);
+                    awayCoach = (String)coachMap.get("coache");
+                }
             }
-        }*/
+        }
         String scores = (String)ml.get("event_final_result");
         if(!StringUtils.equals("",scores)){
             String[] scoreArr = scores.split("-");
@@ -190,6 +167,8 @@ public class AllSportsFootballLiveDataTask {
                 awayScore = Integer.parseInt(scoreArr[1].trim());
             }
         }
+
+
         footballMatchLiveData.setMatchId(matchId.longValue());
         footballMatchLiveData.setMatchTime(matchTime);
         footballMatchLiveData.setMatchDate(matchDate);
@@ -199,6 +178,8 @@ public class AllSportsFootballLiveDataTask {
         footballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
         footballMatchLiveData.setHomeFormation(homeFormation);
         footballMatchLiveData.setAwayFormation(awayFormation);
+        footballMatchLiveData.setHomeCoach(homeCoach);
+        footballMatchLiveData.setAwayCoach(awayCoach);
         footballMatchLiveData.setRefereeName(refereeName);
         footballMatchLiveData.setVenueName(venueName);
         footballMatchLiveData.setStatus(status);

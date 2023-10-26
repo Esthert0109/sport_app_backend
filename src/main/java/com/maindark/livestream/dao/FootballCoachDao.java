@@ -23,4 +23,6 @@ public interface FootballCoachDao {
     void updateDataById(FootballCoach footballCoach);
 
 
+    @Select("select * from football_coach where team_id = #{teamId} limit 1")
+    FootballCoach getCoachByTeamId(@Param("teamId") Integer teamId);
 }

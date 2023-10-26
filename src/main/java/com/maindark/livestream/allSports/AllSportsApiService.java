@@ -486,6 +486,8 @@ public class AllSportsApiService {
         String awayRedCardNum = "0";
         String homeYellowCardNum = "0";
         String awayYellowCardNum = "0";
+        String homeCoach = "";
+        String awayCoach = "";
         Integer homeScore = 0;
         Integer awayScore = 0;
         if(statistics != null && !statistics.isEmpty()){
@@ -534,31 +536,6 @@ public class AllSportsApiService {
             }
         }
 
-        //  get home and away team card number
-        JSONArray cards = (JSONArray) ml.get("cards");
-        if(cards != null){
-            int size = cards.size();
-            for(int i=0;i<size;i++) {
-                Map<String,Object> card = (Map<String,Object>)cards.get(i);
-                String homeFault = (String)card.get("home_fault");
-                String cardColor = (String)card.get("card");
-                String awayFault = (String)card.get("away_fault");
-                if(!StringUtils.equals("",homeFault)){
-                    if(StringUtils.equals("yellow card",cardColor)) {
-                        homeYellowCardNum +=1;
-                    } else if(StringUtils.equals("red card",cardColor)){
-                        homeRedCardNum += 1;
-                    }
-                }
-                if(!StringUtils.equals("",awayFault)){
-                    if(StringUtils.equals("yellow card",cardColor)) {
-                       awayYellowCardNum +=1;
-                    } else if(StringUtils.equals("red card",cardColor)){
-                        awayRedCardNum += 1;
-                    }
-                }
-            }
-        }
         // get home and away team score
         String scores = (String)ml.get("event_final_result");
         if(!StringUtils.equals("",scores)){
@@ -566,6 +543,27 @@ public class AllSportsApiService {
             if(scoreArr != null && scoreArr.length >0) {
                 homeScore = Integer.parseInt(scoreArr[0].trim());
                 awayScore = Integer.parseInt(scoreArr[1].trim());
+            }
+        }
+        Map<String, Object> lineups = (Map<String, Object>) ml.get("lineups");
+        if (lineups != null && !lineups.isEmpty()) {
+            // set home coach
+            Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+            if (homeTeam != null && !homeTeam.isEmpty()) {
+                JSONArray coaches = (JSONArray) homeTeam.get("coaches");
+                if(coaches != null && !coaches.isEmpty()){
+                    Map<String,Object> coachMap = (Map<String,Object>)coaches.get(0);
+                    homeCoach = (String)coachMap.get("coache");
+                }
+            }
+            // set away coach
+            Map<String, Object> awayTeam = (Map<String, Object>) lineups.get("away_team");
+            if (awayTeam != null && !awayTeam.isEmpty()) {
+                JSONArray coaches = (JSONArray) awayTeam.get("coaches");
+                if(coaches != null && !coaches.isEmpty()){
+                    Map<String,Object> coachMap = (Map<String,Object>)coaches.get(0);
+                    awayCoach = (String)coachMap.get("coache");
+                }
             }
         }
         footballMatchLiveData.setMatchId(matchId.longValue());
@@ -577,6 +575,8 @@ public class AllSportsApiService {
         footballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
         footballMatchLiveData.setHomeFormation(homeFormation);
         footballMatchLiveData.setAwayFormation(awayFormation);
+        footballMatchLiveData.setHomeCoach(homeCoach);
+        footballMatchLiveData.setAwayCoach(awayCoach);
         footballMatchLiveData.setRefereeName(refereeName);
         footballMatchLiveData.setVenueName(venueName);
         footballMatchLiveData.setStatus(status);

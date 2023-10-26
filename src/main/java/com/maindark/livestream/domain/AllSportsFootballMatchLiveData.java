@@ -41,5 +41,7 @@ public class AllSportsFootballMatchLiveData {
     private Integer awayScore;
     private Integer homePenaltyNum;
     private Integer awayPenaltyNum;
+    private String homeCoach;
+    private String awayCoach;
 
 }

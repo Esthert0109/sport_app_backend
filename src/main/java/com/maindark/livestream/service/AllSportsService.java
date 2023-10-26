@@ -168,7 +168,14 @@ public class AllSportsService {
     }
 
     public AllSportsFootballMatchLiveDataVo getMatchLiveData(Long matchId) {
-        return allSportsFootballLiveDataDao.getMatchLiveData(matchId);
+        AllSportsFootballMatchLiveDataVo allSportsFootballMatchLiveDataVo =  allSportsFootballLiveDataDao.getMatchLiveData(matchId);
+        if(allSportsFootballMatchLiveDataVo != null){
+            String homePossessionRate = allSportsFootballMatchLiveDataVo.getHomePossessionRate().replace("%","");
+            allSportsFootballMatchLiveDataVo.setHomePossessionRate(homePossessionRate);
+            String awayPossessionRate = allSportsFootballMatchLiveDataVo.getAwayPossessionRate().replace("%","");
+            allSportsFootballMatchLiveDataVo.setAwayPossessionRate(awayPossessionRate);
+        }
+        return allSportsFootballMatchLiveDataVo;
     }
 
     public String getLiveAddress(String teamName) {

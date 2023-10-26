@@ -52,6 +52,11 @@ public class FootBallService {
   @Resource
   FootballLiveAddressDao footballLiveAddressDao;
 
+  @Resource
+  FootballCoachDao footballCoachDao;
+
+
+
 
   public String getNormalUrl(String normalUrl){
     return namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() +"&secret=" + namiConfig.getSecretKey();
@@ -211,7 +216,6 @@ public class FootBallService {
       footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds,deadlineSeconds,limit,offset);
       footballMatchVos = getFootballMatchVos(footballMatchVos);
     }
-
     return footballMatchVos;
   }
 
@@ -220,6 +224,16 @@ public class FootBallService {
     FootballMatchLiveDataVo footballMatchLiveDataVo = redisService.get(FootballMatchKey.matchLiveVoKey,String.valueOf(matchId),FootballMatchLiveDataVo.class);
     if(footballMatchLiveDataVo == null) {
       footballMatchLiveDataVo = footballMatchLiveDataDao.getFootballMatchLiveDataVo(matchId);
+      Integer homeTeamId = footballMatchLiveDataVo.getHomeTeamId();
+      Integer awayTeamId = footballMatchLiveDataVo.getAwayTeamId();
+      FootballCoach homeCoach = footballCoachDao.getCoachByTeamId(homeTeamId);
+      if(homeCoach != null) {
+        footballMatchLiveDataVo.setHomeCoach(homeCoach.getNameZh());
+      }
+      FootballCoach awayCoach = footballCoachDao.getCoachByTeamId(awayTeamId);
+      if(awayCoach != null) {
+        footballMatchLiveDataVo.setAwayCoach(awayCoach.getNameZh());
+      }
     }
     return footballMatchLiveDataVo;
   }

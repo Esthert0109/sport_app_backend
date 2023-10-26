@@ -92,6 +92,8 @@ CREATE TABLE `all_sports_football_match_live_data` (
   `venue_name` varchar(255)  COMMENT 'stadium name',
   `home_formation` varchar(255)  COMMENT 'home formation',
   `away_formation` varchar(255)  COMMENT 'away formation',
+  `home_coach` varchar(255) COMMENT 'home coach',
+  `away_coach` varchar(255) COMMENT  'away coach',
   `home_attack_num` int COMMENT 'homeAttackNum',
   `away_attack_num` int COMMENT 'awayAttackNum',
   `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
@@ -121,8 +123,8 @@ alter table all_sports_football_match_live_data modify home_possession_rate varc
 
 alter table all_sports_football_match_live_data modify away_possession_rate varchar(16) COMMENT 'homePossessionRate';
 
-alter table all_sports_football_match_live_data add column `home_penalty_Num` int COMMENT 'home penalty num';
-alter table all_sports_football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
+alter table all_sports_football_match_live_data add column `home_coach` varchar(255) COMMENT 'home coach';
+alter table all_sports_football_match_live_data add column `away_coach` varchar(255) COMMENT 'away coach';
 alter table all_sports_home_match_line_up add column `player_id` bigint COMMENT 'player id';
 alter table all_sports_away_match_line_up add column `player_id` bigint COMMENT 'player id';
 
