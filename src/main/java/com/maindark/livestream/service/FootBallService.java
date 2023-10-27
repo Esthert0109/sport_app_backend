@@ -280,7 +280,7 @@ public class FootBallService {
         Integer refereeId = (Integer)matchMap.get("referee_id");
         Map<String,Object> coverage = (Map<String,Object>)matchMap.get("coverage");
         Integer lineUp = 0;
-        if(coverage != null && coverage.size() >0) {
+        if(coverage != null && !coverage.isEmpty()) {
           lineUp = (Integer)coverage.get("lineup");
         }
         Integer homeScore = 0;
@@ -307,7 +307,7 @@ public class FootBallService {
           }
         }
 
-        if(awayScores != null && awayScores.size() >0) {
+        if(awayScores != null && !awayScores.isEmpty()) {
           Integer score0 = awayScores.get(0);
           Integer score1 = awayScores.get(5);
           Integer score2 = awayScores.get(6);
@@ -393,7 +393,7 @@ public class FootBallService {
     }
     if(0 == code) {
       Map<String,Object> results = (Map<String,Object>)resultObj.get("results");
-      if(results != null && results.size() >0){
+      if(results != null && !results.isEmpty()){
         Integer confirmed = (Integer)results.get("confirmed");
         if(confirmed == 1) {
 
@@ -404,7 +404,7 @@ public class FootBallService {
           footballMatchDao.updateFormation(homeFormation,awayFormation,matchId);
           List<Map<String,Object>> home = (List<Map<String, Object>>) results.get("home");
           List<Map<String,Object>> away = (List<Map<String, Object>>) results.get("away");
-          if(home != null && home.size() >0) {
+          if(home != null && !home.isEmpty()) {
             home.stream().forEach(ml ->{
               HomeMatchLineUp homeMatchLineUp = getFootballHomeMatchLineUp(ml,matchId);
               HomeMatchLineUp homeMatchLineUpFromDb = homeMatchLineUpDao.getHomeMatchLineUp(homeMatchLineUp.getMatchId(),matchId);
@@ -416,7 +416,7 @@ public class FootBallService {
 
             });
           }
-          if(away != null && away.size() >0) {
+          if(away != null && !away.isEmpty()) {
             away.stream().forEach(ml ->{
               AwayMatchLineUp awayMatchLineUp = getFootballAwayMatchLineUp(ml,matchId);
               AwayMatchLineUp awayMatchLineUpFromDb = awayMatchLineUpDao.getAwayMatchLineUp(awayMatchLineUp.getId(),matchId);
@@ -493,7 +493,7 @@ public class FootBallService {
     if(code == 0)
     {
       List<Map<String,Object>> results = (List<Map<String,Object>>)resultObj.get("results");
-      if(results != null && results.size() >0)
+      if(results != null && !results.isEmpty())
       {
         int size = results.size();
         for(int i=0;i<size;i++)
@@ -520,11 +520,11 @@ public class FootBallService {
           Integer awayYellowCardNum = 0;
           Integer matchId = (Integer)ml.get("id");
           List<Object> score = (List<Object>) ml.get("score");
-          if(score != null && score.size() >0)
+          if(score != null && !score.isEmpty())
           {
             matchStatus = (Integer)score.get(1);
             List<Integer> homeScores = (List<Integer>) score.get(2);
-            if(homeScores != null && homeScores.size() >0) {
+            if(homeScores != null && !homeScores.isEmpty()) {
               Integer score0 = homeScores.get(0);
               Integer score1 = homeScores.get(5);
               Integer score2 = homeScores.get(6);
@@ -536,7 +536,7 @@ public class FootBallService {
 
             }
             List<Integer> awayScores = (List<Integer>) score.get(3);
-            if(awayScores != null && awayScores.size() >0) {
+            if(awayScores != null && !awayScores.isEmpty()) {
               Integer score0 = awayScores.get(0);
               Integer score1 = awayScores.get(5);
               Integer score2 = awayScores.get(6);
@@ -549,7 +549,7 @@ public class FootBallService {
           }
 
           List<Map<String,Object>> statsList = (List<Map<String,Object>>)ml.get("stats");
-          if(statsList != null && statsList.size() >0)
+          if(statsList != null && !statsList.isEmpty())
           {
             int statSize = statsList.size();
             for(int j=0;j<statSize;j++)
@@ -597,24 +597,6 @@ public class FootBallService {
             }
           }
 
-          /*FootballMatch footballMatch = redisService.get(FootballMatchKey.matchKey,String.valueOf(matchId),FootballMatch.class);
-          if(footballMatch == null) {
-            footballMatch = footballMatchDao.getFootballMatchById(matchId);
-          }
-          if(matchStatus != 0) {
-            footballMatch.setStatusId(matchStatus);
-          }
-          if(homeScore != 0) {
-            footballMatch.setHomeTeamScore(homeScore);
-          }
-          if(awayScore !=0) {
-            footballMatch.setAwayTeamScore(awayScore);
-          }
-          // update redis cache
-          redisService.set(FootballMatchKey.matchKey,String.valueOf(matchId),footballMatch);
-          // update table football_match
-          footballMatchDao.updateDataById(footballMatch);*/
-
           // football_match_live_data
           FootballMatchLiveData footballMatchLiveData = redisService.get(FootballMatchKey.matchLiveKey,String.valueOf(matchId),FootballMatchLiveData.class);
           if(footballMatchLiveData == null) {
@@ -627,8 +609,8 @@ public class FootBallService {
               footballMatchLiveData.setAwayScore(awayScore);
               footballMatchLiveData.setHomeTeamId(0);
               footballMatchLiveData.setAwayTeamId(0);
-              footballMatchLiveData.setHomeTeamName("sdfdfd");
-              footballMatchLiveData.setAwayTeamName("dfddfd");
+              footballMatchLiveData.setHomeTeamName("homeTeam");
+              footballMatchLiveData.setAwayTeamName("awayTeam");
               footballMatchLiveData.setHomeAttackNum(homeAttackNum);
               footballMatchLiveData.setAwayAttackNum(awayAttackNum);
               footballMatchLiveData.setHomeAttackDangerNum(homeAttackDangerNum);
@@ -654,8 +636,8 @@ public class FootBallService {
             footballMatchLiveData.setAwayScore(awayScore);
             footballMatchLiveData.setHomeTeamId(0);
             footballMatchLiveData.setAwayTeamId(0);
-            footballMatchLiveData.setHomeTeamName("sfdsfdf");
-            footballMatchLiveData.setAwayTeamName("sdfdfd");
+            footballMatchLiveData.setHomeTeamName("homeTeam");
+            footballMatchLiveData.setAwayTeamName("awayTeam");
             footballMatchLiveData.setHomeAttackNum(homeAttackNum);
             footballMatchLiveData.setAwayAttackNum(awayAttackNum);
             footballMatchLiveData.setHomeAttackDangerNum(homeAttackDangerNum);
