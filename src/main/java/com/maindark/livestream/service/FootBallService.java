@@ -11,6 +11,7 @@ import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
+import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -79,16 +80,16 @@ public class FootBallService {
           list = footballMatchDao.getFootballMatchByTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
       }
       if(list != null && !list.isEmpty()){
-        int size = list.size();
-        for(int i=0;i<size;i++) {
-          FootballMatchVo footballMatchVo = list.get(i);
-          Long matchTime = footballMatchVo.getMatchTime() * 1000;
+        Stream<FootballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() > nowSeconds).map(data ->{
+          Long matchTime = data.getMatchTime() * 1000;
           String timeStr = DateUtil.interceptTime(matchTime);
-          footballMatchVo.setMatchTimeStr(timeStr);
-          footballMatchVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(matchTime));
-          Integer statusId = footballMatchVo.getStatusId();
-          footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
-        }
+          data.setMatchTimeStr(timeStr);
+          data.setMatchDate(DateUtil.convertLongTimeToMatchDate(matchTime));
+          Integer statusId = data.getStatusId();
+          data.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
+          return data;
+        });
+        list = StreamToListUtil.getArrayListFromStream(stream);
       }
       return list;
     }
