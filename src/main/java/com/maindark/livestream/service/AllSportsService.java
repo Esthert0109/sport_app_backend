@@ -10,6 +10,7 @@ import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
+import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -65,6 +67,10 @@ public class AllSportsService {
             list = allSportsFootballMatchDao.getAllSportsFootMatchByCompetitionName(competitionName,from,to,pageSize,offset);
         } else if (!StringUtils.isBlank(teamName)) {
             list = allSportsFootballMatchDao.getAllSportsFootMatchByTeamName(teamName,from,to,pageSize,offset);
+        }
+        if(list != null && !list.isEmpty()) {
+            Stream<FootballMatchVo> stream = list.stream().filter(data -> data.getMatchDate().equals(from));
+            list = StreamToListUtil.getArrayListFromStream(stream);
         }
         return list;
     }
