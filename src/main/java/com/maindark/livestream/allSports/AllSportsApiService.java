@@ -426,7 +426,7 @@ public class AllSportsApiService {
 
 
     public Map<String, Object> getLiveData(String matchId) {
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore()) + "&matchId=" + matchId;
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures()) + "&matchId=" + matchId;
         String result = HttpUtil.getAllSportsData(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {
@@ -436,7 +436,7 @@ public class AllSportsApiService {
                 if (matches != null && !matches.isEmpty()) {
                     matches.stream().forEach(ml ->{
                         String eventLive = (String)ml.get("event_live");
-                        if(StringUtils.equals("1",eventLive)) {
+                        if(StringUtils.equals("0",eventLive)) {
                             //Number matchId = (Number) ml.get("event_key");
                             int exist = allSportsFootballLiveDataDao.queryExist(Long.valueOf(matchId));
                             AllSportsFootballMatchLiveData footballMatchLiveData = getAllSportsLiveData(ml);

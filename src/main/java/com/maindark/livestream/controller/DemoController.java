@@ -10,10 +10,8 @@ import com.maindark.livestream.service.LiveStreamUserService;
 import com.maindark.livestream.sms.SMSService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -67,5 +65,13 @@ public class DemoController {
         log.info(mobile);
         Boolean result =smsService.sendSMS("1",mobile);
         return Result.success(result);
+    }
+
+    @PostMapping("/checkToken")
+    public Result<Boolean> getToken(@RequestParam(required = false)String type){
+        if(StringUtils.equals("pc",type)){
+           return Result.success(true);
+        }
+        return Result.success(false);
     }
 }
