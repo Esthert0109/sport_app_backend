@@ -140,6 +140,51 @@ public class AllSportsApiService {
         return resultObj;
     }
 
+    public Map<String, Object> getLiveMatchViaLiveDataApi(String matchId) {
+        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore()) + "&matchId=" + matchId;
+        String result = HttpUtil.getAllSportsData(url);
+        Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
+        if (resultObj != null && !resultObj.isEmpty()) {
+            int success = (Integer) resultObj.get("success");
+            if (1 == success) {
+                List<Map<String, Object>> matches = (List<Map<String, Object>>) resultObj.get("result");
+                if (matches != null && !matches.isEmpty()) {
+                    int size = matches.size();
+                    for (int i = 0; i < size; i++) {
+                        Map<String, Object> ml = matches.get(i);
+                        String eventLive = (String) ml.get("event_live");
+                        if (StringUtils.equals("1", eventLive)) {
+                            AllSportsFootballMatch allSportsFootballMatch = getAllSportsMatchByMatchId(ml);
+                            allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);
+                            Map<String, Object> lineups = (Map<String, Object>) ml.get("lineups");
+                            //Number matchId = (Number) ml.get("event_key");
+                            Number homeTeamId = (Number) ml.get("home_team_key");
+                            Number awayTeamId = (Number) ml.get("away_team_key");
+                            if (lineups != null && !lineups.isEmpty()) {
+                                // set home team line-up
+                                Map<String, Object> homeTeam = (Map<String, Object>) lineups.get("home_team");
+                                if (homeTeam != null && !homeTeam.isEmpty()) {
+                                    JSONArray startingLineups = (JSONArray) homeTeam.get("starting_lineups");
+                                    JSONArray substitutes = (JSONArray) homeTeam.get("substitutes");
+                                    getMatchLineUp(startingLineups, Long.valueOf(matchId), substitutes, homeTeamId.longValue(), TeamEnum.HOME.getCode());
+                                }
+                                // set away team line-up
+                                Map<String, Object> awayTeam = (Map<String, Object>) lineups.get("away_team");
+                                if (awayTeam != null && !awayTeam.isEmpty()) {
+                                    JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
+                                    JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
+                                    getMatchLineUp(startingLineups, Long.valueOf(matchId), substitutes, awayTeamId.longValue(),TeamEnum.AWAY.getCode());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return resultObj;
+    }
+
+
 
 
 
