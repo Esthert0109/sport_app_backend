@@ -20,7 +20,7 @@ CREATE TABLE `all_sports_football_team` (
 
 DROP TABLE IF EXISTS `all_sports_home_match_line_up`;
 CREATE TABLE `all_sports_home_match_line_up` (
-  `id` int auto_increment NOT NULL  COMMENT 'id',
+  `id` int(11)  auto_increment  COMMENT 'id',
   `player_id` bigint COMMENT 'player id',
   `match_id` bigint not null COMMENT 'match id',
   `team_id` bigint COMMENT 'team id',
@@ -36,7 +36,7 @@ CREATE TABLE `all_sports_home_match_line_up` (
 
 DROP TABLE IF EXISTS `all_sports_away_match_line_up`;
 CREATE TABLE `all_sports_away_match_line_up` (
-  `id` int auto_increment NOT NULL  COMMENT 'id',
+  `id` int(11) auto_increment COMMENT 'id',
   `player_id` bigint COMMENT 'player id',
   `match_id` bigint not null COMMENT 'match id',
   `team_id` bigint COMMENT 'team id',
@@ -79,7 +79,7 @@ CREATE TABLE `all_sports_football_match` (
 
 DROP TABLE IF EXISTS `all_sports_football_match_live_data`;
 CREATE TABLE `all_sports_football_match_live_data` (
-  `id` int auto_increment NOT NULL   COMMENT 'id',
+  `id` int  NOT NULL auto_increment    COMMENT 'id',
   `match_id` bigint not null COMMENT 'match id',
   `status` bigint COMMENT 'football status',
   `match_time` varchar(8) COMMENT 'match time',

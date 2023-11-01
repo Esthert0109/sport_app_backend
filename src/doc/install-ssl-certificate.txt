@@ -1,0 +1,14 @@
+1 在腾讯云申请SSL证书
+2 把刚刚下载的文件中的 Tomcat 文件夹中的jks文件复制到
+  spring boot 项目中的 src/main/resources/ 目录下，和 application.properties 平级
+3 application.properties 中配置如下命令
+
+server.port: 8092
+server.ssl.key-store= classpath:server.jks
+server.ssl.key-store-password=你的密码
+server.ssl.keyStoreType = JKS
+key-store: 生成的证书文件的存储路径,其中 server.jks 需要改为你刚刚复制进来的jks文件名
+
+key-store-password: 指定签名的密码，打开下载文件中 Tomcat 文件夹中的 txt 文件，即为此处填写的密码
+
+keyStoreType:为制定秘钥仓库的类型，这里我们需要填写为 JKS
