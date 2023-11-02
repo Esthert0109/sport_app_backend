@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CollectionForm {
     @NotNull(message = "match_id can be not empty!")
-    private Integer matchId;
+    private String matchId;
     @NotNull(message = "category can be not empty!")
     private String category;
 }

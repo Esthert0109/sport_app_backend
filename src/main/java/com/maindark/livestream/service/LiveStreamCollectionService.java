@@ -52,7 +52,7 @@ public class LiveStreamCollectionService {
     public LiveStreamCollection createCollection(Long userId, CollectionForm collectionForm) {
         LiveStreamCollection liveStreamCollection = new LiveStreamCollection();
         liveStreamCollection.setUserId(userId);
-        liveStreamCollection.setMatchId(collectionForm.getMatchId());
+        liveStreamCollection.setMatchId(Integer.parseInt(collectionForm.getMatchId()));
         liveStreamCollection.setCategory(collectionForm.getCategory());
         liveStreamCollection.setStatus(StatusEnum.UP.getCode());
         liveStreamCollectionDao.insert(liveStreamCollection);

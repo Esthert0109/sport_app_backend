@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS `all_sports_collection`;
+CREATE TABLE `all_sports_collection` (
+  `id` int NOT NULL auto_increment COMMENT 'id',
+  `user_id` bigint  COMMENT 'user id',
+  `match_id` bigint COMMENT 'match_id',
+  `category` char(2) COMMENT '0 football 1 basketball',
+  `status` char(2) DEFAULT '1' COMMENT ' 0 down 1 up',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+
+
 DROP TABLE IF EXISTS `all_sports_football_competition`;
 CREATE TABLE `all_sports_football_competition` (
   `id` bigint  COMMENT 'id',
