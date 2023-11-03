@@ -1,9 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.LiveStreamCollection;
-import com.maindark.livestream.domain.LiveStreamUser;
 import com.maindark.livestream.vo.FootballMatchVo;
-import com.maindark.livestream.vo.LiveStreamCollectionVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -22,11 +20,10 @@ public interface LiveStreamCollectionDao {
             " on t1.competition_id = fc.id left join live_stream_collection co on t1.id= co.match_id " +
             "where co.user_id=#{userId}")
     List<FootballMatchVo> getAllCollections(@Param("userId") Long userId);
-    @Select("select * from live_stream_collection where match_id=#{id}")
-    LiveStreamCollectionVo getCollectionByMatchId(@Param("id") Integer id);
+
 
     @Delete("delete from live_stream_collection where user_id=#{userId} and match_id=#{matchId}")
-    int deleteCollectionById(@Param("userId")Long userId,@Param("matchId") Integer matchId);
+    void deleteCollectionById(@Param("userId")Long userId,@Param("matchId") Integer matchId);
 
 
     @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id," +
