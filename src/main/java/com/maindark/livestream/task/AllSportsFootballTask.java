@@ -51,19 +51,17 @@ public class AllSportsFootballTask {
                 if(1 == success){
                     List<Map<String,Object>> matches = (List<Map<String, Object>>) resultObj.get("result");
                     if(matches != null && !matches.isEmpty()){
-                        int size = matches.size();
-                        for(int i=0;i<size;i++){
-                            Map<String,Object> ml = matches.get(i);
-                            String eventLive = (String)ml.get("event_live");
-                            if(StringUtils.equals("1",eventLive)){
+                        for (Map<String, Object> ml : matches) {
+                            String eventLive = (String) ml.get("event_live");
+                            if (StringUtils.equals("1", eventLive)) {
                                 AllSportsFootballMatch allSportsFootballMatch = getAllSportsMatch(ml);
                                 int exists = allSportsFootballMatchDao.queryMatchIsExists(allSportsFootballMatch.getId());
-                                if(exists <= 0){
+                                if (exists <= 0) {
                                     allSportsFootballMatchDao.insert(allSportsFootballMatch);
                                 } else {
                                     allSportsFootballMatchDao.updateAllSportsMatch(allSportsFootballMatch);
                                 }
-                                Map<String,Object> lineups = (Map<String, Object>) ml.get("lineups");
+                                Map<String, Object> lineups = (Map<String, Object>) ml.get("lineups");
                                 Number matchId = (Number) ml.get("event_key");
                                 Number homeTeamId = (Number) ml.get("home_team_key");
                                 Number awayTeamId = (Number) ml.get("away_team_key");
@@ -80,7 +78,7 @@ public class AllSportsFootballTask {
                                     if (awayTeam != null && !awayTeam.isEmpty()) {
                                         JSONArray startingLineups = (JSONArray) awayTeam.get("starting_lineups");
                                         JSONArray substitutes = (JSONArray) awayTeam.get("substitutes");
-                                        getMatchLineUp(startingLineups, matchId.longValue(), substitutes, awayTeamId.longValue(),TeamEnum.AWAY.getCode());
+                                        getMatchLineUp(startingLineups, matchId.longValue(), substitutes, awayTeamId.longValue(), TeamEnum.AWAY.getCode());
                                     }
                                 }
                             }
@@ -112,27 +110,30 @@ public class AllSportsFootballTask {
      */
     private void setAllSportsFootballMatchLineUp(JSONArray jsonArray, Long matchId,Long teamId,Integer first,String teamType) {
         if(jsonArray != null){
-            int size = jsonArray.size();
-            for(int i=0;i<size;i++){
-                Map<String,Object> map = (Map<String,Object>)jsonArray.get(i);
-                String playerName = (String)map.get("player");
-                Integer playerNumber = (Integer)map.get("player_number");
-                Integer playerPosition = (Integer)map.get("player_position");
-                Number playerKey = (Number)map.get("player_key");
-                if(0 == playerKey.longValue()){
+            for (Object o : jsonArray) {
+                Map<String, Object> map = (Map<String, Object>) o;
+                String playerName = (String) map.get("player");
+                Integer playerNumber = (Integer) map.get("player_number");
+                Integer playerPosition = (Integer) map.get("player_position");
+                Number playerKey = (Number) map.get("player_key");
+                if (0 == playerKey.longValue()) {
                     continue;
                 }
-                if(StringUtils.equals("0",teamType)){
-                    int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue(),matchId);
-                    if(exist <=0){
-                        BaseFootballMatchLineup allSportsHomeMatchLineUp = getAllSportsLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first,TeamEnum.HOME.getCode());
+                if (StringUtils.equals("0", teamType)) {
+                    int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue(), matchId);
+                    BaseFootballMatchLineup allSportsHomeMatchLineUp = getAllSportsLineUp(playerKey.longValue(), playerNumber, playerPosition, matchId, teamId, playerName, first, TeamEnum.HOME.getCode());
+                    if (exist <= 0) {
                         allSportsHomeMatchLineUpDao.insert((AllSportsHomeMatchLineUp) allSportsHomeMatchLineUp);
+                    } else {
+                        allSportsHomeMatchLineUpDao.updateHomeMatchLineUp((AllSportsHomeMatchLineUp) allSportsHomeMatchLineUp);
                     }
                 } else {
-                    int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue(),matchId);
-                    if(exist <=0){
-                        BaseFootballMatchLineup allSportsAwayMatchLineUp = getAllSportsLineUp(playerKey.longValue(),playerNumber,playerPosition,matchId,teamId,playerName,first,TeamEnum.AWAY.getCode());
+                    int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue(), matchId);
+                    BaseFootballMatchLineup allSportsAwayMatchLineUp = getAllSportsLineUp(playerKey.longValue(), playerNumber, playerPosition, matchId, teamId, playerName, first, TeamEnum.AWAY.getCode());
+                    if (exist <= 0) {
                         allSportsAwayMatchLineUpDao.insert((AllSportsAwayMatchLineUp) allSportsAwayMatchLineUp);
+                    } else {
+                        allSportsAwayMatchLineUpDao.updateAwayMatchLineUp((AllSportsAwayMatchLineUp) allSportsAwayMatchLineUp);
                     }
                 }
 

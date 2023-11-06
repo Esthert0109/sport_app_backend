@@ -10,7 +10,6 @@ public interface FootballCompetitionDao extends BasicDao<FootballCompetition> {
 
     @Insert("insert into football_competition(id,name_zh,name_en,short_name_zh,short_name_en,logo,type,updated_at)values("
             + "#{id},#{nameZh},#{nameEn},#{shortNameZh},#{shortNameEn},#{logo},#{type},#{updatedAt})")
-    @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     Integer insert(FootballCompetition footballCompetition);
 
     @Select("select max(id) from football_competition")

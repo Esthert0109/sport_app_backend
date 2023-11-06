@@ -9,7 +9,6 @@ public interface FootballCoachDao {
 
     @Insert("insert into football_coach(id, name_zh, name_en, logo, preferred_formation, team_id, updated_at)values("
             + "#{id},#{nameZh}, #{nameEn}, #{logo},#{preferredFormation},#{teamId}, #{updatedAt})")
-    @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     Integer insert(FootballCoach footballCoach);
 
     @Select("select max(id) from football_coach")

@@ -1,10 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,4 +17,7 @@ public interface AllSportsAwayMatchLineUpDao {
 
     @Select("select * from all_sports_away_match_line_up where match_id=#{matchId}")
     List<AllSportsAwayMatchLineUp> getAwayMatchLineUpByMatchId(@Param("matchId") Long matchId);
+
+    @Update("update all_sports_away_match_line_up set rating=#{rating} where player_id=#{playerId} and match_id=#{matchId} ")
+    void updateAwayMatchLineUp(AllSportsAwayMatchLineUp awayMatchLineUp);
 }

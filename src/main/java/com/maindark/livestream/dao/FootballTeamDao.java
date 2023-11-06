@@ -12,7 +12,6 @@ public interface FootballTeamDao extends BasicDao<FootballTeam> {
 
     @Insert("insert into football_team(id, competition_id,name_zh,name_en,logo,updated_at)values("
             + "#{id}, #{competitionId}, #{nameZh}, #{nameEn}, #{logo}, #{updatedAt})")
-    @SelectKey(keyColumn="id", keyProperty="id", resultType=Integer.class, before=false, statement="select last_insert_id()")
     Integer insert(FootballTeam footBallTeam);
 
     @Select("select max(id) from football_team")

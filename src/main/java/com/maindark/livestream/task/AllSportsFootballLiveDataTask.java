@@ -92,45 +92,45 @@ public class AllSportsFootballLiveDataTask {
         String homeCoach = "";
         String awayCoach = "";
         if(statistics != null && !statistics.isEmpty()){
-            for(int i = 0;i<statistics.size();i++){
-                Map<String,Object> statistic = (Map<String,Object>)statistics.get(i);
-                String type = (String)statistic.get("type");
-                switch (type){
+            for (Object o : statistics) {
+                Map<String, Object> statistic = (Map<String, Object>) o;
+                String type = (String) statistic.get("type");
+                switch (type) {
                     case "Attacks":
-                        homeAttackNum = (String)statistic.get("home");
-                        awayAttackNum = (String)statistic.get("away");
+                        homeAttackNum = (String) statistic.get("home");
+                        awayAttackNum = (String) statistic.get("away");
                         break;
                     case "Dangerous Attacks":
-                        homeAttackDangerNum = (String)statistic.get("home");
-                        awayAttackDangerNum = (String)statistic.get("away");
+                        homeAttackDangerNum = (String) statistic.get("home");
+                        awayAttackDangerNum = (String) statistic.get("away");
                         break;
                     case "Off Target":
-                        homeBiasNum = (String)statistic.get("home");
-                        awayBiasNum = (String)statistic.get("away");
+                        homeBiasNum = (String) statistic.get("home");
+                        awayBiasNum = (String) statistic.get("away");
                         break;
                     case "Shots On Goal":
-                        homeShootGoalNum = (String)statistic.get("home");
-                        awayShootGoalNum = (String)statistic.get("away");
+                        homeShootGoalNum = (String) statistic.get("home");
+                        awayShootGoalNum = (String) statistic.get("away");
                         break;
                     case "Ball Possession":
-                        homePossessionRate = (String)statistic.get("home");
-                        awayPossessionRate = (String)statistic.get("away");
+                        homePossessionRate = (String) statistic.get("home");
+                        awayPossessionRate = (String) statistic.get("away");
                         break;
                     case "Corners":
-                        homeCornerKickNum = (String)statistic.get("home");
-                        awayCornerKickNum = (String)statistic.get("away");
+                        homeCornerKickNum = (String) statistic.get("home");
+                        awayCornerKickNum = (String) statistic.get("away");
                         break;
                     case "Yellow Cards":
-                        homeYellowCardNum = (String)statistic.get("home");
-                        awayYellowCardNum = (String)statistic.get("away");
+                        homeYellowCardNum = (String) statistic.get("home");
+                        awayYellowCardNum = (String) statistic.get("away");
                         break;
                     case "Red Cards":
-                        homeRedCardNum = (String)statistic.get("home");
-                        awayRedCardNum = (String)statistic.get("away");
+                        homeRedCardNum = (String) statistic.get("home");
+                        awayRedCardNum = (String) statistic.get("away");
                         break;
                     case "Penalty":
-                        homePenaltyNum = (String)statistic.get("home");
-                        awayPenaltyNum = (String)statistic.get("away");
+                        homePenaltyNum = (String) statistic.get("home");
+                        awayPenaltyNum = (String) statistic.get("away");
                         break;
 
                 }
@@ -211,18 +211,18 @@ public class AllSportsFootballLiveDataTask {
         Integer redCardNum = 0;
         Integer[] cards = {0,0};
         if(startingLineups != null){
-            for(int i=0;i<startingLineups.size();i++){
-                Map<String,Object> map = (Map<String,Object>)startingLineups.get(i);
-                Number playerKey = (Number)map.get("player_key");
+            for (Object startingLineup : startingLineups) {
+                Map<String, Object> map = (Map<String, Object>) startingLineup;
+                Number playerKey = (Number) map.get("player_key");
                 Integer[] cardsArr = getPlayerCardById(playerKey.toString());
                 yellowCardNum += cardsArr[0];
                 redCardNum += cardsArr[2];
             }
         }
         if(substitutes != null){
-            for(int i=0;i<substitutes.size();i++){
-                Map<String,Object> map = (Map<String,Object>)startingLineups.get(i);
-                Number playerKey = (Number)map.get("player_key");
+            for (Object substitute : substitutes) {
+                Map<String, Object> map = (Map<String, Object>) substitute;
+                Number playerKey = (Number) map.get("player_key");
                 Integer[] cardsArr = getPlayerCardById(playerKey.toString());
                 yellowCardNum += cardsArr[0];
                 redCardNum += cardsArr[2];

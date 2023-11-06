@@ -74,8 +74,12 @@ public class FootBallTask {
         while(true) {
             String url = namiConfig.getIdUrl(namiConfig.getFootballMatchUrl());
             if(maxMatchIdFromApi == 0) {
-                int maxMatchIdFromDb = footballMatchDao.getMaxId();
-                url += maxMatchIdFromDb + 1;
+                Integer maxMatchIdFromDb = footballMatchDao.getMaxId();
+                if(maxMatchIdFromDb == null) {
+                    url += maxMatchIdFromApi +1;
+                } else {
+                    url += maxMatchIdFromDb + 1;
+                }
             } else {
                 url += maxMatchIdFromApi +1;
             }
@@ -123,8 +127,12 @@ public class FootBallTask {
         while(true) {
             String url = namiConfig.getTimeUrl(namiConfig.getFootballMatchUrl());
             if(maxMatchTimeFromApi == 0) {
-                int maxUpdateAt = footballMatchDao.getMaxUpdatedAt();
-                url += maxUpdateAt + 1;
+                Integer maxUpdateAt = footballMatchDao.getMaxUpdatedAt();
+                if(maxUpdateAt == null){
+                    url += maxMatchTimeFromApi + 1;
+                } else {
+                    url += maxUpdateAt + 1;
+                }
             } else {
                 url += maxMatchTimeFromApi + 1;
             }
@@ -445,7 +453,7 @@ public class FootBallTask {
 
 
     /* Get live url*/
-    //@Scheduled(cron = " 0 */10 * * * ?")
+   // @Scheduled(cron = " 0 */10 * * * ?")
     public void getLiveUrlAddress(){
         String url = namiConfig.getFootballLiveAddress(namiConfig.getFootballLiveAddress());
         String result = HttpUtil.getNaMiData(url);
@@ -471,22 +479,7 @@ public class FootBallTask {
         }
     }
 
-    //@Scheduled(cron = "0 */20 * * * ?")
-    public void getAllFootballMatchLineup(){
-       /* List<FootballMatchVo> list = null;
-        LocalDate now = LocalDate.now();
-        //5 12
-        LocalDate tomorrow = now.plusDays(13);
-        long nowSeconds = DateUtil.convertDateToLongTime(now);
-        long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
-        log.info("nowTime:{},tomorrowTime:{}",nowSeconds,tomorrowSeconds);
-        list = footballMatchDao.getFootballMatchByTime(nowSeconds,tomorrowSeconds);
-        if(!list.isEmpty()){
-            String url = getNormalUrl(namiConfig.getFootballLineUpUrl());
-            log.info("send url to nami:{}",url);
-        }*/
 
-    }
 
     private void setMatchLineUp(Integer matchId){
         String url = namiConfig.getNormalUrl(namiConfig.getFootballLineUpUrl());
@@ -611,6 +604,7 @@ public class FootBallTask {
         }
         Integer homeScore = 0;
         Integer awayScore = 0;
+
         //get home_scores from api
         List<Integer> homeScores = (List<Integer>)matchMap.get("home_scores");
         List<Integer> awayScores = (List<Integer>)matchMap.get("away_scores");

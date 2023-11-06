@@ -8,6 +8,7 @@ import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -54,14 +55,18 @@ public class FootballNormalDataTask {
      *
      */
 
-    //@Scheduled(cron = "*/2 * * * * ?")
+    @Scheduled(cron = "0 */1 * * * ?")
     public void getAllFootballVenue(){
         while(true) {
             String url;
             url = namiConfig.getIdUrl(namiConfig.getFootballVenueUrl());
             if(maxVenueIdFromApi == 0) {
-                int maxTeamId = footballVenueDao.getMaxId();
-                url += maxTeamId+1;
+                Integer maxVenueId = footballVenueDao.getMaxId();
+                if (maxVenueId == null){
+                    url += maxVenueIdFromApi + 1;
+                } else {
+                    url += maxVenueId+1;
+                }
             } else {
                 url += maxVenueIdFromApi + 1;
             }
@@ -96,7 +101,11 @@ public class FootballNormalDataTask {
             String url = namiConfig.getTimeUrl(namiConfig.getFootballVenueUrl());
             if(maxVenueTimeFromApi == 0){
                 Integer maxUpdateAt = footballVenueDao.getMaxUpdatedAt();
-                url += maxUpdateAt+1;
+                if(maxUpdateAt == null){
+                    url += maxVenueTimeFromApi+1;
+                } else {
+                    url += maxUpdateAt+1;
+                }
             } else {
                 url += maxVenueTimeFromApi+1;
             }
@@ -134,14 +143,18 @@ public class FootballNormalDataTask {
      * get all referees
      *
      */
-    // @Scheduled(cron = "0 */1 * * * ?")
+     @Scheduled(cron = "0 */1 * * * ?")
     public void getAllReferees(){
         while(true) {
             String url;
             url = namiConfig.getIdUrl(namiConfig.getFootballRefereeUrl());
             if(maxRefereeIdFromApi == 0) {
-                int maxRefereeId = footballRefereeDao.getMaxId();
-                url += maxRefereeId+1;
+                Integer maxRefereeId = footballRefereeDao.getMaxId();
+                if(maxRefereeId== null) {
+                    url += maxRefereeIdFromApi + 1;
+                } else {
+                    url += maxRefereeId+1;
+                }
             } else {
                 url += maxRefereeIdFromApi + 1;
             }
@@ -176,7 +189,11 @@ public class FootballNormalDataTask {
             String url = namiConfig.getTimeUrl(namiConfig.getFootballRefereeUrl());
             if(maxRefereeTimeFromApi == 0){
                 Integer maxUpdateAt = footballRefereeDao.getMaxUpdatedAt();
-                url += maxUpdateAt+1;
+                if(maxUpdateAt == null){
+                    url += maxRefereeTimeFromApi+1;
+                } else {
+                    url += maxUpdateAt+1;
+                }
             } else {
                 url += maxRefereeTimeFromApi+1;
             }
@@ -212,7 +229,7 @@ public class FootballNormalDataTask {
     /**
      * get all footballTeams
      * */
-    //@Scheduled(cron = "0 */10 * * * ?")
+    @Scheduled(cron = "0 */1 * * * ?")
     public void getAllTeamOrUpdate(){
 
         // Get all teams
@@ -220,8 +237,12 @@ public class FootballNormalDataTask {
             String url;
             url = namiConfig.getIdUrl(namiConfig.getFootballTeamUrl());
             if(maxTeamIdFromApi == 0) {
-                int maxTeamId = footballTeamDao.getMaxId();
-                url += maxTeamId+1;
+                Integer maxTeamId = footballTeamDao.getMaxId();
+                if(maxTeamId == null) {
+                    url += maxTeamIdFromApi + 1;
+                } else {
+                    url += maxTeamId+1;
+                }
             } else {
                 url += maxTeamIdFromApi + 1;
             }
@@ -256,7 +277,11 @@ public class FootballNormalDataTask {
             String url = namiConfig.getTimeUrl(namiConfig.getFootballTeamUrl());
             if(maxTeamTimeFromApi == 0){
                 Integer maxUpdateAt = footballTeamDao.getMaxUpdatedAt();
-                url += maxUpdateAt+1;
+                if(maxUpdateAt == null) {
+                    url += maxTeamTimeFromApi+1;
+                } else {
+                    url += maxUpdateAt+1;
+                }
             } else {
                 url += maxTeamTimeFromApi+1;
             }
@@ -291,14 +316,19 @@ public class FootballNormalDataTask {
     /**
      * get all coaches
      */
-    //@Scheduled(cron = "")
+    @Scheduled(cron = "0 */1 * * * ?")
     public void getAllFootballCoach(){
         while(true) {
             String url;
             url = namiConfig.getIdUrl(namiConfig.getFootballCoachUrl());
             if(maxCoachIdFromApi == 0) {
-                int maxTeamId = footballCoachDao.getMaxId();
-                url += maxTeamId+1;
+                Integer maxCoachId = footballCoachDao.getMaxId();
+                if(maxCoachId == null) {
+                    url += maxCoachIdFromApi + 1;
+                } else {
+                    url += maxCoachId+1;
+                }
+
             } else {
                 url += maxCoachIdFromApi + 1;
             }
@@ -333,7 +363,11 @@ public class FootballNormalDataTask {
             String url = namiConfig.getTimeUrl(namiConfig.getFootballCoachUrl());
             if(maxCoachTimeFromApi == 0){
                 Integer maxUpdateAt = footballCoachDao.getMaxUpdatedAt();
-                url += maxUpdateAt+1;
+                if(maxUpdateAt == null) {
+                    url += maxCoachTimeFromApi+1;
+                } else {
+                    url += maxUpdateAt+1;
+                }
             } else {
                 url += maxCoachTimeFromApi+1;
             }
@@ -370,14 +404,18 @@ public class FootballNormalDataTask {
     /**
      * Get All competitions
      * */
-    //@Scheduled(cron = "0 */10 * * * ?")
+    @Scheduled(cron = "0 */10 * * * ?")
     public void getAllCompetitionOrUpdate(){
         /* First time get maxId from data, and then get maxId from api*/
         while (true) {
             String url = namiConfig.getIdUrl(namiConfig.getFootballCompetitionUrl());
             if(maxCompetitionIdFromApi == 0){
-                int maxIdFromDb = footballCompetitionDao.getMaxId();
-                url += maxIdFromDb+1;
+                Integer maxIdFromDb = footballCompetitionDao.getMaxId();
+                if(maxIdFromDb == null){
+                    url += maxCompetitionIdFromApi+1;
+                } else {
+                    url += maxIdFromDb+1;
+                }
             } else {
                 url += maxCompetitionIdFromApi+1;
             }
@@ -414,7 +452,11 @@ public class FootballNormalDataTask {
             String url = namiConfig.getTimeUrl(namiConfig.getFootballCompetitionUrl());
             if(maxCompetitionTimeFromApi == 0) {
                 Integer maxUpdateAtFromDb = footballCompetitionDao.getMaxUpdatedAt();
-                url += maxUpdateAtFromDb+1;
+                if (maxUpdateAtFromDb == null) {
+                    url += maxCompetitionTimeFromApi+1;
+                } else {
+                    url += maxUpdateAtFromDb+1;
+                }
             } else {
                 url += maxCompetitionTimeFromApi+1;
             }
