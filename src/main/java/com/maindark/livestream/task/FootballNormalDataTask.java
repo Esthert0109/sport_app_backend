@@ -55,7 +55,7 @@ public class FootballNormalDataTask {
      *
      */
 
-    @Scheduled(cron = "0 */1 * * * ?")
+    //@Scheduled(cron = "0 */1 * * * ?")
     public void getAllFootballVenue(){
         while(true) {
             String url;
@@ -143,7 +143,7 @@ public class FootballNormalDataTask {
      * get all referees
      *
      */
-     @Scheduled(cron = "0 */1 * * * ?")
+    // @Scheduled(cron = "0 */1 * * * ?")
     public void getAllReferees(){
         while(true) {
             String url;
@@ -229,7 +229,7 @@ public class FootballNormalDataTask {
     /**
      * get all footballTeams
      * */
-    @Scheduled(cron = "0 */1 * * * ?")
+   // @Scheduled(cron = "0 */1 * * * ?")
     public void getAllTeamOrUpdate(){
 
         // Get all teams
@@ -316,7 +316,7 @@ public class FootballNormalDataTask {
     /**
      * get all coaches
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    //@Scheduled(cron = "0 */1 * * * ?")
     public void getAllFootballCoach(){
         while(true) {
             String url;
@@ -404,7 +404,7 @@ public class FootballNormalDataTask {
     /**
      * Get All competitions
      * */
-    @Scheduled(cron = "0 */10 * * * ?")
+    //@Scheduled(cron = "0 */10 * * * ?")
     public void getAllCompetitionOrUpdate(){
         /* First time get maxId from data, and then get maxId from api*/
         while (true) {
