@@ -1,4 +1,4 @@
 Server-Ip:--198.148.116.174  142.171.64.254
 Server-Port:22
 Server-account:root
-Server-password:--1Xk95XyiSq  --Vl5q4NRn5w  VqXLwNa55w
+Server-password:--1Xk95XyiSq  --Vl5q4NRn5w  5goNzP837D

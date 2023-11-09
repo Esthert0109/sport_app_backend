@@ -80,7 +80,7 @@ public class AllSportsApiService {
     }
 
 
-    public Map<String, Object> getAllFixtures(String from, String to) {
+    public List<AllSportsFootballMatch> getAllFixtures(String from, String to) {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures()) + "&from=" + from + "&to=" + to;
         List<AllSportsFootballMatch> allSportsFootballMatches = getAllSportsMatch(url);
         if (allSportsFootballMatches != null) {
@@ -93,7 +93,7 @@ public class AllSportsApiService {
                 }
             });
         }
-        return null;
+        return allSportsFootballMatches;
     }
 
     public Map<String, Object> getLiveMatchByMatchId(String matchId) {

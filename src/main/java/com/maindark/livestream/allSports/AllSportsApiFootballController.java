@@ -1,11 +1,13 @@
 package com.maindark.livestream.allSports;
 
 
+import com.maindark.livestream.domain.AllSportsFootballMatch;
 import com.maindark.livestream.result.Result;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,10 +29,15 @@ public class AllSportsApiFootballController {
     }
 
     @GetMapping("/fixtures/list")
-    public Result<Map<String,Object>> getAllFixtures(@RequestParam("from")String from,@RequestParam("to")String to){
-        Map<String,Object> map = allSportsApiService.getAllFixtures(from,to);
-        return Result.success(map);
+    public Result<List<AllSportsFootballMatch>> getAllFixtures(@RequestParam("from")String from, @RequestParam("to")String to){
+        List<AllSportsFootballMatch> list = allSportsApiService.getAllFixtures(from,to);
+        return Result.success(list);
     }
+
+    /**
+     * get match line up from fixtures api
+     *
+     */
 
     @GetMapping("/fixtures/{matchId}")
     public Result<Map<String,Object>> getAllLiveMatch(@PathVariable("matchId") String matchId){
