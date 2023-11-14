@@ -21,7 +21,7 @@ CREATE TABLE `live_stream_user` (
   `register_date` datetime DEFAULT NULL COMMENT '注册时间',
   `last_login_date` datetime DEFAULT NULL COMMENT 'last time 登录时间',
   `role` char(1) default '0' comment '0 normal user 1 anchor',
-  `login_count` int(11) DEFAULT '0' COMMENT '登录次数',
+  `login_total` int(11) DEFAULT '0' COMMENT '登录次数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -255,15 +255,15 @@ create table popular_search (
     create_date datetime default null comment 'create time',
     PRIMARY KEY (id)
 )ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
-
+/* status(0 apply 1 approve)*/
 DROP TABLE IF EXISTS `apply_for_live`;
 create table apply_for_live(
-    id int(11) auto_increment comment 'id',
-    user_id bigint(20) comment 'user id',
-    apply_date datetime default null comment 'apply date',
-    updated_at datetime default null comment 'updated date',
-    edit_id bigint(20) comment 'edit user',
-    status char(1) default '0' comment '0 apply 1 approve',
+    id int(11) auto_increment comment '编号',
+    user_id bigint(20) comment '用户ID',
+    apply_date datetime default null comment '申请时间',
+    updated_at datetime default null comment '更新时间',
+    edit_id bigint(20) comment '审核人员ID',
+    status char(1) default '0' comment '审核状态',
     PRIMARY KEY (id)
 )ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
 
