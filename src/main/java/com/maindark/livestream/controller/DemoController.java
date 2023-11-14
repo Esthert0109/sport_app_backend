@@ -52,7 +52,7 @@ public class DemoController {
             liveStreamUser.setId(Long.parseLong("123455566778"));
             liveStreamUser.setPassword("test1234556");
             liveStreamUser.setNickName("hongFeiDu");
-            liveStreamUser.setLoginCount(1);
+            liveStreamUser.setLoginTotal(1);
             Boolean bool =  redisService.set(UserKey.getById,redisKey,liveStreamUser);
 
 //           String key2 = redisService.get(UserKey.getById,String.class);

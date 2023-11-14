@@ -11,8 +11,6 @@ FLUSH PRIVILEGES;
 
 
 DROP TABLE IF EXISTS `live_stream_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `live_stream_user` (
   `id` bigint(20) NOT NULL COMMENT '用户ID，手机号码',
   `area_code` varchar(8) default '60' COMMENT ' area code',
@@ -22,6 +20,7 @@ CREATE TABLE `live_stream_user` (
   `head` varchar(128) DEFAULT NULL COMMENT '头像，云存储的ID',
   `register_date` datetime DEFAULT NULL COMMENT '注册时间',
   `last_login_date` datetime DEFAULT NULL COMMENT 'last time 登录时间',
+  `role` char(1) default '0' comment '0 normal user 1 anchor',
   `login_count` int(11) DEFAULT '0' COMMENT '登录次数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -240,7 +239,33 @@ CREATE TABLE `football_coach` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `anchor_follow`;
+create table anchor_follow  (
+    id int(11) auto_increment comment 'id',
+    anchor_id int(11) comment 'anchor id',
+    follower_id int(11) comment 'follower_id',
+    follow_date datetime default null comment 'follow date',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `popular_search`;
+create table popular_search (
+    id int(11) auto_increment comment 'id',
+    popular_keywords varchar(255) default null comment 'popular competition or popular team',
+    create_date datetime default null comment 'create time',
+    PRIMARY KEY (id)
+)ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `apply_for_live`;
+create table apply_for_live(
+    id int(11) auto_increment comment 'id',
+    user_id bigint(20) comment 'user id',
+    apply_date datetime default null comment 'apply date',
+    updated_at datetime default null comment 'updated date',
+    edit_id bigint(20) comment 'edit user',
+    status char(1) default '0' comment '0 apply 1 approve',
+    PRIMARY KEY (id)
+)ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -257,6 +282,7 @@ create index football_live_address_index_matchId on football_live_address(match_
 
 alter table football_match_live_data add column `home_penalty_Num` int COMMENT 'home penalty num';
 alter table football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
+alter table live_stream_user add column `role` char(1) default '0' comment '0 normal user 1 anchor';
   `away_penalty_Num` int COMMENT 'away penalty num',
 
 

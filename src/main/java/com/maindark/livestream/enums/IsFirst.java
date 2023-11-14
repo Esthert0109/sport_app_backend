@@ -6,8 +6,8 @@ import lombok.Getter;
 public enum IsFirst {
     NO(0,"is not first"),
     YES(1,"is first");
-    private Integer code;
-    private String message;
+    private final Integer code;
+    private final String message;
     IsFirst(Integer code,String message){
         this.code = code;
         this.message = message;

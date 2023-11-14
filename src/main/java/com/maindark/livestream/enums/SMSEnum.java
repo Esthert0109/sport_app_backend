@@ -8,8 +8,8 @@ public enum SMSEnum {
     RESET("2","reset password send msgCode"),
     FORGOT("3","forgot password send msgCode");
 
-    private String code;
-    private String msg;
+    private final String code;
+    private final String msg;
 
     SMSEnum(String code,String msg){
         this.code = code;

@@ -12,8 +12,8 @@ public interface LiveStreamUserDao {
     void update(LiveStreamUser toBeUpdate);
 
 
-    @Insert("insert into live_stream_user(id, nickname, password,salt, head, area_code, register_date)values("
-            + "#{id}, #{nickName}, #{password}, #{salt}, #{head}, #{areaCode},#{registerDate} )")
+    @Insert("insert into live_stream_user(id, nickname, password,salt, head, area_code, register_date,role)values("
+            + "#{id}, #{nickName}, #{password}, #{salt}, #{head}, #{areaCode},#{registerDate},#{role})")
     @SelectKey(keyColumn="id", keyProperty="id", resultType=long.class, before=false, statement="select last_insert_id()")
     long insert(LiveStreamUser liveStreamUser);
     @Update("update live_stream_user set nickname = #{nickName} where id=#{id}")

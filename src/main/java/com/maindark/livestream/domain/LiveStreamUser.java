@@ -20,8 +20,9 @@ public class LiveStreamUser {
     private String head;
     private Date registerDate;
     private Date lastLoginDate;
-    private Integer loginCount;
+    private Integer loginTotal;
     private String areaCode;
+    private String role;
 
 
 }

@@ -3,6 +3,7 @@ package com.maindark.livestream.service;
 import com.alibaba.druid.util.StringUtils;
 import com.maindark.livestream.dao.LiveStreamUserDao;
 import com.maindark.livestream.domain.LiveStreamUser;
+import com.maindark.livestream.enums.RoleEnum;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.form.LiveStreamUserForm;
 import com.maindark.livestream.redis.LoginKey;
@@ -71,6 +72,7 @@ public class LiveStreamUserService {
         liveStreamUser.setId(Long.parseLong(liveStreamUserForm.getId()));
         liveStreamUser.setPassword(MD5Util.formPassToDBPass(liveStreamUserForm.getPassword(),SALT));
         liveStreamUser.setRegisterDate(new Date());
+        liveStreamUser.setRole(RoleEnum.USER.getRole());
         liveStreamUserDao.insert(liveStreamUser);
         return liveStreamUser;
     }
