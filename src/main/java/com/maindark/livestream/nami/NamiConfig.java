@@ -27,6 +27,10 @@ public class NamiConfig {
     private String footballRefereeUrl;
     private String footballCoachUrl;
     private String footballLiveAddress;
+    private String basketballCompetitionUrl;
+    private String basketballTeamUrl;
+    private String basketballMatchUrl;
+
 
 
 
