@@ -43,7 +43,7 @@ public class BasketballFundamentalTask {
 
     @Resource
     BasketballMatchDao basketballMatchDao;
-    @Scheduled(cron = "0 */10 * * * ?")
+    //@Scheduled(cron = "0 */10 * * * ?")
     public void getAllBasketballCompetition(){
         while (true) {
             String url = namiConfig.getIdUrl(namiConfig.getBasketballCompetitionUrl());
@@ -127,7 +127,7 @@ public class BasketballFundamentalTask {
     }
 
 
-    @Scheduled(cron = "0 */1 * * * ?")
+    //@Scheduled(cron = "0 */1 * * * ?")
     public void getAllBasketballTeam(){
         // Get all teams
         while(true) {
@@ -210,7 +210,7 @@ public class BasketballFundamentalTask {
         }
     }
 
-    @Scheduled(cron = "0 */1 * * * ?")
+   // @Scheduled(cron = "0 */1 * * * ?")
     public void getAllBasketballMatch(){
         while(true) {
             String url = namiConfig.getIdUrl(namiConfig.getBasketballMatchUrl());
