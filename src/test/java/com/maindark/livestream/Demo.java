@@ -47,10 +47,18 @@ public class Demo {
 
     public static void main(String[] args) throws Exception {
         LocalDate now = LocalDate.now();
+        //jintian yi jieshu mingtian wei kaisai  zuotian yijieshu
         LocalDate tomorrow = now.plusDays(1);
+        LocalDate future = now.plusDays(2);
+        LocalDate past = now.minusDays(1);
         long nowSeconds = DateUtil.convertDateToLongTime(now);
         long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+        long futureSeconds = DateUtil.convertDateToLongTime(future);
+        long pastSeconds = DateUtil.convertDateToLongTime(past);
+        System.out.println(pastSeconds);
         System.out.println(nowSeconds);
         System.out.println(tomorrowSeconds);
+        System.out.println(futureSeconds);
+
     }
 }

@@ -101,6 +101,11 @@ CREATE TABLE `basketball_line_up` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+create index basketball_match_indexTime on basketball_match(match_time);
+create index basketball_match_line_up_indexMatch on basketball_line_up(match_id,player_id);
+create index basketball_match_live_data_indexMatch on basketball_match_live_data(match_id);
+
+
 
 
 
