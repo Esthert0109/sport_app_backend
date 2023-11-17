@@ -1,5 +1,7 @@
 package com.maindark.livestream;
 
+import com.maindark.livestream.util.DateUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +32,7 @@ public class Demo {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public static Long convertDateToLongTime(LocalDate localDate){
@@ -43,8 +46,11 @@ public class Demo {
     }
 
     public static void main(String[] args) throws Exception {
-       // liveRtmpFeed();
-        Long nowDate = convertDateToLongTime(LocalDate.now());
-        System.out.println(nowDate);
+        LocalDate now = LocalDate.now();
+        LocalDate tomorrow = now.plusDays(1);
+        long nowSeconds = DateUtil.convertDateToLongTime(now);
+        long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+        System.out.println(nowSeconds);
+        System.out.println(tomorrowSeconds);
     }
 }

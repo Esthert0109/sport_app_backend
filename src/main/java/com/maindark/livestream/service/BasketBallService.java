@@ -2,13 +2,19 @@ package com.maindark.livestream.service;
 
 
 
+import com.maindark.livestream.dao.BasketballLineUpDao;
 import com.maindark.livestream.dao.BasketballMatchDao;
+import com.maindark.livestream.dao.BasketballMatchLiveDataDao;
+import com.maindark.livestream.domain.BasketballLineUp;
+import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.StreamToListUtil;
+import com.maindark.livestream.vo.BasketballMatchLineUpVo;
+import com.maindark.livestream.vo.BasketballMatchLiveDataVo;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +37,13 @@ public class BasketBallService {
 
     @Resource
     BasketballMatchDao basketballMatchDao;
+
+    @Resource
+    BasketballMatchLiveDataDao basketballMatchLiveDataDao;
+
+    @Resource
+    BasketballLineUpDao basketballLineUpDao;
+
 
 
     public List<BasketballMatchVo> getBasketballMatchList(String competitionName, String teamName, Pageable pageable) {
@@ -114,7 +127,7 @@ public class BasketBallService {
     public List<BasketballMatchVo> getMatchListByDate(String date, Pageable pageable, String checkData) {
         long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
-        List<BasketballMatchVo> basketballMatchVos = null;
+        List<BasketballMatchVo> basketballMatchVos;
         // query today's matches do not start
         if(StringUtils.equals("true",checkData)){
             LocalDate now = LocalDate.now();
@@ -141,6 +154,19 @@ public class BasketBallService {
         return basketballMatchVos;
     }
 
+    public BasketballMatchLineUpVo getBasketballMatchLineUpByMatchId(Long matchId) {
+        BasketballMatchLineUpVo basketballMatchLineUpVo = new BasketballMatchLineUpVo();
+        List<BasketballLineUp> home = basketballLineUpDao.getLineUpByMatchId(matchId, LineUpType.HOME.getType());
+        List<BasketballLineUp> away = basketballLineUpDao.getLineUpByMatchId(matchId, LineUpType.AWAY.getType());
+        basketballMatchLineUpVo.setHome(home);
+        basketballMatchLineUpVo.setAway(away);
+        return basketballMatchLineUpVo;
+    }
+
+    public BasketballMatchLiveDataVo getMatchLiveData(Long matchId) {
+        return basketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
+    }
+
 
     private List<BasketballMatchVo> getBasketballMatchVos(List<BasketballMatchVo> futureMatches) {
         if(futureMatches != null && !futureMatches.isEmpty()){
@@ -155,4 +181,6 @@ public class BasketBallService {
         }
         return futureMatches;
     }
+
+
 }

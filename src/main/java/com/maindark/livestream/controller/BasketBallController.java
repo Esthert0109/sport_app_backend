@@ -1,10 +1,8 @@
 package com.maindark.livestream.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.BasketBallService;
-import com.maindark.livestream.vo.BasketballMatchVo;
-import com.maindark.livestream.vo.FootballMatchVo;
+import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -85,6 +83,23 @@ public class BasketBallController {
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
         List<BasketballMatchVo> footballMatchVos = basketBallService.getMatchListByDate(date,request,checkData);
         return Result.success(footballMatchVos);
+    }
+
+
+    @GetMapping("/line-up/{matchId}")
+    public Result<BasketballMatchLineUpVo> getMatchLineUpByMatchId(@PathVariable("matchId")String matchId){
+        BasketballMatchLineUpVo basketballMatchLineUpVo = basketBallService.getBasketballMatchLineUpByMatchId(Long.parseLong(matchId));
+        return Result.success(basketballMatchLineUpVo);
+    }
+
+    /**
+     * get match live data
+     *
+     */
+    @GetMapping("/livedata/{matchId}")
+    public Result<BasketballMatchLiveDataVo> getFootballMatchLiveData(@PathVariable("matchId")String matchId){
+        BasketballMatchLiveDataVo basketballMatchLiveDataVo = basketBallService.getMatchLiveData(Long.parseLong(matchId));
+        return Result.success(basketballMatchLiveDataVo);
     }
 
 
