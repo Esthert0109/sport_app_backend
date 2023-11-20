@@ -32,6 +32,7 @@ public class NamiConfig {
     private String basketballMatchUrl;
     private String basketballLiveUrl;
     private String basketballLineUpUrl;
+    private String basketballDataUrl;
 
 
 

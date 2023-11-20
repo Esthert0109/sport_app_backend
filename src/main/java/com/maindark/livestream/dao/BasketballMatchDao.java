@@ -2,10 +2,7 @@ package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.BasketballMatch;
 import com.maindark.livestream.vo.BasketballMatchVo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -80,4 +77,7 @@ public interface BasketballMatchDao {
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id = 10 and b.match_time >=#{currentSeconds} " +
             "and b.match_time < #{deadlineSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
     List<BasketballMatchVo> getBasketballMatchFinished(Long currentSeconds, Long deadlineSeconds, Integer limit, long offset);
+
+    @Select("select count(1) from basketball_match where match_id=#{matchId}")
+    int queryExist(@Param("matchId") Long matchId);
 }

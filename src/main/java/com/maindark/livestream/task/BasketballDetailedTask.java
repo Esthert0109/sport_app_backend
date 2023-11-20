@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class BasketballDetailedTask {
     NamiConfig namiConfig;
     @Resource
     BasketballMatchLiveDataDao basketballMatchLiveDataDao;
-    //@Scheduled(cron = "0 */2 * * * ? ")
+    @Scheduled(cron = "0 */2 * * * ? ")
     public void getAllLiveData() {
         String url = namiConfig.getNormalUrl(namiConfig.getBasketballLiveUrl());
         String result = HttpUtil.getNaMiData(url);
@@ -104,36 +105,36 @@ public class BasketballDetailedTask {
         JSONArray statistics= (JSONArray) ml.get("stats");
         if(statistics != null && !statistics.isEmpty()){
             for(int i=0;i<statistics.size();i++){
-                List<Integer> statistic = (List<Integer>)statistics.get(i);
-                Integer type = statistic.get(0);
+                List<Object> statistic = (List<Object>)statistics.get(i);
+                Integer type = (Integer)statistic.get(0);
                 switch (type){
                     case 1:
-                        hThreeGoal= statistic.get(1);
-                        aThreeGoal = statistic.get(2);
+                        hThreeGoal= (Integer)statistic.get(1);
+                        aThreeGoal = (Integer)statistic.get(2);
                         break;
                     case 2:
-                        hTwoGoal = statistic.get(1);
-                        aTwoGoal = statistic.get(2);
+                        hTwoGoal = (Integer)statistic.get(1);
+                        aTwoGoal = (Integer)statistic.get(2);
                         break;
                     case 3:
-                        hPKickGoal = statistic.get(1);
-                        aPKickGoal = statistic.get(2);
+                        hPKickGoal = (Integer)statistic.get(1);
+                        aPKickGoal = (Integer)statistic.get(2);
                         break;
                     case 4:
-                        hNumPauseRemain = statistic.get(1);
-                        aNumPauseRemain = statistic.get(2);
+                        hNumPauseRemain = (Integer)statistic.get(1);
+                        aNumPauseRemain = (Integer)statistic.get(2);
                         break;
                     case 5:
-                        hNumOfFouls = statistic.get(1);
-                        aNumOfFouls = statistic.get(2);
+                        hNumOfFouls = (Integer)statistic.get(1);
+                        aNumOfFouls = (Integer)statistic.get(2);
                         break;
                     case 6:
-                        hFreeThrowPercentage = statistic.get(1);
-                        aFreeThrowPercentage = statistic.get(2);
+                        hFreeThrowPercentage = ((Number)statistic.get(1)).intValue();
+                        aFreeThrowPercentage = ((Number)statistic.get(2)).intValue();
                         break;
                     case 7:
-                        hTotalPause = statistic.get(1);
-                        aTotalPause = statistic.get(2);
+                        hTotalPause = (Integer) statistic.get(1);
+                        aTotalPause = (Integer)statistic.get(2);
                         break;
                 }
             }

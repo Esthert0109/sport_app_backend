@@ -32,7 +32,7 @@ public class BasketballMatchLineUpTask {
 
 
 
-    //@Scheduled(cron = "0 */2 * * * ? ")
+    @Scheduled(cron = "0 */2 * * * ? ")
     public void getMatchLineUp(){
         String url = namiConfig.getNormalUrl(namiConfig.getBasketballLiveUrl());
         String result = HttpUtil.getNaMiData(url);
@@ -92,15 +92,15 @@ public class BasketballMatchLineUpTask {
         Number playerId = (Number)objects.get(0);
         String playerName = (String)objects.get(1);
         String data = (String)objects.get(6);
-        String[] dataArr = data.split("^");
+        String[] dataArr = data.split("[/^]+",19);
         if(dataArr != null && dataArr.length >0) {
             String minutes = dataArr[0];
-            String fieldGoalsAttempts = dataArr[1].split("-")[0];
-            String fieldGoalsMade = dataArr[1].split("-")[1];
-            String threePointGoalsAttempts = dataArr[2].split("-")[0];
-            String threePointGoalsMade = dataArr[2].split("-")[1];
-            String freeThrowsGoalsAttempts = dataArr[3].split("-")[0];
-            String freeThrowsGoalsMade = dataArr[3].split("-")[1];
+            String fieldGoalsAttempts = dataArr[1].split("-",2)[0];
+            String fieldGoalsMade = dataArr[1].split("-",2)[1];
+            String threePointGoalsAttempts = dataArr[2].split("-",2)[0];
+            String threePointGoalsMade = dataArr[2].split("-",2)[1];
+            String freeThrowsGoalsAttempts = dataArr[3].split("-",2)[0];
+            String freeThrowsGoalsMade = dataArr[3].split("-",2)[1];
             String totalRebounds = dataArr[6];
             String assists = dataArr[7];
             String steals = dataArr[8];

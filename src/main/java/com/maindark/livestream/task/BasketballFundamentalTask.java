@@ -304,6 +304,7 @@ public class BasketballFundamentalTask {
         Number homeTeamId = (Number)matchMap.get("home_team_id");
         Number awayTeamId = (Number)matchMap.get("away_team_id");
         Integer statusId = (Integer)matchMap.get("status_id");
+        Integer kind = (Integer)matchMap.get("kind");
         Long matchTime = Long.valueOf((Integer) matchMap.get("match_time"));
         Integer homeScore = 0;
         Integer awayScore = 0;
@@ -351,6 +352,7 @@ public class BasketballFundamentalTask {
         basketballMatch.setHomeTeamId(homeTeamId.longValue());
         basketballMatch.setAwayTeamId(awayTeamId.longValue());
         basketballMatch.setStatusId(statusId);
+        basketballMatch.setKind(kind);
         basketballMatch.setHomeScore(homeScore);
         basketballMatch.setAwayScore(awayScore);
         basketballMatch.setMatchTime(matchTime);
