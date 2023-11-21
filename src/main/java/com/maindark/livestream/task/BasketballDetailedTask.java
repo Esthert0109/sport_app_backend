@@ -27,7 +27,7 @@ public class BasketballDetailedTask {
     NamiConfig namiConfig;
     @Resource
     BasketballMatchLiveDataDao basketballMatchLiveDataDao;
-    @Scheduled(cron = "0 */2 * * * ? ")
+//    @Scheduled(cron = "0 */2 * * * ? ")
     public void getAllLiveData() {
         String url = namiConfig.getNormalUrl(namiConfig.getBasketballLiveUrl());
         String result = HttpUtil.getNaMiData(url);

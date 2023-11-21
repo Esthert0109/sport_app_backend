@@ -17,6 +17,10 @@ public class AllSportsConfig {
     private String fixturesTeamId;
     private String livescore;
     private String players;
+    private String basketballHost;
+    private String basketballMatchUrl;
+    private String basketballLiveDataUrl;
+
 
     public String getAllSportsApi(String url){
         return this.host + url + this.secretKey;

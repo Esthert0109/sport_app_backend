@@ -32,7 +32,7 @@ public class BasketballMatchLineUpTask {
 
 
 
-    @Scheduled(cron = "0 */2 * * * ? ")
+//    @Scheduled(cron = "0 */2 * * * ? ")
     public void getMatchLineUp(){
         String url = namiConfig.getNormalUrl(namiConfig.getBasketballLiveUrl());
         String result = HttpUtil.getNaMiData(url);

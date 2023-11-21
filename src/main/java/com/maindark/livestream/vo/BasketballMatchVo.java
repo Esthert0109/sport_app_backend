@@ -2,6 +2,8 @@ package com.maindark.livestream.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class BasketballMatchVo {
     private Long id;
@@ -20,4 +22,5 @@ public class BasketballMatchVo {
     private String matchTimeStr;
     private String statusStr;
     private String matchDate;
+
 }

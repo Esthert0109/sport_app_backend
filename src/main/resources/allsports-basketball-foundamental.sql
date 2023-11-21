@@ -1,0 +1,44 @@
+DROP TABLE IF EXISTS `all_sports_basketball_match`;
+CREATE TABLE `all_sports_basketball_match` (
+   `match_id` bigint(20) NOT NULL  COMMENT 'match_id',
+   `competition_id` bigint(20) NOT NULL  COMMENT 'competition_id ',
+   `competition_name` varchar(128) COMMENT 'competition name',
+   `home_team_id` bigint(20) NOT NULL  COMMENT 'home team id',
+   `away_team_id` bigint(20) NOT NULL  COMMENT 'away team id',
+   `home_team_name` varchar(255) COMMENT 'home team name',
+   `away_team_name` varchar(255) COMMENT 'away team name',
+   `home_team_logo` varchar(255) COMMENT 'home team logo',
+   `away_team_logo` varchar(255) COMMENT 'away team logo',
+   `status` varchar(64) NOT NULL COMMENT 'status',
+   `match_time` varchar(16)  COMMENT 'match time',
+   `match_date` varchar(16)  COMMENT 'match date',
+   `home_score` int(3)  COMMENT 'home scores',
+   `away_score` int(3)  COMMENT 'away scores',
+   `season` varchar(32)  COMMENT 'season ',
+   `event_live` char(2)  COMMENT 'event live 0 no playing 1 playing ',
+    PRIMARY KEY (`match_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `all_sports_basketball_line_up`;
+CREATE TABLE `all_sports_basketball_line_up` (
+   `id` int(11) auto_increment COMMENT 'id',
+   `match_id` bigint(20) NOT NULL  COMMENT 'match_id',
+   `type` int(1) not null COMMENT '0 home 1 away',
+   `player_id` bigint(20) COMMENT 'player id',
+   `player_name` varchar(128) NOT NULL COMMENT 'player_name',
+   `minutes` varchar(8)  COMMENT 'minutes',
+   `point` varchar(8)  COMMENT 'point',
+   `assists` varchar(8)  COMMENT 'assists',
+   `steals` varchar(8)  COMMENT 'steals',
+   `total_rebounds` varchar(8)  COMMENT 'totalRebounds',
+   `free_throws_goals_attempts` varchar(8)  COMMENT 'freeThrowsGoalsAttempts',
+   `free_throws_goals_made` varchar(8)  COMMENT 'freeThrowsGoalsAttempts',
+   `personal_fouls` varchar(8)  COMMENT 'personalFouls',
+   `turnovers` varchar(8)  COMMENT 'turnovers',
+   `three_point_goals_attempts` varchar(8)  COMMENT 'threePointGoalsAttempts',
+   `three_point_goals_made` varchar(8)  COMMENT 'threePointGoalsMade',
+   `blocks` varchar(8) COMMENT 'blocks',
+   `field_goals_attempts` varchar(8)  COMMENT 'fieldGoalsAttempts',
+   `field_goals_made` varchar(8)  COMMENT 'fieldGoalsMade',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

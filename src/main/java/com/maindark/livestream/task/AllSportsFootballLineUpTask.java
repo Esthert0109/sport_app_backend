@@ -26,7 +26,7 @@ import java.util.Map;
 @Component
 @Slf4j
 @EnableScheduling
-public class AllSportsFootballTask {
+public class AllSportsFootballLineUpTask {
 
     @Resource
     AllSportsConfig allSportsConfig;
