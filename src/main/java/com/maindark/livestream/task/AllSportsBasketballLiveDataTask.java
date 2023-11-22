@@ -3,7 +3,7 @@ package com.maindark.livestream.task;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.maindark.livestream.allSports.AllSportsConfig;
-import com.maindark.livestream.dao.AllSportsBasketballMatchDao;
+import com.maindark.livestream.dao.AllSportsBasketballMatchLiveDataDao;
 import com.maindark.livestream.domain.AllSportsBasketballMatchLiveData;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
@@ -23,7 +23,7 @@ public class AllSportsBasketballLiveDataTask {
     @Resource
     AllSportsConfig allSportsConfig;
     @Resource
-    AllSportsBasketballMatchDao allSportsBasketballMatchDao;
+    AllSportsBasketballMatchLiveDataDao allSportsBasketballMatchLiveDataDao;
 
     @Scheduled(cron = "0 */2 * * * ?")
     public void getAllLiveData() {
@@ -37,6 +37,12 @@ public class AllSportsBasketballLiveDataTask {
                 if (matches != null && !matches.isEmpty()) {
                     matches.stream().forEach(ml -> {
                         AllSportsBasketballMatchLiveData allSportsBasketballMatchLiveData = insertOrUpdateLiveData(ml);
+                        int exist = allSportsBasketballMatchLiveDataDao.queryExist(allSportsBasketballMatchLiveData.getMatchId());
+                        if(exist <=0) {
+                            allSportsBasketballMatchLiveDataDao.insertData(allSportsBasketballMatchLiveData);
+                        } else {
+                            allSportsBasketballMatchLiveDataDao.updateData(allSportsBasketballMatchLiveData);
+                        }
                     });
                 }
             }
@@ -55,57 +61,58 @@ public class AllSportsBasketballLiveDataTask {
         Integer aSQuarter = 0;
         Integer aTQuarter = 0;
         Integer a4Quarter = 0;
-        Integer hPKickGoal = 0;
-        Integer hNumPauseRemain = 0;
-        Integer hNumOfFouls = 0;
-        Integer hFreeThrowPercentage = 0;
-        Integer hTotalPause = 0;
-        Integer hThreeGoal = 0;
-        Integer hTwoGoal = 0;
-        Integer aPKickGoal = 0;
-        Integer aNumPauseRemain = 0;
-        Integer aNumOfFouls = 0;
-        Integer aFreeThrowPercentage = 0;
-        Integer aTotalPause = 0;
-        Integer aThreeGoal = 0;
-        Integer aTwoGoal = 0;
-
-        if(scores != null && !scores.isEmpty()) {
+        String hBlocks = "";
+        String hFieldGoals = "";
+        String hFreeThrows = "";
+        String hPersonalFouls = "";
+        String hRebounds = "";
+        String hSteals = "";
+        String hThreePointGoals = "";
+        String hTurnOvers = "";
+        String aBlocks = "";
+        String aFieldGoals = "";
+        String aFreeThrows = "";
+        String aPersonalFouls = "";
+        String aRebounds = "";
+        String aSteals = "";
+        String aThreePointGoals = "";
+        String aTurnOvers = "";
+        if (scores != null && !scores.isEmpty()) {
             JSONArray fQuarter = (JSONArray) scores.get("1stQuarter");
             JSONArray sQuarter = (JSONArray) scores.get("1stQuarter");
             JSONArray tQuarter = (JSONArray) scores.get("1stQuarter");
             JSONArray f4Quarter = (JSONArray) scores.get("1stQuarter");
-            if(fQuarter != null && !fQuarter.isEmpty()) {
+            if (fQuarter != null && !fQuarter.isEmpty()) {
                 for (Object o : fQuarter) {
                     Map<String, Object> map = (Map<String, Object>) o;
-                    hFQuarter = Integer.valueOf((String)map.get("score_home"));
-                    aFQuarter = Integer.valueOf((String)map.get("score_away"));
+                    hFQuarter = Integer.valueOf((String) map.get("score_home"));
+                    aFQuarter = Integer.valueOf((String) map.get("score_away"));
                 }
             }
-            if(sQuarter != null && !sQuarter.isEmpty()) {
+            if (sQuarter != null && !sQuarter.isEmpty()) {
                 for (Object o : sQuarter) {
                     Map<String, Object> map = (Map<String, Object>) o;
-                    hSQuarter = Integer.valueOf((String)map.get("score_home"));
-                    aSQuarter = Integer.valueOf((String)map.get("score_away"));
+                    hSQuarter = Integer.valueOf((String) map.get("score_home"));
+                    aSQuarter = Integer.valueOf((String) map.get("score_away"));
                 }
             }
-            if(tQuarter != null && !tQuarter.isEmpty()) {
+            if (tQuarter != null && !tQuarter.isEmpty()) {
                 for (Object o : tQuarter) {
                     Map<String, Object> map = (Map<String, Object>) o;
-                    hTQuarter = Integer.valueOf((String)map.get("score_home"));
-                    aTQuarter = Integer.valueOf((String)map.get("score_away"));
+                    hTQuarter = Integer.valueOf((String) map.get("score_home"));
+                    aTQuarter = Integer.valueOf((String) map.get("score_away"));
                 }
             }
-            if(f4Quarter != null && !f4Quarter.isEmpty()) {
+            if (f4Quarter != null && !f4Quarter.isEmpty()) {
                 for (Object o : f4Quarter) {
                     Map<String, Object> map = (Map<String, Object>) o;
-                    h4Quarter = Integer.valueOf((String)map.get("score_home"));
-                    a4Quarter = Integer.valueOf((String)map.get("score_away"));
+                    h4Quarter = Integer.valueOf((String) map.get("score_home"));
+                    a4Quarter = Integer.valueOf((String) map.get("score_away"));
                 }
             }
         }
         String score = (String) ml.get("event_final_result");
-        if(!StringUtils.equals("",score)) {
+        if (!StringUtils.equals("", score)) {
             String[] scoreArr = score.split("-");
             if (scoreArr.length > 0) {
                 allSportsBasketballMatchLiveData.setHomeScore(Integer.parseInt(scoreArr[0].trim()));
@@ -117,84 +124,75 @@ public class AllSportsBasketballLiveDataTask {
             allSportsBasketballMatchLiveData.setHomeScore(homeScore);
             allSportsBasketballMatchLiveData.setAwayScore(awayScore);
         }
-        JSONArray statistics= (JSONArray) ml.get("statistics");
-        if(statistics != null && !statistics.isEmpty()) {
+        JSONArray statistics = (JSONArray) ml.get("statistics");
+        if (statistics != null && !statistics.isEmpty()) {
             for (Object o : statistics) {
                 Map<String, Object> statistic = (Map<String, Object>) o;
                 String type = (String) statistic.get("type");
-//                Field Goal Attempts
-//                Attempts FreeThrows
-//                Attempts Threepoint Goals
-//                Defense Rebounds
-//                Offense Rebounds
-//                Field Goals Pct
-//                FreeThrows Pct
-//                Pct Threepoint Goals
-//                Total Assists
-//                Total Blocks
-//                Total Field Goals
-//                Total FreeThrows
-//                Total Personal Fouls
-//                Total Rebounds
-//                Total Steals
-//                Total Threepoint Goals
-//                Total Turnovers
-
-                /* 罚球进球数 */
-//                private Integer hPKickGoal;
-//                /*剩余暂停数*/
-//                private Integer hNumPauseRemain;
-//                /*  犯规数 */
-//                private Integer hNumOfFouls;
-//                /* 罚球命中率 */
-//                private Integer hFreeThrowPercentage;
-//                /* 总暂停数 */
-//                private Integer hTotalPause;
-//                /* 3分球进球数*/
-//                private Integer hThreeGoal;
                 switch (type) {
-                    case "Attacks":
-                        hThreeGoal = Integer.parseInt((String) statistic.get("home"));
-                        aThreeGoal = Integer.parseInt((String) statistic.get("away"));
+                    case "Total Blocks":
+                        hBlocks = (String) statistic.get("home");
+                        aBlocks = (String) statistic.get("away");
                         break;
-                    case "Dangerous Attacks":
-                        hThreeGoal = Integer.parseInt((String) statistic.get("home"));
-                        aThreeGoal = Integer.parseInt((String) statistic.get("away"));
+                    case "Total Field Goals":
+                        hFieldGoals = (String) statistic.get("home");
+                        aFieldGoals = (String) statistic.get("away");
                         break;
-                    case "Off Target":
-                        hThreeGoal = Integer.parseInt((String) statistic.get("home"));
-                        aThreeGoal = Integer.parseInt((String) statistic.get("away"));
-                        break;
-                    case "Shots On Goal":
-                        hThreeGoal = Integer.parseInt((String) statistic.get("home"));
-                        aThreeGoal = Integer.parseInt((String) statistic.get("away"));
-                        break;
-                    case "Ball Possession":
-                        hThreeGoal = Integer.parseInt((String) statistic.get("home"));
-                        aThreeGoal = Integer.parseInt((String) statistic.get("away"));
-                        break;
-                    case "FreeThrows Pct":
-                        hFreeThrowPercentage = Integer.parseInt((String) statistic.get("home"));
-                        aFreeThrowPercentage = Integer.parseInt((String) statistic.get("away"));
-                        break;
-                    case "FreeThrows":
-                        hPKickGoal = Integer.parseInt((String) statistic.get("home"));
-                        aPKickGoal = Integer.parseInt((String) statistic.get("away"));
+                    case "Total FreeThrows":
+                        hFreeThrows = (String) statistic.get("home");
+                        aFreeThrows = (String) statistic.get("away");
                         break;
                     case "Total Personal Fouls":
-                        hNumOfFouls = Integer.parseInt((String) statistic.get("home"));
-                        aNumOfFouls = Integer.parseInt((String) statistic.get("away"));
+                        hPersonalFouls = (String) statistic.get("home");
+                        aPersonalFouls = (String) statistic.get("away");
+                        break;
+                    case "Total Rebounds":
+                        hRebounds = (String) statistic.get("home");
+                        aRebounds = (String) statistic.get("away");
+                        break;
+                    case "Total Steals":
+                        hSteals = (String) statistic.get("home");
+                        aSteals = (String) statistic.get("away");
+                        break;
+                    case "Total Turnovers":
+                        hTurnOvers = (String) statistic.get("home");
+                        aTurnOvers = (String) statistic.get("away");
                         break;
                     case "Total Threepoint Goals":
-                        hThreeGoal = Integer.parseInt((String) statistic.get("home"));
-                        aThreeGoal = Integer.parseInt((String) statistic.get("away"));
+                        hThreePointGoals = (String) statistic.get("home");
+                        aThreePointGoals = (String) statistic.get("away");
                         break;
-
                 }
+
+
             }
         }
-        return null;
+        allSportsBasketballMatchLiveData.setMatchId(matchId.longValue());
+        allSportsBasketballMatchLiveData.setHFQuarter(hFQuarter);
+        allSportsBasketballMatchLiveData.setHSQuarter(hSQuarter);
+        allSportsBasketballMatchLiveData.setHTQuarter(hTQuarter);
+        allSportsBasketballMatchLiveData.setH4Quarter(h4Quarter);
+        allSportsBasketballMatchLiveData.setAFQuarter(aFQuarter);
+        allSportsBasketballMatchLiveData.setASQuarter(aSQuarter);
+        allSportsBasketballMatchLiveData.setATQuarter(aTQuarter);
+        allSportsBasketballMatchLiveData.setA4Quarter(a4Quarter);
+        allSportsBasketballMatchLiveData.setHBlocks(hBlocks);
+        allSportsBasketballMatchLiveData.setHFieldGoals(hFieldGoals);
+        allSportsBasketballMatchLiveData.setHSteals(hSteals);
+        allSportsBasketballMatchLiveData.setHFreeThrows(hFreeThrows);
+        allSportsBasketballMatchLiveData.setHThreePointGoals(hThreePointGoals);
+        allSportsBasketballMatchLiveData.setHRebounds(hRebounds);
+        allSportsBasketballMatchLiveData.setHPersonalFouls(hPersonalFouls);
+        allSportsBasketballMatchLiveData.setHTurnOvers(hTurnOvers);
+        allSportsBasketballMatchLiveData.setABlocks(aBlocks);
+        allSportsBasketballMatchLiveData.setAFieldGoals(aFieldGoals);
+        allSportsBasketballMatchLiveData.setASteals(aSteals);
+        allSportsBasketballMatchLiveData.setARebounds(aRebounds);
+        allSportsBasketballMatchLiveData.setAFreeThrows(aFreeThrows);
+        allSportsBasketballMatchLiveData.setAPersonalFouls(aPersonalFouls);
+        allSportsBasketballMatchLiveData.setATurnOvers(aTurnOvers);
+        allSportsBasketballMatchLiveData.setAThreePointGoals(aThreePointGoals);
+        return allSportsBasketballMatchLiveData;
     }
-
 
 }

@@ -2,7 +2,9 @@ package com.maindark.livestream.controller;
 
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.AllSportsBasketballService;
+import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
 import com.maindark.livestream.vo.BasketballMatchLineUpVo;
+import com.maindark.livestream.vo.BasketballMatchLiveDataVo;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -94,5 +96,16 @@ public class AllSportsBasketballController {
         BasketballMatchLineUpVo basketballMatchLineUpVo = allSportsBasketballService.getBasketballMatchLineUpByMatchId(Long.parseLong(matchId));
         return Result.success(basketballMatchLineUpVo);
     }
+
+    /**
+     * get match live data
+     *
+     */
+    @GetMapping("/livedata/{matchId}")
+    public Result<AllSportsBasketballLiveDataVo> getBasketballMatchLiveData(@PathVariable("matchId")String matchId){
+        AllSportsBasketballLiveDataVo basketballMatchLiveDataVo = allSportsBasketballService.getMatchLiveData(Long.parseLong(matchId));
+        return Result.success(basketballMatchLiveDataVo);
+    }
+
 
 }

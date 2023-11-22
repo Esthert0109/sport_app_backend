@@ -2,15 +2,16 @@ package com.maindark.livestream.service;
 
 import com.maindark.livestream.dao.AllSportsBasketballLineUpDao;
 import com.maindark.livestream.dao.AllSportsBasketballMatchDao;
+import com.maindark.livestream.dao.AllSportsBasketballMatchLiveDataDao;
 import com.maindark.livestream.domain.BasketballLineUp;
 import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.StreamToListUtil;
+import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
 import com.maindark.livestream.vo.BasketballMatchLineUpVo;
 import com.maindark.livestream.vo.BasketballMatchVo;
-import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,9 @@ public class AllSportsBasketballService {
 
     @Resource
     AllSportsBasketballLineUpDao allSportsBasketballLineUpDao;
+
+    @Resource
+    AllSportsBasketballMatchLiveDataDao allSportsBasketballMatchLiveDataDao;
 
     public List<BasketballMatchVo> getBasketBallMatchList(String competitionName, String teamName, Pageable pageable) {
         int pageSize = pageable.getPageSize();
@@ -117,5 +121,9 @@ public class AllSportsBasketballService {
         basketballMatchLineUpVo.setHome(home);
         basketballMatchLineUpVo.setAway(away);
         return basketballMatchLineUpVo;
+    }
+
+    public AllSportsBasketballLiveDataVo getMatchLiveData(Long matchId) {
+        return allSportsBasketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
     }
 }

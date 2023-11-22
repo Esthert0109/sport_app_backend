@@ -1,14 +1,9 @@
-package com.maindark.livestream.domain;
+package com.maindark.livestream.vo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.Data;
 
-@Entity
 @Data
-public class AllSportsBasketballMatchLiveData {
-    @Id
-    private Integer id;
+public class AllSportsBasketballLiveDataVo {
     private Long matchId;
     private Integer hFQuarter;
     private Integer hSQuarter;
@@ -36,6 +31,4 @@ public class AllSportsBasketballMatchLiveData {
     private String aTurnOvers;
     private Integer homeScore;
     private Integer awayScore;
-
-
 }
