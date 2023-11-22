@@ -42,3 +42,38 @@ CREATE TABLE `all_sports_basketball_line_up` (
    `field_goals_made` varchar(8)  COMMENT 'fieldGoalsMade',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `all_sports_basketball_match_live_data`;
+CREATE TABLE `all_sports_basketball_match_live_data` (
+    `id` int(11) auto_increment COMMENT 'id',
+    `match_id` bigint(20) NOT NULL  COMMENT 'match_id',
+    `h_f_quarter` int(3) NOT NULL COMMENT 'hf_quarter',
+    `h_s_quarter` int(3) NOT NULL COMMENT 'hs_quarter',
+    `h_t_quarter` int(3) NOT NULL COMMENT 'ht_quarter',
+    `h_4_quarter` int(3) NOT NULL COMMENT 'h4_quarter',
+    `a_f_quarter` int(3) NOT NULL COMMENT 'af_quarter',
+    `a_s_quarter` int(3) NOT NULL COMMENT 'as_quarter',
+    `a_t_quarter` int(3) NOT NULL COMMENT 'at_quarter',
+    `a_4_quarter` int(3) NOT NULL COMMENT 'a4_quarter',
+    `h_P_KickGoal` int(3) NOT NULL COMMENT '罚球进球数',
+    `h_Num_Pause_Remain` int(3) NOT NULL COMMENT '剩余暂停数',
+    `h_Num_Of_Fouls` int(3) NOT NULL COMMENT '犯规数',
+    `h_Free_Throw_Percentage` int(3) NOT NULL COMMENT '罚球命中率',
+    `h_Total_Pause` int(2) NOT NULL COMMENT '总暂停数',
+    `h_Two_Goal` int(3) NOT NULL COMMENT '3分球进球数',
+    `h_Three_Goal` int(3) NOT NULL COMMENT '2分球进球数',
+    `a_P_KickGoal` int(3) NOT NULL COMMENT 'season id',
+    `a_Num_Pause_Remain` int(3) NOT NULL COMMENT 'season id',
+    `a_Num_OfFouls` int(3) NOT NULL COMMENT 'season id',
+    `a_Free_Throw_Percentage` int(3) NOT NULL COMMENT 'season id',
+    `a_Total_Pause` int(3) NOT NULL COMMENT 'season id',
+    `a_Two_Goal` int(3) NOT NULL COMMENT 'season id',
+    `a_Three_Goal` int(3) NOT NULL COMMENT 'home scores',
+    `home_score` int(3) NOT NULL COMMENT 'home score',
+    `away_score` int(3) NOT NULL COMMENT 'away score',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+create index all_sports_basketball_match_indexTime on all_sports_basketball_match(match_date);
+create index all_sports_basketball_match_line_up_indexMatch on all_sports_basketball_line_up(match_id,player_id);
+create index all_sports_basketball_match_live_data_indexMatch on all_sports_basketball_match_live_data(match_id);
