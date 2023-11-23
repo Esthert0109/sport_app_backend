@@ -10,6 +10,7 @@ public class BasketballMatchLiveData {
     @Id
     private Integer id;
     private Long matchId;
+    private Integer status;
     private Integer hFQuarter;
     private Integer hSQuarter;
     private Integer hTQuarter;

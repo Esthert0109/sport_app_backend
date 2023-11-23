@@ -5,6 +5,13 @@ import lombok.Data;
 @Data
 public class AllSportsBasketballLiveDataVo {
     private Long matchId;
+    private String homeTeamName;
+    private String awayTeamName;
+    private String homeTeamLogo;
+    private String awayTeamLogo;
+    private String matchTime;
+    private String matchDate;
+    private String statusStr;
     private Integer hFQuarter;
     private Integer hSQuarter;
     private Integer hTQuarter;

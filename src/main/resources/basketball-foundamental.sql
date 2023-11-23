@@ -50,6 +50,7 @@ DROP TABLE IF EXISTS `basketball_match_live_data`;
 CREATE TABLE `basketball_match_live_data` (
    `id` int(11) auto_increment COMMENT 'id',
    `match_id` bigint(20) NOT NULL  COMMENT 'match_id',
+   `status` int(2) NOT NULL COMMENT 'status',
    `h_f_quarter` int(3) NOT NULL COMMENT 'hf_quarter',
    `h_s_quarter` int(3) NOT NULL COMMENT 'hs_quarter',
    `h_t_quarter` int(3) NOT NULL COMMENT 'ht_quarter',
@@ -104,6 +105,7 @@ CREATE TABLE `basketball_line_up` (
 create index basketball_match_indexTime on basketball_match(match_time);
 create index basketball_match_line_up_indexMatch on basketball_line_up(match_id,player_id);
 create index basketball_match_live_data_indexMatch on basketball_match_live_data(match_id);
+alter table basketball_match_live_data add column status int(2) comment 'status';
 
 
 

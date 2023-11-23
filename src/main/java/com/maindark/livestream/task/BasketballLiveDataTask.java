@@ -11,17 +11,15 @@ import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 @Component
 @Slf4j
 @EnableScheduling
-public class BasketballDetailedTask {
+public class BasketballLiveDataTask {
 
     @Resource
     NamiConfig namiConfig;
@@ -56,6 +54,7 @@ public class BasketballDetailedTask {
 
     public BasketballMatchLiveData insertOrUpdateMatchLiveData(Map<String, Object> ml) {
         Number matchId = (Number) ml.get("id");
+        Integer status = 0;
         Integer hFQuarter = 0;
         Integer hSQuarter = 0;
         Integer hTQuarter = 0;
@@ -69,6 +68,7 @@ public class BasketballDetailedTask {
 
         List<Object> score = (List<Object>) ml.get("score");
         if(score != null && !score.isEmpty()) {
+            status = (Integer)score.get(1);
             List<Integer> homeQuarters = (List<Integer>)score.get(3);
             if(homeQuarters != null && !homeQuarters.isEmpty()) {
                 hFQuarter = homeQuarters.get(0);
@@ -141,6 +141,7 @@ public class BasketballDetailedTask {
         }
         BasketballMatchLiveData basketballMatchLiveData = new BasketballMatchLiveData();
         basketballMatchLiveData.setMatchId(matchId.longValue());
+        basketballMatchLiveData.setStatus(status);
         basketballMatchLiveData.setHFQuarter(hFQuarter);
         basketballMatchLiveData.setHSQuarter(hSQuarter);
         basketballMatchLiveData.setHTQuarter(hTQuarter);

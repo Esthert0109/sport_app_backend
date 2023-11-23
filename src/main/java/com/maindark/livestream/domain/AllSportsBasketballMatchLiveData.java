@@ -10,6 +10,13 @@ public class AllSportsBasketballMatchLiveData {
     @Id
     private Integer id;
     private Long matchId;
+    private String status;
+    private String matchTime;
+    private String matchDate;
+    private String homeTeamName;
+    private String awayTeamName;
+    private String homeTeamLogo;
+    private String awayTeamLogo;
     private Integer hFQuarter;
     private Integer hSQuarter;
     private Integer hTQuarter;

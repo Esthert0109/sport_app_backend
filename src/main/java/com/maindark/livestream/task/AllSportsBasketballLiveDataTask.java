@@ -52,6 +52,14 @@ public class AllSportsBasketballLiveDataTask {
     private AllSportsBasketballMatchLiveData insertOrUpdateLiveData(Map<String, Object> ml) {
         AllSportsBasketballMatchLiveData allSportsBasketballMatchLiveData = new AllSportsBasketballMatchLiveData();
         Number matchId = (Number) ml.get("event_key");
+        String status = (String)ml.get("event_status");
+        String matchTime = (String) ml.get("event_time");
+        String matchDate = (String) ml.get("event_date");
+        String homeTeamName = (String) ml.get("event_home_team");
+        String awayTeamName = (String) ml.get("event_away_team");
+        String homeTeamLogo = (String) ml.get("event_home_team_logo");
+        String awayTeamLogo = (String) ml.get("event_away_team_logo");
+
         Map<String, Object> scores = (Map<String, Object>) ml.get("scores");
         Integer hFQuarter = 0;
         Integer hSQuarter = 0;
@@ -192,6 +200,13 @@ public class AllSportsBasketballLiveDataTask {
         allSportsBasketballMatchLiveData.setAPersonalFouls(aPersonalFouls);
         allSportsBasketballMatchLiveData.setATurnOvers(aTurnOvers);
         allSportsBasketballMatchLiveData.setAThreePointGoals(aThreePointGoals);
+        allSportsBasketballMatchLiveData.setStatus(status);
+        allSportsBasketballMatchLiveData.setMatchTime(matchTime);
+        allSportsBasketballMatchLiveData.setMatchDate(matchDate);
+        allSportsBasketballMatchLiveData.setHomeTeamName(homeTeamName);
+        allSportsBasketballMatchLiveData.setAwayTeamName(awayTeamName);
+        allSportsBasketballMatchLiveData.setHomeTeamLogo(homeTeamLogo);
+        allSportsBasketballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
         return allSportsBasketballMatchLiveData;
     }
 

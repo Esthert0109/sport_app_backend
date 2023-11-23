@@ -97,7 +97,7 @@ DROP TABLE IF EXISTS `all_sports_football_match_live_data`;
 CREATE TABLE `all_sports_football_match_live_data` (
   `id` int  NOT NULL auto_increment    COMMENT 'id',
   `match_id` bigint not null COMMENT 'match id',
-  `status` bigint COMMENT 'football status',
+  `status` varchar(16) COMMENT 'football status',
   `match_time` varchar(8) COMMENT 'match time',
   `match_date` varchar(32) COMMENT 'match_date',
   `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
