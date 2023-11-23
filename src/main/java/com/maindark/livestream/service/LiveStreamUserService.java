@@ -43,7 +43,7 @@ public class LiveStreamUserService {
         }
         LiveStreamUser liveStreamUser = redisService.get(LoginKey.token,token,LiveStreamUser.class);
         if(liveStreamUser != null) {
-            addCookie(response,liveStreamUser);
+            addCookie(response,liveStreamUser,token);
         }
 
         return liveStreamUser;
@@ -97,6 +97,24 @@ public class LiveStreamUserService {
         return true;
     }
 
+    public boolean updatePasswordByForgotType(long id, String formPass) {
+        //get user
+        LiveStreamUser user = getById(id);
+        if(user == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+
+        //update database
+        LiveStreamUser toBeUpdate = new LiveStreamUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
+        liveStreamUserDao.update(toBeUpdate);
+
+        //manage cache
+        user.setPassword(toBeUpdate.getPassword());
+        return true;
+    }
+
     public boolean updateNickName(String token, Long id, String nickName) {
         //get user
         LiveStreamUser user = getById(id);
@@ -112,7 +130,6 @@ public class LiveStreamUserService {
         //manage cache
         redisService.delete(UserKey.getById, ""+id);
         user.setNickName(toBeUpdate.getNickName());
-        token = UUIDUtil.uuid();
         redisService.set(LoginKey.token, token, user);
         return true;
     }
@@ -134,8 +151,8 @@ public class LiveStreamUserService {
         redisService.set(LoginKey.token, token, user);
         return true;
     }
-    private void addCookie(HttpServletResponse response,LiveStreamUser liveStreamUser){
-        String token = UUIDUtil.uuid();
+    private void addCookie(HttpServletResponse response,LiveStreamUser liveStreamUser,String token){
+        //String token = UUIDUtil.uuid();
         redisService.set(LoginKey.token,token,liveStreamUser);
         Cookie cookie = new Cookie(COOK_NAME_TOKEN,token);
         cookie.setMaxAge(LoginKey.token.expireSeconds());

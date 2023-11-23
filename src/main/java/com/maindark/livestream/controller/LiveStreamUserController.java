@@ -38,6 +38,14 @@ public class LiveStreamUserController {
        return Result.success(res);
     }
 
+    @PatchMapping("/updatePassByForgot/{id}")
+    public Result<Boolean> updatePassByForgotType(@PathVariable("id")String id, @Valid @RequestBody ResetPasswordVo resetPasswordVo){
+        String password = resetPasswordVo.getPassword();
+        log.info("update pass by forgot type:id: {}",id);
+        Boolean res = liveStreamUserService.updatePasswordByForgotType(Long.parseLong(id),password);
+        return Result.success(res);
+    }
+
     @PostMapping("/create")
     public Result<Boolean> createUser(@RequestBody @Valid LiveStreamUserForm liveStreamUserForm){
        liveStreamUserService.save(liveStreamUserForm);
