@@ -181,7 +181,6 @@ public class FootBallService {
       Stream<FootballMatchVo> footballMatchVoStream = futureMatches.stream().map(vo ->{
         vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
         vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
-        vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
         vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
         return vo;
       });

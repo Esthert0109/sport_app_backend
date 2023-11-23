@@ -164,14 +164,24 @@ public class BasketBallService {
     }
 
     public BasketballMatchLiveDataVo getMatchLiveData(Long matchId) {
-        return basketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
+        BasketballMatchLiveDataVo basketballMatchLiveDataVo =  basketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
+        BasketballMatchVo basketballMatchVo = basketballMatchDao.getBasketBallMatchById(matchId);
+        if(basketballMatchVo != null) {
+            basketballMatchLiveDataVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchLiveDataVo.getStatus()));
+            basketballMatchLiveDataVo.setMatchTimeStr(DateUtil.interceptTime(basketballMatchVo.getMatchTime()*1000));
+            basketballMatchLiveDataVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(basketballMatchVo.getMatchTime() * 1000));
+            basketballMatchLiveDataVo.setHomeTeamName(basketballMatchVo.getHomeTeamName());
+            basketballMatchLiveDataVo.setAwayTeamName(basketballMatchVo.getAwayTeamName());
+            basketballMatchLiveDataVo.setHomeTeamLogo(basketballMatchVo.getHomeTeamLogo());
+            basketballMatchLiveDataVo.setAwayTeamLogo(basketballMatchVo.getAwayTeamLogo());
+        }
+        return basketballMatchLiveDataVo;
     }
 
 
     private List<BasketballMatchVo> getBasketballMatchVos(List<BasketballMatchVo> futureMatches) {
         if(futureMatches != null && !futureMatches.isEmpty()){
             Stream<BasketballMatchVo> basketballMatchVoStream = futureMatches.stream().map(vo ->{
-                vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
                 vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
                 vo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
                 vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));

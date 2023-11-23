@@ -80,4 +80,7 @@ public interface BasketballMatchDao {
 
     @Select("select count(1) from basketball_match where match_id=#{matchId}")
     int queryExist(@Param("matchId") Long matchId);
+
+    @Select("select match_time,home_team_name,away_team_name,home_team_logo,away_team_logo from basketball_match where match_id=#{matchId}")
+    BasketballMatchVo getBasketBallMatchById(@Param("matchId") Long matchId);
 }
