@@ -87,9 +87,9 @@ public class AllSportsBasketballLiveDataTask {
         String aTurnOvers = "";
         if (scores != null && !scores.isEmpty()) {
             JSONArray fQuarter = (JSONArray) scores.get("1stQuarter");
-            JSONArray sQuarter = (JSONArray) scores.get("1stQuarter");
-            JSONArray tQuarter = (JSONArray) scores.get("1stQuarter");
-            JSONArray f4Quarter = (JSONArray) scores.get("1stQuarter");
+            JSONArray sQuarter = (JSONArray) scores.get("2ndQuarter");
+            JSONArray tQuarter = (JSONArray) scores.get("3rdQuarter");
+            JSONArray f4Quarter = (JSONArray) scores.get("4thQuarter");
             if (fQuarter != null && !fQuarter.isEmpty()) {
                 for (Object o : fQuarter) {
                     Map<String, Object> map = (Map<String, Object>) o;

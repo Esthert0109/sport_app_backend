@@ -134,7 +134,7 @@ public class AllSportsBasketballLineUpTask {
 
     private AllSportsBasketballLineUp getAllSportsLineUp(Map<String, Object> ml, Long matchId, Integer teamType) {
         AllSportsBasketballLineUp allSportsBasketballLineUp = new AllSportsBasketballLineUp();
-        Long playerId = Long.valueOf((String) ml.get("player_id"));
+        Number playerId = (Number) ml.get("player_id");
         String playerName = (String) ml.get("player");
         /*出场时间*/
         String minutes = (String) ml.get("player_minutes");
@@ -155,7 +155,7 @@ public class AllSportsBasketballLineUpTask {
         /*失误*/
         String turnovers = (String) ml.get("player_turnovers");
         /*三分 总数*/
-        String threePointGoalsAttempts = (String) ml.get("player_threepoint_goals_attempts  ");
+        String threePointGoalsAttempts = (String) ml.get("player_threepoint_goals_attempts");
         /*三分命中*/
         String threePointGoalsMade = (String) ml.get("player_threepoint_goals_made");
         /*盖帽*/
@@ -164,7 +164,7 @@ public class AllSportsBasketballLineUpTask {
         String fieldGoalsAttempts = (String) ml.get("player_field_goals_attempts");
         /*投篮命中*/
         String fieldGoalsMade = (String) ml.get("player_field_goals_made");
-        allSportsBasketballLineUp.setPlayerId(playerId);
+        allSportsBasketballLineUp.setPlayerId(playerId.longValue());
         allSportsBasketballLineUp.setMatchId(matchId);
         allSportsBasketballLineUp.setType(teamType);
         allSportsBasketballLineUp.setPlayerName(playerName);
