@@ -27,7 +27,7 @@ public class AllSportsBasketballLiveDataTask {
 
     @Scheduled(cron = "0 */2 * * * ?")
     public void getAllLiveData() {
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getBasketballLiveDataUrl());
+        String url = allSportsConfig.getAllSportsBasketballApi(allSportsConfig.getBasketballLiveDataUrl());
         String result = HttpUtil.getAllSportsData(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         if (resultObj != null && !resultObj.isEmpty()) {

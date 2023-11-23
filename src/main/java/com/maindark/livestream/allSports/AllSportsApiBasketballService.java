@@ -22,7 +22,7 @@ public class AllSportsApiBasketballService {
     AllSportsBasketballMatchDao allSportsBasketballMatchDao;
 
     public List<AllSportsBasketballMatch> getAllFixtures(String from, String to) {
-        String url = allSportsConfig.getAllSportsApi(allSportsConfig.getFixtures()) + "&from=" + from + "&to=" + to;
+        String url = allSportsConfig.getAllSportsBasketballApi(allSportsConfig.getFixtures()) + "&from=" + from + "&to=" + to;
         List<AllSportsBasketballMatch> allSportsBasketballMatchList = getAllSportsMatch(url);
         if (allSportsBasketballMatchList != null) {
             allSportsBasketballMatchList.forEach(match -> {
@@ -53,13 +53,14 @@ public class AllSportsApiBasketballService {
                         allSportsBasketballMatch.setHomeTeamId(((Number)ml.get("home_team_key")).longValue());
                         allSportsBasketballMatch.setAwayTeamId(((Number)ml.get("away_team_key")).longValue());
                         allSportsBasketballMatch.setMatchTime((String)ml.get("event_time"));
-                        allSportsBasketballMatch.setHomeTeamLogo((String)ml.get("home_team_logo"));
-                        allSportsBasketballMatch.setAwayTeamLogo((String)ml.get("away_team_logo"));
+                        allSportsBasketballMatch.setHomeTeamLogo((String)ml.get("event_home_team_logo"));
+                        allSportsBasketballMatch.setAwayTeamLogo((String)ml.get("event_away_team_logo"));
                         allSportsBasketballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsBasketballMatch.setAwayTeamName((String)ml.get("event_away_team"));
                         allSportsBasketballMatch.setMatchDate((String)ml.get("event_date"));
                         String matchStatus = (String)ml.get("event_status");
                         String eventLive = (String)ml.get("event_live");
+                        String season = (String)ml.get("league_season");
                         if(StringUtils.equals(matchStatus,"")){
                             allSportsBasketballMatch.setHomeScore(0);
                             allSportsBasketballMatch.setAwayScore(0);
@@ -86,6 +87,7 @@ public class AllSportsApiBasketballService {
                         // if eventLive equals 1 , is playing now
                         allSportsBasketballMatch.setCompetitionName((String)ml.get("league_name"));
                         allSportsBasketballMatch.setCompetitionId(((Number)ml.get("league_key")).longValue());
+                        allSportsBasketballMatch.setSeason(season);
                         allSportsBasketballMatch.setEventLive(eventLive);
                         return allSportsBasketballMatch;
                     });

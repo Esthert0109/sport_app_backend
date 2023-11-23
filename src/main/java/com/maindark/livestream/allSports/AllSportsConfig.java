@@ -25,4 +25,7 @@ public class AllSportsConfig {
     public String getAllSportsApi(String url){
         return this.host + url + this.secretKey;
     }
+    public String getAllSportsBasketballApi(String url){
+        return this.basketballHost + url + this.secretKey;
+    }
 }
