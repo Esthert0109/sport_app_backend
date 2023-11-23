@@ -50,7 +50,7 @@ public class Demo {
         //jintian yi jieshu mingtian wei kaisai  zuotian yijieshu
         LocalDate tomorrow = now.plusDays(1);
         LocalDate future = now.plusDays(2);
-        LocalDate past = now.minusDays(1);
+        LocalDate past = now.minusDays(2);
         long nowSeconds = DateUtil.convertDateToLongTime(now);
         long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
         long futureSeconds = DateUtil.convertDateToLongTime(future);
