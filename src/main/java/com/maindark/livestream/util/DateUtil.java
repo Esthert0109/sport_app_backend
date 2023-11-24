@@ -41,7 +41,7 @@ public class DateUtil {
 
     public static String convertLongTimeToMatchDate(Long time) {
         Date sol = new Date(time);
-        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd");
         String timeStr = obj.format(sol);
         return timeStr;
     }
