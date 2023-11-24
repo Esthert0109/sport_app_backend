@@ -1,7 +1,6 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.FootballCoach;
-import com.maindark.livestream.domain.FootballTeam;
 import org.apache.ibatis.annotations.*;
 
 @Mapper

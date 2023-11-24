@@ -30,6 +30,8 @@ public class LiveStreamCollectionController {
         List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllFootballCollectionByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
+
+
     @GetMapping("/football/list/3")
     public Result<List<FootballMatchVo>> getThreeFootballCollections(LiveStreamUser liveStreamUser) {
         if(liveStreamUser == null) {
@@ -37,26 +39,6 @@ public class LiveStreamCollectionController {
         }
         Long userId = liveStreamUser.getId();
         List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeFootballCollectionsByUserId(userId);
-        return Result.success(liveStreamCollectionVos);
-    }
-
-
-    @GetMapping("/basketball/list")
-    public Result<List<BasketballMatchVo>> getAllBasketballCollection(LiveStreamUser liveStreamUser) {
-        if(liveStreamUser == null) {
-            throw new GlobalException(CodeMsg.LOGIN_IN);
-        }
-        Long userId = liveStreamUser.getId();
-        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllBasketballCollectionByUserId(userId);
-        return Result.success(liveStreamCollectionVos);
-    }
-    @GetMapping("/basketball/list/3")
-    public Result<List<BasketballMatchVo>> getThreeBasketFootballCollections(LiveStreamUser liveStreamUser) {
-        if(liveStreamUser == null) {
-            throw new GlobalException(CodeMsg.LOGIN_IN);
-        }
-        Long userId = liveStreamUser.getId();
-        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeBasketballCollectionsByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
 
@@ -69,6 +51,28 @@ public class LiveStreamCollectionController {
         return Result.success(footballMatch);
     }
 
+
+    @GetMapping("/basketball/list")
+    public Result<List<BasketballMatchVo>> getAllBasketballCollection(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
+        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllBasketballCollectionByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+
+    @GetMapping("/basketball/list/3")
+    public Result<List<BasketballMatchVo>> getThreeBasketFootballCollections(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
+        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeBasketballCollectionsByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+
+
     @GetMapping("/basketball/{matchId}")
     public Result<BasketballMatchVo> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
         if(liveStreamUser == null){
@@ -77,6 +81,7 @@ public class LiveStreamCollectionController {
         BasketballMatchVo basketballMatchVo = liveStreamCollectionService.getBasketballMatchByMatchId(matchId);
         return Result.success(basketballMatchVo);
     }
+
 
     @DeleteMapping("/{matchId}")
     public Result<Boolean> deleteCollectionById(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
@@ -88,6 +93,7 @@ public class LiveStreamCollectionController {
         return Result.success(true);
     }
 
+
     @PostMapping("/")
     public Result<LiveStreamCollection> createCollection(LiveStreamUser liveStreamUser, @RequestBody CollectionForm collectionForm){
         if(liveStreamUser == null) {
@@ -97,8 +103,5 @@ public class LiveStreamCollectionController {
         LiveStreamCollection collection = liveStreamCollectionService.createCollection(userId,collectionForm);
         return Result.success(collection);
     }
-
-
-
-
+    
 }

@@ -167,13 +167,4 @@ public class FootballController {
         return Result.success(result);
     }
 
-
-    /**
-     *  test get data live address from nami
-     *
-     */
-
-
-
-
 }

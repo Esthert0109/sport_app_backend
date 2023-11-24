@@ -20,7 +20,7 @@ public class UploadFileController {
     private TxYunStorageService txYunStorageService;
 
     @PostMapping("/upload/aws")
-    public Result<String>  upLoadFile(@RequestParam("file")MultipartFile file) throws Exception{
+    public Result<String>  upLoadFile(@RequestParam("file")MultipartFile file){
         String fileName = file.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         fileName = UUIDUtil.uuid() + suffixName;
@@ -35,7 +35,7 @@ public class UploadFileController {
     }
 
     @PostMapping("/upload/tx")
-    public Result<String>  upLoadFileByTx(@RequestParam("file")MultipartFile file) throws Exception{
+    public Result<String>  upLoadFileByTx(@RequestParam("file")MultipartFile file){
         String fileName = file.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         fileName = UUIDUtil.uuid() + suffixName;

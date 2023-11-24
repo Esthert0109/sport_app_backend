@@ -11,7 +11,6 @@ import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
-import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.BasketballMatchLineUpVo;
 import com.maindark.livestream.vo.BasketballMatchLiveDataVo;

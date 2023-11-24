@@ -38,7 +38,7 @@ public class SMSService {
     public  Boolean sendSMS(String type,String mobileNumber)  {
         // check the mobile is existed when reset the password or forgot the password.
         if(StringUtils.equals(type,SMSEnum.RESET.getCode()) || StringUtils.equals(type,SMSEnum.FORGOT.getCode())){
-            LiveStreamUser liveStreamUser = liveStreamUserDao.getById(Long.valueOf(mobileNumber));
+            LiveStreamUser liveStreamUser = liveStreamUserDao.getById(Long.parseLong(mobileNumber));
             if(liveStreamUser == null){
                 throw  new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
             }
@@ -46,7 +46,7 @@ public class SMSService {
 
         // check the mobile is existed when register
         if(StringUtils.equals(type,SMSEnum.REGISTER.getCode())){
-            LiveStreamUser liveStreamUser = liveStreamUserDao.getById(Long.valueOf(mobileNumber));
+            LiveStreamUser liveStreamUser = liveStreamUserDao.getById(Long.parseLong(mobileNumber));
             if(liveStreamUser != null){
                 throw  new GlobalException(CodeMsg.MOBILE_EXIST);
             }
@@ -66,7 +66,7 @@ public class SMSService {
         String url =  smsConfig.getUrl() + param;
         url = URLDecoder.decode(url, Charset.forName(StandardCharsets.UTF_8.name()));
         String result = restTemplate.getForObject(url, String.class);
-        log.info("sms result:{}",result);
+        log.info("receive msg result:{}",result);
         JSONObject resultObj = JSON.parseObject(result);
         String status = (String)resultObj.get("status");
         if(StringUtils.equals("ok",status)) {
@@ -86,7 +86,7 @@ public class SMSService {
             return true;
         } else {
             log.error("send msg url:{}",url);
-            log.error("send smg result:{}",result);
+            log.error("send msg result:{}",result);
             throw new GlobalException(CodeMsg.SMS_CODE_SEND_ERROR);
         }
     }

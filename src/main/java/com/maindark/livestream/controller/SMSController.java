@@ -37,8 +37,8 @@ public class SMSController {
     }
 
     /**
-     *  type 1 register send msgcode
-     *  type 2 reset password msgcode
+     *  type 1 register send msgCode
+     *  type 2 reset password msgCode
      *  type 3 forgot password
      */
     @PostMapping("/verify/mobile/{type}")

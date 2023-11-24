@@ -19,7 +19,7 @@ public interface FootballCompetitionDao extends BasicDao<FootballCompetition> {
     Integer getMaxUpdatedAt();
 
 
-    @Update("update football_competition set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},short_name_zh=#{shortNameZh},short_name_en=#{shortNameEn},type=#{type},updated_at=#{updatedAt} ")
+    @Update("update football_competition set logo=#{logo},name_zh=#{nameZh},name_en=#{nameEn},short_name_zh=#{shortNameZh},short_name_en=#{shortNameEn},type=#{type},updated_at=#{updatedAt} where id=#{id} ")
     void updateDataById(FootballCompetition footballCompetition);
 
     @Select("select * from football_competition")
