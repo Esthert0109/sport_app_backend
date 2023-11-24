@@ -23,12 +23,18 @@ public class AllSportsCollectionController {
 
     @GetMapping("/football/list")
     public Result<List<FootballMatchVo>> getAllFootballCollection(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         List<FootballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getAllFootballCollectionByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
     @GetMapping("/football/list/3")
     public Result<List<FootballMatchVo>> getThreeFootballCollections(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         List<FootballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getThreeFootballCollectionsByUserId(userId);
         return Result.success(liveStreamCollectionVos);
@@ -49,6 +55,9 @@ public class AllSportsCollectionController {
 
     @PostMapping("/")
     public Result<AllSportsCollection> createCollection(LiveStreamUser liveStreamUser, @RequestBody CollectionForm collectionForm){
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         AllSportsCollection collection = allSportsCollectionService.createCollection(userId,collectionForm);
         return Result.success(collection);
