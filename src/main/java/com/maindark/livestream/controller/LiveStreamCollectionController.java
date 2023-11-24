@@ -7,6 +7,7 @@ import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.LiveStreamCollectionService;
+import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +21,42 @@ public class LiveStreamCollectionController {
     @Resource
     LiveStreamCollectionService liveStreamCollectionService;
 
-    @GetMapping("/list")
-    public Result<List<FootballMatchVo>> getAllCollection(LiveStreamUser liveStreamUser) {
+    @GetMapping("/football/list")
+    public Result<List<FootballMatchVo>> getAllFootballCollection(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
-        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllCollectionByUserId(userId);
+        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllFootballCollectionByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
-    @GetMapping("/list/3")
-    public Result<List<FootballMatchVo>> getThreeCollections(LiveStreamUser liveStreamUser) {
+    @GetMapping("/football/list/3")
+    public Result<List<FootballMatchVo>> getThreeFootballCollections(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
-        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeCollectionsByUserId(userId);
+        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeFootballCollectionsByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+
+
+    @GetMapping("/basketball/list")
+    public Result<List<BasketballMatchVo>> getAllBasketballCollection(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
+        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllBasketballCollectionByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+    @GetMapping("/basketball/list/3")
+    public Result<List<BasketballMatchVo>> getThreeBasketFootballCollections(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
+        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getThreeBasketballCollectionsByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
 
@@ -43,12 +70,12 @@ public class LiveStreamCollectionController {
     }
 
     @GetMapping("/basketball/{matchId}")
-    public Result<FootballMatchVo> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
+    public Result<BasketballMatchVo> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable Integer matchId){
         if(liveStreamUser == null){
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
-        FootballMatchVo footballMatch = liveStreamCollectionService.getFootballMatchByMatchId(matchId);
-        return Result.success(footballMatch);
+        BasketballMatchVo basketballMatchVo = liveStreamCollectionService.getBasketballMatchByMatchId(matchId);
+        return Result.success(basketballMatchVo);
     }
 
     @DeleteMapping("/{matchId}")
@@ -63,6 +90,9 @@ public class LiveStreamCollectionController {
 
     @PostMapping("/")
     public Result<LiveStreamCollection> createCollection(LiveStreamUser liveStreamUser, @RequestBody CollectionForm collectionForm){
+        if(liveStreamUser == null) {
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         LiveStreamCollection collection = liveStreamCollectionService.createCollection(userId,collectionForm);
         return Result.success(collection);

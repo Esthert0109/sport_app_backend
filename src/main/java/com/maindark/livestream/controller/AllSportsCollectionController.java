@@ -7,6 +7,7 @@ import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.AllSportsCollectionService;
+import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +21,29 @@ public class AllSportsCollectionController {
     @Resource
     AllSportsCollectionService allSportsCollectionService;
 
-    @GetMapping("/list")
-    public Result<List<FootballMatchVo>> getAllCollection(LiveStreamUser liveStreamUser) {
+    @GetMapping("/football/list")
+    public Result<List<FootballMatchVo>> getAllFootballCollection(LiveStreamUser liveStreamUser) {
         Long userId = liveStreamUser.getId();
-        List<FootballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getAllCollectionByUserId(userId);
+        List<FootballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getAllFootballCollectionByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
-    @GetMapping("/list/3")
-    public Result<List<FootballMatchVo>> getThreeCollections(LiveStreamUser liveStreamUser) {
+    @GetMapping("/football/list/3")
+    public Result<List<FootballMatchVo>> getThreeFootballCollections(LiveStreamUser liveStreamUser) {
         Long userId = liveStreamUser.getId();
-        List<FootballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getThreeCollectionsByUserId(userId);
+        List<FootballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getThreeFootballCollectionsByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+
+    @GetMapping("/basketball/list")
+    public Result<List<BasketballMatchVo>> getAllCollection(LiveStreamUser liveStreamUser) {
+        Long userId = liveStreamUser.getId();
+        List<BasketballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getAllBasketballCollectionByUserId(userId);
+        return Result.success(liveStreamCollectionVos);
+    }
+    @GetMapping("/basketball/list/3")
+    public Result<List<BasketballMatchVo>> getThreeCollections(LiveStreamUser liveStreamUser) {
+        Long userId = liveStreamUser.getId();
+        List<BasketballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getThreeBasketballCollectionsByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
 
@@ -51,12 +65,12 @@ public class AllSportsCollectionController {
     }
 
     @GetMapping("/basketball/{matchId}")
-    public Result<FootballMatchVo> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable String matchId){
+    public Result<BasketballMatchVo> getBasketballMatch(LiveStreamUser liveStreamUser, @PathVariable String matchId){
         if(liveStreamUser == null){
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
-        FootballMatchVo footballMatch = allSportsCollectionService.getFootballMatchByMatchId(Long.parseLong(matchId));
-        return Result.success(footballMatch);
+        BasketballMatchVo basketballMatchVo = allSportsCollectionService.getBasketballMatchByMatchId(Long.parseLong(matchId));
+        return Result.success(basketballMatchVo);
     }
 
     @DeleteMapping("/{matchId}")

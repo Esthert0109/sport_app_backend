@@ -13,7 +13,7 @@ public class CodeMsg {
     public static CodeMsg BIND_ERROR = new CodeMsg(500101,"para is not correct: %s");
 
     //login module 5002XX
-    public static CodeMsg LOGIN_IN = new CodeMsg(500210,"please login in");
+    public static CodeMsg LOGIN_IN = new CodeMsg(500210,"please sign in");
     public static CodeMsg PASSWORD_EMPTY = new CodeMsg(500211,"password can not be empty");
     public static CodeMsg MOBILE_EMPTY = new CodeMsg(500212,"mobile can not be empty");
 

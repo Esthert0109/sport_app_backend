@@ -117,4 +117,19 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     List<FootballMatchVo> getFootballMatchFinished(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds,
                                                    @Param("limit") Integer limit, @Param("offset") long offset);
 
+    @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id," +
+            "t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score," +
+            "t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up " +
+            "from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            " on t1.competition_id = fc.id left join live_stream_collection co on t1.id= co.match_id " +
+            "where co.user_id=#{userId}")
+    List<FootballMatchVo> getAllFootballCollections(@Param("userId") Long userId);
+
+    @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id," +
+            "t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score,t1.match_time," +
+            "fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 " +
+            "left join live_stream.football_competition fc on t1.competition_id = fc.id left join " +
+            "live_stream_collection co on t1.id= co.match_id where co.user_id=#{userId} limit 3")
+    List<FootballMatchVo> getThreeFootballCollections(@Param("userId") Long userId);
+
 }
