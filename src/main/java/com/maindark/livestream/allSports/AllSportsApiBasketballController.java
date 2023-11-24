@@ -3,7 +3,6 @@ package com.maindark.livestream.allSports;
 import com.maindark.livestream.domain.AllSportsBasketballMatch;
 import com.maindark.livestream.domain.AllSportsBasketballMatchLiveData;
 import com.maindark.livestream.result.Result;
-import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
