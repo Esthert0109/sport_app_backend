@@ -8,11 +8,9 @@ import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.form.LiveStreamUserForm;
 import com.maindark.livestream.redis.LoginKey;
 import com.maindark.livestream.redis.RedisService;
-import com.maindark.livestream.redis.SMSKey;
 import com.maindark.livestream.redis.UserKey;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.MD5Util;
-import com.maindark.livestream.util.UUIDUtil;
 import com.maindark.livestream.vo.LiveStreamUserVo;
 
 import jakarta.annotation.Resource;
