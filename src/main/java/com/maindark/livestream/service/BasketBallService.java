@@ -164,15 +164,17 @@ public class BasketBallService {
 
     public BasketballMatchLiveDataVo getMatchLiveData(Long matchId) {
         BasketballMatchLiveDataVo basketballMatchLiveDataVo =  basketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
-        BasketballMatchVo basketballMatchVo = basketballMatchDao.getBasketBallMatchById(matchId);
-        if(basketballMatchVo != null) {
-            basketballMatchLiveDataVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchLiveDataVo.getStatus()));
-            basketballMatchLiveDataVo.setMatchTimeStr(DateUtil.interceptTime(basketballMatchVo.getMatchTime()*1000));
-            basketballMatchLiveDataVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(basketballMatchVo.getMatchTime() * 1000));
-            basketballMatchLiveDataVo.setHomeTeamName(basketballMatchVo.getHomeTeamName());
-            basketballMatchLiveDataVo.setAwayTeamName(basketballMatchVo.getAwayTeamName());
-            basketballMatchLiveDataVo.setHomeTeamLogo(basketballMatchVo.getHomeTeamLogo());
-            basketballMatchLiveDataVo.setAwayTeamLogo(basketballMatchVo.getAwayTeamLogo());
+        if(basketballMatchLiveDataVo != null) {
+            BasketballMatchVo basketballMatchVo = basketballMatchDao.getBasketBallMatchById(matchId);
+            if(basketballMatchVo != null) {
+                basketballMatchLiveDataVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchLiveDataVo.getStatus()));
+                basketballMatchLiveDataVo.setMatchTimeStr(DateUtil.interceptTime(basketballMatchVo.getMatchTime()*1000));
+                basketballMatchLiveDataVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(basketballMatchVo.getMatchTime() * 1000));
+                basketballMatchLiveDataVo.setHomeTeamName(basketballMatchVo.getHomeTeamName());
+                basketballMatchLiveDataVo.setAwayTeamName(basketballMatchVo.getAwayTeamName());
+                basketballMatchLiveDataVo.setHomeTeamLogo(basketballMatchVo.getHomeTeamLogo());
+                basketballMatchLiveDataVo.setAwayTeamLogo(basketballMatchVo.getAwayTeamLogo());
+            }
         }
         return basketballMatchLiveDataVo;
     }
