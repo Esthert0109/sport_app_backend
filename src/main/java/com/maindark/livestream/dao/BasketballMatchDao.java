@@ -34,37 +34,37 @@ public interface BasketballMatchDao {
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where c.name_zh like '%${competitionName}%' and b.match_time >=#{nowSeconds} " +
             "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchByCompetitionName(String competitionName, long nowSeconds, long tomorrowSeconds, Integer limit, long offset);
+    List<BasketballMatchVo> getBasketballMatchByCompetitionName(@Param("competitionName") String competitionName, @Param("nowSeconds") long nowSeconds, @Param("tomorrowSeconds") long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.home_team_name like '%${teamName}%' or b.away_team_name like '%${teamName}%' and b.match_time >=#{nowSeconds} " +
             "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchByTeamName(String teamName, long nowSeconds, long tomorrowSeconds, Integer limit, long offset);
+    List<BasketballMatchVo> getBasketballMatchByTeamName(@Param("teamName") String teamName, @Param("nowSeconds") long nowSeconds, @Param("tomorrowSeconds") long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id >= 1 and b.status_id <= 10 and b.match_time >=#{nowSeconds} " +
             "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchesStart(Long nowSeconds, Long tomorrowSeconds, Integer limit, Long offset);
+    List<BasketballMatchVo> getBasketballMatchesStart(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") Long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id = 10 and b.match_time >=#{pastSeconds} " +
             "and b.match_time < #{nowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchesPast(Long pastSeconds, Long nowSeconds, Integer limit, Long offset);
+    List<BasketballMatchVo> getBasketballMatchesPast(@Param("pastSeconds") Long pastSeconds, @Param("nowSeconds") Long nowSeconds, @Param("limit") Integer limit, @Param("offset") Long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id = 1 and b.match_time >=#{tomorrowSeconds} " +
             "and b.match_time < #{futureSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchesFuture(Long tomorrowSeconds, Long futureSeconds, Integer limit, Long offset);
+    List<BasketballMatchVo> getBasketballMatchesFuture(@Param("tomorrowSeconds") Long tomorrowSeconds, @Param("futureSeconds") Long futureSeconds,  @Param("limit") Integer limit, @Param("offset") long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id = 1 and b.match_time >=#{nowSeconds} " +
             "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchNotStart(Long nowSeconds, Long tomorrowSeconds, Integer limit, long offset);
+    List<BasketballMatchVo> getBasketballMatchNotStart(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
@@ -91,11 +91,11 @@ public interface BasketballMatchDao {
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
-            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where b.match_id = #{matchId}")
-    List<BasketballMatchVo> getAllBasketballCollectionsByUserId(Long userId);
+            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where co.user_id = #{userId}")
+    List<BasketballMatchVo> getAllBasketballCollectionsByUserId(@Param("userId") Long userId);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
-            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where b.match_id = #{matchId} limit 3")
-    List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(Long userId);
+            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where co.user_id = #{userId} limit 3")
+    List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(@Param("userId") Long userId);
 }
