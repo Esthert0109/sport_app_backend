@@ -20,7 +20,7 @@ public class BasketballMatchLiveData {
     private Integer aTQuarter;
     private Integer a4Quarter;
     /* 罚球进球数 */
-    private Integer hPKickGoal;
+    private Integer hFreeThrow;
     /*剩余暂停数*/
     private Integer hNumPauseRemain;
     /*  犯规数 */
@@ -33,7 +33,7 @@ public class BasketballMatchLiveData {
     private Integer hThreeGoal;
     /* 2分球进球数*/
     private Integer hTwoGoal;
-    private Integer aPKickGoal;
+    private Integer aFreeThrow;
     private Integer aNumPauseRemain;
     private Integer aNumOfFouls;
     private Integer aFreeThrowPercentage;

@@ -86,14 +86,14 @@ public class BasketballLiveDataTask {
                 additionalAQuarter = awayQuarters.get(4);
             }
         }
-        Integer hPKickGoal = 0;
+        Integer hFreeThrow = 0;
         Integer hNumPauseRemain = 0;
         Integer hNumOfFouls = 0;
         Integer hFreeThrowPercentage = 0;
         Integer hTotalPause = 0;
         Integer hThreeGoal = 0;
         Integer hTwoGoal = 0;
-        Integer aPKickGoal = 0;
+        Integer aFreeThrow = 0;
         Integer aNumPauseRemain = 0;
         Integer aNumOfFouls = 0;
         Integer aFreeThrowPercentage = 0;
@@ -117,8 +117,8 @@ public class BasketballLiveDataTask {
                         aTwoGoal = (Integer)statistic.get(2);
                         break;
                     case 3:
-                        hPKickGoal = (Integer)statistic.get(1);
-                        aPKickGoal = (Integer)statistic.get(2);
+                        hFreeThrow = (Integer)statistic.get(1);
+                        aFreeThrow = (Integer)statistic.get(2);
                         break;
                     case 4:
                         hNumPauseRemain = (Integer)statistic.get(1);
@@ -150,8 +150,8 @@ public class BasketballLiveDataTask {
         basketballMatchLiveData.setASQuarter(aSQuarter);
         basketballMatchLiveData.setATQuarter(aTQuarter);
         basketballMatchLiveData.setA4Quarter(a4Quarter);
-        basketballMatchLiveData.setAPKickGoal(aPKickGoal);
-        basketballMatchLiveData.setHPKickGoal(hPKickGoal);
+        basketballMatchLiveData.setHFreeThrow(hFreeThrow);
+        basketballMatchLiveData.setAFreeThrow(aFreeThrow);
         basketballMatchLiveData.setANumOfFouls(aNumOfFouls);
         basketballMatchLiveData.setHNumOfFouls(hNumOfFouls);
         basketballMatchLiveData.setANumPauseRemain(aNumPauseRemain);
