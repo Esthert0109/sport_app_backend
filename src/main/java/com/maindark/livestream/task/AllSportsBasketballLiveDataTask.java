@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.maindark.livestream.allSports.AllSportsConfig;
 import com.maindark.livestream.dao.AllSportsBasketballMatchLiveDataDao;
 import com.maindark.livestream.domain.AllSportsBasketballMatchLiveData;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ public class AllSportsBasketballLiveDataTask {
     AllSportsConfig allSportsConfig;
     @Resource
     AllSportsBasketballMatchLiveDataDao allSportsBasketballMatchLiveDataDao;
+
+    @Resource
+    TxYunConfig txYunConfig;
 
     @Scheduled(cron = "0 */2 * * * ?")
     public void getAllLiveData() {
@@ -205,8 +209,8 @@ public class AllSportsBasketballLiveDataTask {
         allSportsBasketballMatchLiveData.setMatchDate(matchDate);
         allSportsBasketballMatchLiveData.setHomeTeamName(homeTeamName);
         allSportsBasketballMatchLiveData.setAwayTeamName(awayTeamName);
-        allSportsBasketballMatchLiveData.setHomeTeamLogo(homeTeamLogo);
-        allSportsBasketballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
+        allSportsBasketballMatchLiveData.setHomeTeamLogo(StringUtils.equals("",(String)ml.get("event_home_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
+        allSportsBasketballMatchLiveData.setAwayTeamLogo(StringUtils.equals("",(String)ml.get("event_away_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
         return allSportsBasketballMatchLiveData;
     }
 

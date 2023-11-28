@@ -21,6 +21,7 @@ public class TxYunConfig {
     private String secretKey;
     private String secretId;
     private String regionName;
+    private String defaultLogo;
 
     @Bean
     public COSClient cosClient() {

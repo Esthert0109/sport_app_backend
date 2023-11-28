@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.maindark.livestream.allSports.AllSportsConfig;
 import com.maindark.livestream.dao.AllSportsFootballLiveDataDao;
 import com.maindark.livestream.domain.AllSportsFootballMatchLiveData;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ public class AllSportsFootballLiveDataTask {
     AllSportsConfig allSportsConfig;
     @Resource
     AllSportsFootballLiveDataDao allSportsFootballLiveDataDao;
+
+    @Resource
+    TxYunConfig txYunConfig;
     @Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballLiveData() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
@@ -174,8 +178,8 @@ public class AllSportsFootballLiveDataTask {
         footballMatchLiveData.setMatchDate(matchDate);
         footballMatchLiveData.setHomeTeamName(homeTeamName);
         footballMatchLiveData.setAwayTeamName(awayTeamName);
-        footballMatchLiveData.setHomeTeamLogo(homeTeamLogo);
-        footballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
+        footballMatchLiveData.setHomeTeamLogo(StringUtils.equals("",homeTeamLogo)?txYunConfig.getDefaultLogo():homeTeamLogo);
+        footballMatchLiveData.setAwayTeamLogo(StringUtils.equals("",awayTeamLogo)?txYunConfig.getDefaultLogo():awayTeamLogo);
         footballMatchLiveData.setHomeFormation(homeFormation);
         footballMatchLiveData.setAwayFormation(awayFormation);
         footballMatchLiveData.setHomeCoach(homeCoach);

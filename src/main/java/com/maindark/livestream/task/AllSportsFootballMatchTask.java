@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.maindark.livestream.allSports.AllSportsConfig;
 import com.maindark.livestream.dao.AllSportsFootballMatchDao;
 import com.maindark.livestream.domain.AllSportsFootballMatch;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
 import com.maindark.livestream.util.StreamToListUtil;
@@ -29,6 +30,9 @@ public class AllSportsFootballMatchTask {
 
     @Resource
     AllSportsFootballMatchDao allSportsFootballMatchDao;
+
+    @Resource
+    TxYunConfig txYunConfig;
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void getFootballMatch(){
@@ -66,8 +70,8 @@ public class AllSportsFootballMatchTask {
                         allSportsFootballMatch.setHomeTeamId(((Number)ml.get("home_team_key")).longValue());
                         allSportsFootballMatch.setAwayTeamId(((Number)ml.get("away_team_key")).longValue());
                         allSportsFootballMatch.setMatchTime((String)ml.get("event_time"));
-                        allSportsFootballMatch.setHomeTeamLogo((String)ml.get("home_team_logo"));
-                        allSportsFootballMatch.setAwayTeamLogo((String)ml.get("away_team_logo"));
+                        allSportsFootballMatch.setHomeTeamLogo(StringUtils.equals("",(String)ml.get("home_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("home_team_logo"));
+                        allSportsFootballMatch.setAwayTeamLogo(StringUtils.equals("",(String)ml.get("away_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("away_team_logo"));
                         allSportsFootballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsFootballMatch.setAwayTeamName((String)ml.get("event_away_team"));
                         allSportsFootballMatch.setMatchDate((String)ml.get("event_date"));

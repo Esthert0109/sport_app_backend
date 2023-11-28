@@ -8,6 +8,7 @@ import com.maindark.livestream.nami.NamiConfig;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.HttpUtil;
@@ -56,6 +57,12 @@ public class FootBallService {
   @Resource
   FootballCoachDao footballCoachDao;
 
+  @Resource
+  TxYunConfig txYunConfig;
+
+
+
+
 
 
 
@@ -84,6 +91,8 @@ public class FootBallService {
           Long matchTime = data.getMatchTime() * 1000;
           String timeStr = DateUtil.interceptTime(matchTime);
           data.setMatchTimeStr(timeStr);
+          data.setHomeTeamLogo(data.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():data.getHomeTeamLogo());
+          data.setAwayTeamLogo(data.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():data.getAwayTeamLogo());
           data.setMatchDate(DateUtil.convertLongTimeToMatchDate(matchTime));
           Integer statusId = data.getStatusId();
           data.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
@@ -182,6 +191,8 @@ public class FootBallService {
         vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
         vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
         vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
+        vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getHomeTeamLogo());
+        vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getAwayTeamLogo());
         return vo;
       });
       futureMatches = getArrayListFromStream(footballMatchVoStream);

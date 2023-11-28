@@ -9,6 +9,7 @@ import com.maindark.livestream.domain.BasketballLineUp;
 import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.result.CodeMsg;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.StreamToListUtil;
@@ -43,6 +44,9 @@ public class BasketBallService {
     @Resource
     BasketballLineUpDao basketballLineUpDao;
 
+    @Resource
+    TxYunConfig txYunConfig;
+
 
 
     public List<BasketballMatchVo> getBasketballMatchList(String competitionName, String teamName, Pageable pageable) {
@@ -69,6 +73,8 @@ public class BasketBallService {
                 data.setMatchDate(DateUtil.convertLongTimeToMatchDate(matchTime));
                 Integer statusId = data.getStatusId();
                 data.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(statusId));
+                data.setHomeTeamLogo(data.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():data.getHomeTeamLogo());
+                data.setAwayTeamLogo(data.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():data.getAwayTeamLogo());
                 return data;
             });
             list = StreamToListUtil.getArrayListFromStream(stream);
@@ -172,8 +178,8 @@ public class BasketBallService {
                 basketballMatchLiveDataVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(basketballMatchVo.getMatchTime() * 1000));
                 basketballMatchLiveDataVo.setHomeTeamName(basketballMatchVo.getHomeTeamName());
                 basketballMatchLiveDataVo.setAwayTeamName(basketballMatchVo.getAwayTeamName());
-                basketballMatchLiveDataVo.setHomeTeamLogo(basketballMatchVo.getHomeTeamLogo());
-                basketballMatchLiveDataVo.setAwayTeamLogo(basketballMatchVo.getAwayTeamLogo());
+                basketballMatchLiveDataVo.setHomeTeamLogo(basketballMatchLiveDataVo.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():basketballMatchLiveDataVo.getHomeTeamLogo());
+                basketballMatchLiveDataVo.setAwayTeamLogo(basketballMatchLiveDataVo.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():basketballMatchLiveDataVo.getAwayTeamLogo());
             }
         }
         return basketballMatchLiveDataVo;
@@ -186,6 +192,8 @@ public class BasketBallService {
                 vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
                 vo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
                 vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
+                vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getHomeTeamLogo());
+                vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getAwayTeamLogo());
                 return vo;
             });
             futureMatches = StreamToListUtil.getArrayListFromStream(basketballMatchVoStream);
