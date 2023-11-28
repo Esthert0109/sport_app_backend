@@ -70,8 +70,8 @@ public class AllSportsFootballMatchTask {
                         allSportsFootballMatch.setHomeTeamId(((Number)ml.get("home_team_key")).longValue());
                         allSportsFootballMatch.setAwayTeamId(((Number)ml.get("away_team_key")).longValue());
                         allSportsFootballMatch.setMatchTime((String)ml.get("event_time"));
-                        allSportsFootballMatch.setHomeTeamLogo(StringUtils.equals("",(String)ml.get("home_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("home_team_logo"));
-                        allSportsFootballMatch.setAwayTeamLogo(StringUtils.equals("",(String)ml.get("away_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("away_team_logo"));
+                        allSportsFootballMatch.setHomeTeamLogo(ml.get("home_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("home_team_logo"));
+                        allSportsFootballMatch.setAwayTeamLogo(ml.get("away_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("away_team_logo"));
                         allSportsFootballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsFootballMatch.setAwayTeamName((String)ml.get("event_away_team"));
                         allSportsFootballMatch.setMatchDate((String)ml.get("event_date"));

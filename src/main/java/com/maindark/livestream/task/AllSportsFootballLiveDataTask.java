@@ -178,8 +178,8 @@ public class AllSportsFootballLiveDataTask {
         footballMatchLiveData.setMatchDate(matchDate);
         footballMatchLiveData.setHomeTeamName(homeTeamName);
         footballMatchLiveData.setAwayTeamName(awayTeamName);
-        footballMatchLiveData.setHomeTeamLogo(StringUtils.equals("",homeTeamLogo)?txYunConfig.getDefaultLogo():homeTeamLogo);
-        footballMatchLiveData.setAwayTeamLogo(StringUtils.equals("",awayTeamLogo)?txYunConfig.getDefaultLogo():awayTeamLogo);
+        footballMatchLiveData.setHomeTeamLogo(homeTeamLogo == null?txYunConfig.getDefaultLogo():homeTeamLogo);
+        footballMatchLiveData.setAwayTeamLogo(awayTeamLogo == null?txYunConfig.getDefaultLogo():awayTeamLogo);
         footballMatchLiveData.setHomeFormation(homeFormation);
         footballMatchLiveData.setAwayFormation(awayFormation);
         footballMatchLiveData.setHomeCoach(homeCoach);

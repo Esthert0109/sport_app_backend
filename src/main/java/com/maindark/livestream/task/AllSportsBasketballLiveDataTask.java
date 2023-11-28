@@ -209,8 +209,8 @@ public class AllSportsBasketballLiveDataTask {
         allSportsBasketballMatchLiveData.setMatchDate(matchDate);
         allSportsBasketballMatchLiveData.setHomeTeamName(homeTeamName);
         allSportsBasketballMatchLiveData.setAwayTeamName(awayTeamName);
-        allSportsBasketballMatchLiveData.setHomeTeamLogo(StringUtils.equals("",(String)ml.get("event_home_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
-        allSportsBasketballMatchLiveData.setAwayTeamLogo(StringUtils.equals("",(String)ml.get("event_away_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
+        allSportsBasketballMatchLiveData.setHomeTeamLogo(ml.get("event_home_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
+        allSportsBasketballMatchLiveData.setAwayTeamLogo(ml.get("event_away_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
         return allSportsBasketballMatchLiveData;
     }
 

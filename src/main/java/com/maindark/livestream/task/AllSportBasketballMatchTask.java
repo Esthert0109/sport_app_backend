@@ -68,8 +68,8 @@ public class AllSportBasketballMatchTask {
                         allSportsBasketballMatch.setHomeTeamId(((Number)ml.get("home_team_key")).longValue());
                         allSportsBasketballMatch.setAwayTeamId(((Number)ml.get("away_team_key")).longValue());
                         allSportsBasketballMatch.setMatchTime((String)ml.get("event_time"));
-                        allSportsBasketballMatch.setHomeTeamLogo(StringUtils.equals("",(String)ml.get("event_home_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
-                        allSportsBasketballMatch.setAwayTeamLogo(StringUtils.equals("",(String)ml.get("event_away_team_logo"))?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
+                        allSportsBasketballMatch.setHomeTeamLogo(ml.get("event_home_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
+                        allSportsBasketballMatch.setAwayTeamLogo(ml.get("event_away_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
                         allSportsBasketballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsBasketballMatch.setAwayTeamName((String)ml.get("event_away_team"));
                         allSportsBasketballMatch.setMatchDate((String)ml.get("event_date"));
