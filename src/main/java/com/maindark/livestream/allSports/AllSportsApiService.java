@@ -7,6 +7,7 @@ import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.*;
 import com.maindark.livestream.enums.IsFirst;
 import com.maindark.livestream.enums.TeamEnum;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.HttpUtil;
 import com.maindark.livestream.util.StreamToListUtil;
 import jakarta.annotation.Resource;
@@ -38,6 +39,9 @@ public class AllSportsApiService {
 
     @Resource
     AllSportsFootballLiveDataDao allSportsFootballLiveDataDao;
+
+    @Resource
+    TxYunConfig txYunConfig;
 
     public Map<String, Object> getAllLeagues() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLeagues());
@@ -405,8 +409,8 @@ public class AllSportsApiService {
         allSportsFootballMatch.setHomeTeamId(((Number) ml.get("home_team_key")).longValue());
         allSportsFootballMatch.setAwayTeamId(((Number) ml.get("away_team_key")).longValue());
         allSportsFootballMatch.setMatchTime((String) ml.get("event_time"));
-        allSportsFootballMatch.setHomeTeamLogo((String) ml.get("home_team_logo"));
-        allSportsFootballMatch.setAwayTeamLogo((String) ml.get("away_team_logo"));
+        allSportsFootballMatch.setHomeTeamLogo(ml.get("home_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("home_team_logo"));
+        allSportsFootballMatch.setAwayTeamLogo(ml.get("away_team_logo") == null?txYunConfig.getDefaultLogo():(String) ml.get("away_team_logo"));
         allSportsFootballMatch.setHomeTeamName((String) ml.get("event_home_team"));
         allSportsFootballMatch.setAwayTeamName((String) ml.get("event_away_team"));
         allSportsFootballMatch.setMatchDate((String) ml.get("event_date"));
@@ -616,8 +620,8 @@ public class AllSportsApiService {
         footballMatchLiveData.setMatchDate(matchDate);
         footballMatchLiveData.setHomeTeamName(homeTeamName);
         footballMatchLiveData.setAwayTeamName(awayTeamName);
-        footballMatchLiveData.setHomeTeamLogo(homeTeamLogo);
-        footballMatchLiveData.setAwayTeamLogo(awayTeamLogo);
+        footballMatchLiveData.setHomeTeamLogo(homeTeamLogo == null?txYunConfig.getDefaultLogo():homeTeamLogo);
+        footballMatchLiveData.setAwayTeamLogo(awayTeamLogo == null?txYunConfig.getDefaultLogo():awayTeamLogo);
         footballMatchLiveData.setHomeFormation(homeFormation);
         footballMatchLiveData.setAwayFormation(awayFormation);
         footballMatchLiveData.setHomeCoach(homeCoach);
