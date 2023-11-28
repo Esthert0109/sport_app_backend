@@ -10,6 +10,7 @@ import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
+import com.maindark.livestream.util.MatchDataConvertUtil;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
@@ -35,26 +36,47 @@ public class LiveStreamCollectionService {
     BasketballMatchDao basketballMatchDao;
 
     public List<FootballMatchVo> getAllFootballCollectionByUserId(Long userId) {
-        return footballMatchDao.getAllFootballCollections(userId);
+        List<FootballMatchVo> list = footballMatchDao.getAllFootballCollections(userId);
+        if (list != null && !list.isEmpty()) {
+            list = MatchDataConvertUtil.getFootballMatchVos(list);
+        }
+        return list;
     }
 
     public List<FootballMatchVo> getThreeFootballCollectionsByUserId(Long userId) {
-        return footballMatchDao.getThreeFootballCollections(userId);
+        List<FootballMatchVo> list = footballMatchDao.getThreeFootballCollections(userId);
+        if (list != null && !list.isEmpty()) {
+            list = MatchDataConvertUtil.getFootballMatchVos(list);
+        }
+        return list;
     }
 
     public List<BasketballMatchVo> getAllBasketballCollectionByUserId(Long userId) {
-        return basketballMatchDao.getAllBasketballCollectionsByUserId(userId);
+        List<BasketballMatchVo> list = basketballMatchDao.getAllBasketballCollectionsByUserId(userId);
+        if(list != null && !list.isEmpty()) {
+            list = MatchDataConvertUtil.getBasketballMatchVos(list);
+        }
+        return list ;
     }
 
     public List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(Long userId) {
-        return basketballMatchDao.getThreeBasketballCollectionsByUserId(userId);
+        List<BasketballMatchVo> list = basketballMatchDao.getThreeBasketballCollectionsByUserId(userId);
+        if(list != null && !list.isEmpty()) {
+            list = MatchDataConvertUtil.getBasketballMatchVos(list);
+        }
+        return list ;
     }
 
     public FootballMatchVo getFootballMatchByMatchId(Integer matchId) {
         FootballMatchVo match = redisService.get(FootballMatchKey.matchVoKey, String.valueOf(matchId), FootballMatchVo.class);
         if (match == null) {
             match = footballMatchDao.getFootballMatchVoById(matchId);
-            redisService.set(FootballMatchKey.matchVoKey, String.valueOf(matchId), match);
+            if(match != null) {
+                match.setMatchDate(DateUtil.convertLongTimeToMatchDate(match.getMatchTime() * 1000));
+                match.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(match.getStatusId()));
+                match.setMatchTimeStr(DateUtil.interceptTime(match.getMatchTime() * 1000));
+                redisService.set(FootballMatchKey.matchVoKey, String.valueOf(matchId), match);
+            }
         }
         return match;
     }
