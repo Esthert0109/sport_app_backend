@@ -26,8 +26,7 @@ public interface AllSportsBasketballMatchLiveDataDao {
             "h_blocks=#{hBlocks},h_field_goals=#{hFieldGoals},h_free_throws=#{hFreeThrows},h_rebounds=#{hRebounds},h_three_point_goals=#{hThreePointGoals}" +
             ",h_personal_fouls=#{hPersonalFouls},h_steals=#{hSteals},h_turn_overs=#{hTurnOvers}," +
             "a_blocks=#{aBlocks},a_field_goals=#{aFieldGoals},a_free_throws=#{aFreeThrows},a_personal_fouls=#{aPersonalFouls},a_steals=#{aSteals}," +
-            "a_turn_overs=#{aTurnOvers},a_rebounds=#{aRebounds},a_three_point_goals=#{aThreePointGoals} where match_id=#{matchId}")
-
+            "a_turn_overs=#{aTurnOvers},a_rebounds=#{aRebounds},a_three_point_goals=#{aThreePointGoals},home_score=#{homeScore},away_score=#{awayScore} where match_id=#{matchId}")
     void updateData(AllSportsBasketballMatchLiveData allSportsBasketballMatchLiveData);
 
     @Select("select count(1) from all_sports_basketball_match_live_data where match_id=#{matchId}")
