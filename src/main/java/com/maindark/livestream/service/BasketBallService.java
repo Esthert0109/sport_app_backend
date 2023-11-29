@@ -80,7 +80,7 @@ public class BasketBallService {
             }
         }
         if(list != null && !list.isEmpty()){
-            Stream<BasketballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() > nowSeconds).map(data ->{
+            Stream<BasketballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() >= nowSeconds).map(data ->{
                 Long matchTime = data.getMatchTime() * 1000;
                 String timeStr = DateUtil.interceptTime(matchTime);
                 data.setMatchTimeStr(timeStr);

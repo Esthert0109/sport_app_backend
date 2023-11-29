@@ -101,7 +101,7 @@ public class FootBallService {
         }
       }
       if(list != null && !list.isEmpty()){
-        Stream<FootballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() > nowSeconds).map(data ->{
+        Stream<FootballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() >= nowSeconds).map(data ->{
           Long matchTime = data.getMatchTime() * 1000;
           String timeStr = DateUtil.interceptTime(matchTime);
           data.setMatchTimeStr(timeStr);
