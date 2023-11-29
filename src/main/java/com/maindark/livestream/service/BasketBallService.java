@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class BasketBallService {
     public List<BasketballMatchVo> getBasketballMatchList(String competitionName, String teamName, Pageable pageable) {
         long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
-        List<BasketballMatchVo> list = null;
+        List<BasketballMatchVo> list = new ArrayList<>();
         if(StringUtils.isBlank(competitionName) && StringUtils.isBlank(teamName)) {
             throw new GlobalException(CodeMsg.FOOT_BALL_MATCH_PARAMS_ERROR);
         }
@@ -63,7 +64,20 @@ public class BasketBallService {
         if(!StringUtils.isBlank(competitionName)){
             list = basketballMatchDao.getBasketballMatchByCompetitionName(competitionName,nowSeconds,tomorrowSeconds,limit,offset);
         } else if(!StringUtils.isBlank(teamName)){
-            list = basketballMatchDao.getBasketballMatchByTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
+            List<BasketballMatchVo> homeTeams =  basketballMatchDao.getBasketballMatchByHomeTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
+            if(homeTeams != null && !homeTeams.isEmpty()) {
+                for (BasketballMatchVo vo:
+                     homeTeams) {
+                    list.add(vo);
+                }
+            }
+            List<BasketballMatchVo> awayTeams = basketballMatchDao.getBasketballMatchByAwayTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
+            if(awayTeams != null && !awayTeams.isEmpty()) {
+                for (BasketballMatchVo vo:
+                     awayTeams) {
+                    list.add(vo);
+                }
+            }
         }
         if(list != null && !list.isEmpty()){
             Stream<BasketballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() > nowSeconds).map(data ->{

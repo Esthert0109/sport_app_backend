@@ -73,7 +73,7 @@ public class FootBallService {
     public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName,Pageable pageable){
       long offset = pageable.getOffset();
       Integer limit = pageable.getPageSize();
-      List<FootballMatchVo> list = null;
+      List<FootballMatchVo> list = new ArrayList<>();
       if(StringUtils.isBlank(competitionName) && StringUtils.isBlank(teamName)) {
         throw new GlobalException(CodeMsg.FOOT_BALL_MATCH_PARAMS_ERROR);
       }
@@ -84,7 +84,21 @@ public class FootBallService {
       if(!StringUtils.isBlank(competitionName)){
           list = footballMatchDao.getFootballMatchByCompetitionName(competitionName,nowSeconds,tomorrowSeconds,limit,offset);
       } else if(!StringUtils.isBlank(teamName)){
-          list = footballMatchDao.getFootballMatchByTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
+        List<FootballMatchVo> homeTeams = footballMatchDao.getFootballMatchByHomeTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
+        if(homeTeams != null && !homeTeams.isEmpty()) {
+          for (FootballMatchVo vo:
+                  homeTeams) {
+            list.add(vo);
+          }
+        }
+
+        List<FootballMatchVo> awayTeams = footballMatchDao.getFootballMatchByAwayTeamName(teamName,nowSeconds,tomorrowSeconds,limit,offset);
+        if(awayTeams != null && !awayTeams.isEmpty()) {
+          for (FootballMatchVo vo:
+               awayTeams) {
+            list.add(vo);
+          }
+        }
       }
       if(list != null && !list.isEmpty()){
         Stream<FootballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() > nowSeconds).map(data ->{

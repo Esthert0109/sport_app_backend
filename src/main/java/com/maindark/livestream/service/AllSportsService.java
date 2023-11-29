@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class AllSportsService {
         if(StringUtils.isBlank(competitionName) && StringUtils.isBlank(teamName)) {
             throw new GlobalException(CodeMsg.FOOT_BALL_MATCH_PARAMS_ERROR);
         }
-        List<FootballMatchVo> list = null;
+        List<FootballMatchVo> list = new ArrayList<>();
         LocalDate now = LocalDate.now();
         LocalDate tomorrow = now.plusDays(1);
         String from = DateUtil.convertDateToStr(now);
@@ -66,7 +67,20 @@ public class AllSportsService {
         if (!StringUtils.isBlank(competitionName)){
             list = allSportsFootballMatchDao.getAllSportsFootMatchByCompetitionName(competitionName,from,to,pageSize,offset);
         } else if (!StringUtils.isBlank(teamName)) {
-            list = allSportsFootballMatchDao.getAllSportsFootMatchByTeamName(teamName,from,to,pageSize,offset);
+            List<FootballMatchVo> homeTeams = allSportsFootballMatchDao.getAllSportsFootMatchByHomeTeamName(teamName,from,to,pageSize,offset);
+            if(homeTeams != null && !homeTeams.isEmpty()) {
+                for (FootballMatchVo vo:
+                     homeTeams) {
+                    list.add(vo);
+                }
+            }
+            List<FootballMatchVo> awayTeams = allSportsFootballMatchDao.getAllSportsFootMatchByAwayTeamName(teamName,from,to,pageSize,offset);
+            if(awayTeams != null && !awayTeams.isEmpty()) {
+                for (FootballMatchVo vo:
+                     awayTeams) {
+                    list.add(vo);
+                }
+            }
         }
         if(list != null && !list.isEmpty()) {
             Stream<FootballMatchVo> stream = list.stream().filter(data -> data.getMatchDate().equals(from));

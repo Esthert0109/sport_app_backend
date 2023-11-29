@@ -38,9 +38,14 @@ public interface BasketballMatchDao {
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
-            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.home_team_name like '%${teamName}%' or b.away_team_name like '%${teamName}%' and b.match_time >=#{nowSeconds} " +
+            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.home_team_name like '%${teamName}%' and b.match_time >=#{nowSeconds} " +
             "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
-    List<BasketballMatchVo> getBasketballMatchByTeamName(@Param("teamName") String teamName, @Param("nowSeconds") long nowSeconds, @Param("tomorrowSeconds") long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
+    List<BasketballMatchVo> getBasketballMatchByHomeTeamName(@Param("teamName") String teamName, @Param("nowSeconds") long nowSeconds, @Param("tomorrowSeconds") long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
+    @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
+            "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
+            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.away_team_name like '%${teamName}%' and b.match_time >=#{nowSeconds} " +
+            "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
+    List<BasketballMatchVo> getBasketballMatchByAwayTeamName(@Param("teamName") String teamName, @Param("nowSeconds") long nowSeconds, @Param("tomorrowSeconds") long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
