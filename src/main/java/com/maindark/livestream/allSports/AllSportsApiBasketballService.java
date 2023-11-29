@@ -9,6 +9,7 @@ import com.maindark.livestream.domain.AllSportsBasketballLineUp;
 import com.maindark.livestream.domain.AllSportsBasketballMatch;
 import com.maindark.livestream.domain.AllSportsBasketballMatchLiveData;
 import com.maindark.livestream.enums.LineUpType;
+import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.HttpUtil;
 import com.maindark.livestream.util.StreamToListUtil;
 import jakarta.annotation.Resource;
@@ -34,6 +35,9 @@ public class AllSportsApiBasketballService {
 
     @Resource
     AllSportsBasketballLineUpDao allSportsBasketballLineUpDao;
+
+    @Resource
+    TxYunConfig txYunConfig;
 
     public List<AllSportsBasketballMatch> getAllFixtures(String from, String to) {
         String url = allSportsConfig.getAllSportsBasketballApi(allSportsConfig.getFixtures()) + "&from=" + from + "&to=" + to;
@@ -67,8 +71,8 @@ public class AllSportsApiBasketballService {
                         allSportsBasketballMatch.setHomeTeamId(((Number)ml.get("home_team_key")).longValue());
                         allSportsBasketballMatch.setAwayTeamId(((Number)ml.get("away_team_key")).longValue());
                         allSportsBasketballMatch.setMatchTime((String)ml.get("event_time"));
-                        allSportsBasketballMatch.setHomeTeamLogo((String)ml.get("event_home_team_logo"));
-                        allSportsBasketballMatch.setAwayTeamLogo((String)ml.get("event_away_team_logo"));
+                        allSportsBasketballMatch.setHomeTeamLogo(ml.get("event_home_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
+                        allSportsBasketballMatch.setAwayTeamLogo((ml.get("event_away_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
                         allSportsBasketballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsBasketballMatch.setAwayTeamName((String)ml.get("event_away_team"));
                         allSportsBasketballMatch.setMatchDate((String)ml.get("event_date"));
