@@ -72,7 +72,7 @@ public class AllSportsApiBasketballService {
                         allSportsBasketballMatch.setAwayTeamId(((Number)ml.get("away_team_key")).longValue());
                         allSportsBasketballMatch.setMatchTime((String)ml.get("event_time"));
                         allSportsBasketballMatch.setHomeTeamLogo(ml.get("event_home_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_home_team_logo"));
-                        allSportsBasketballMatch.setAwayTeamLogo((ml.get("event_away_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
+                        allSportsBasketballMatch.setAwayTeamLogo(ml.get("event_away_team_logo") == null?txYunConfig.getDefaultLogo():(String)ml.get("event_away_team_logo"));
                         allSportsBasketballMatch.setHomeTeamName((String)ml.get("event_home_team"));
                         allSportsBasketballMatch.setAwayTeamName((String)ml.get("event_away_team"));
                         allSportsBasketballMatch.setMatchDate((String)ml.get("event_date"));
