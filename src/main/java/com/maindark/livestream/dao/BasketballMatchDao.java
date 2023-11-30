@@ -49,7 +49,7 @@ public interface BasketballMatchDao {
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
-            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id >= 1 and b.status_id <= 10 and b.match_time >=#{nowSeconds} " +
+            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id where b.status_id > 1 and b.status_id <= 10 and b.match_time >=#{nowSeconds} " +
             "and b.match_time < #{tomorrowSeconds} order by b.match_time asc limit #{limit} offset #{offset} ")
     List<BasketballMatchVo> getBasketballMatchesStart(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds, @Param("limit") Integer limit, @Param("offset") Long offset);
 
