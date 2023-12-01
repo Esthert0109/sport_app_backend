@@ -1,7 +1,7 @@
 package com.maindark.livestream.controller;
 
 import com.maindark.livestream.result.Result;
-import com.maindark.livestream.service.AllSportsService;
+import com.maindark.livestream.service.AllSportsFootballService;
 import com.maindark.livestream.vo.AllSportsFootballMatchLineUpVo;
 import com.maindark.livestream.vo.AllSportsFootballMatchLiveDataVo;
 import com.maindark.livestream.vo.FootballMatchVo;
@@ -17,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/footballs/match/en")
 public class AllSportsFootballController {
     @Resource
-    AllSportsService allSportsService;
+    AllSportsFootballService allSportsService;
     /**
      * get today's all matches via competition's name or team's name
      * */

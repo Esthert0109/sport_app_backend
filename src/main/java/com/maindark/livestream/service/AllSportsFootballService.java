@@ -1,13 +1,10 @@
 package com.maindark.livestream.service;
 
 import com.maindark.livestream.dao.*;
-import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
 import com.maindark.livestream.domain.AllSportsFootballLineUp;
-import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
 import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.redis.FootballListKey;
-import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
@@ -28,7 +25,7 @@ import java.util.stream.Stream;
 
 @Service
 @Slf4j
-public class AllSportsService {
+public class AllSportsFootballService {
 
 
     @Resource
@@ -179,15 +176,11 @@ public class AllSportsService {
     }
 
     public AllSportsFootballMatchLineUpVo getFootballMatchLineUpByMatchId(String matchId) {
-        AllSportsFootballMatchLineUpVo footballMatchLineUpVo = redisService.get(FootballMatchKey.matchLineUpKey,String.valueOf(matchId),AllSportsFootballMatchLineUpVo.class);
-        if(footballMatchLineUpVo == null) {
-            footballMatchLineUpVo = new AllSportsFootballMatchLineUpVo();
-            List<AllSportsFootballLineUp> homeMatchLineUpList = allSportsFootballLineUpDao.getHomeMatchLineUpByMatchId(Long.parseLong(matchId));
-            List<AllSportsFootballLineUp> awayMatchLineUpList = allSportsFootballLineUpDao.getAwayMatchLineUpByMatchId(Long.parseLong(matchId));
-            footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
-            footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
-            redisService.set(FootballMatchKey.matchLineUpKey,matchId,footballMatchLineUpVo);
-        }
+        AllSportsFootballMatchLineUpVo footballMatchLineUpVo = new AllSportsFootballMatchLineUpVo();
+        List<AllSportsFootballLineUp> homeMatchLineUpList = allSportsFootballLineUpDao.getHomeMatchLineUpByMatchId(Long.parseLong(matchId));
+        List<AllSportsFootballLineUp> awayMatchLineUpList = allSportsFootballLineUpDao.getAwayMatchLineUpByMatchId(Long.parseLong(matchId));
+        footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
+        footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
         return footballMatchLineUpVo;
     }
 
