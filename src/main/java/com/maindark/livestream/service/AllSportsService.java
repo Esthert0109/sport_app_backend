@@ -182,8 +182,8 @@ public class AllSportsService {
         AllSportsFootballMatchLineUpVo footballMatchLineUpVo = redisService.get(FootballMatchKey.matchLineUpKey,String.valueOf(matchId),AllSportsFootballMatchLineUpVo.class);
         if(footballMatchLineUpVo == null) {
             footballMatchLineUpVo = new AllSportsFootballMatchLineUpVo();
-            List<AllSportsFootballLineUp> homeMatchLineUpList = allSportsFootballLineUpDao.getHomeMatchLineUpByMatchId(Long.valueOf(matchId));
-            List<AllSportsFootballLineUp> awayMatchLineUpList = allSportsFootballLineUpDao.getAwayMatchLineUpByMatchId(Long.valueOf(matchId));
+            List<AllSportsFootballLineUp> homeMatchLineUpList = allSportsFootballLineUpDao.getHomeMatchLineUpByMatchId(Long.parseLong(matchId));
+            List<AllSportsFootballLineUp> awayMatchLineUpList = allSportsFootballLineUpDao.getAwayMatchLineUpByMatchId(Long.parseLong(matchId));
             footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
             footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
             redisService.set(FootballMatchKey.matchLineUpKey,matchId,footballMatchLineUpVo);
