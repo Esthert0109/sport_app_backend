@@ -28,7 +28,7 @@ public class AllSportsFootballLiveDataTask {
 
     @Resource
     TxYunConfig txYunConfig;
-    @Scheduled(cron = "0 */2 * * * ? ")
+    //@Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballLiveData() {
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getAllSportsData(url);

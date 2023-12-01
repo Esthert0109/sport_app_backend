@@ -64,7 +64,25 @@ CREATE TABLE `all_sports_away_match_line_up` (
   `position` int  COMMENT '球员位置',
   `rating` varchar(8) COMMENT 'rating',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB auto_increment = 1 DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `all_sports_football_line_up`;
+CREATE TABLE `all_sports_football_line_up` (
+  `id` int(11) auto_increment COMMENT 'id',
+  `type` int(1) COMMENT 'type 0 home 1 away',
+  `player_id` bigint(20) COMMENT 'player id',
+  `match_id` bigint(20) not null COMMENT 'match id',
+  `team_id` bigint(20) COMMENT 'team id',
+  `first` int COMMENT 'first 0 no 1 yes ',
+  `captain` int COMMENT 'captain 0 no 1 yes',
+  `player_name` varchar(255) NOT NULL COMMENT 'player name',
+  `player_logo` varchar(255)  COMMENT 'player logo',
+  `shirt_number` int COMMENT 'shirt number',
+  `position` int  COMMENT '球员位置',
+  `rating` varchar(8) COMMENT 'rating',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB auto_increment = 1 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `all_sports_football_match`;
 CREATE TABLE `all_sports_football_match` (
@@ -133,7 +151,7 @@ CREATE TABLE `all_sports_football_match_live_data` (
 
 create index all_sports_football_match_live_data_index_matchId on all_sports_football_match_live_data(match_id);
 create index all_sports_home_match_line_up_index_matchId on all_sports_home_match_line_up(match_id);
-create index all_sports_away_match_line_up_index_matchId on all_sports_away_match_line_up(match_id);
+create index all_sports_away_match_line_up_index_matchId on all_sports_football_line_up(match_id);
 create index all_sports_football_match_matchDate on all_sports_football_match(match_date);
 alter table all_sports_football_match_live_data modify home_possession_rate varchar(16) COMMENT 'homePossessionRate';
 
@@ -141,8 +159,7 @@ alter table all_sports_football_match_live_data modify away_possession_rate varc
 
 alter table all_sports_football_match_live_data add column `home_coach` varchar(255) COMMENT 'home coach';
 alter table all_sports_football_match_live_data add column `away_coach` varchar(255) COMMENT 'away coach';
-alter table all_sports_home_match_line_up add column `player_id` bigint COMMENT 'player id';
-alter table all_sports_away_match_line_up add column `player_id` bigint COMMENT 'player id';
+
 
 
 

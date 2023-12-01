@@ -2,6 +2,7 @@ package com.maindark.livestream.service;
 
 import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
+import com.maindark.livestream.domain.AllSportsFootballLineUp;
 import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
 import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.exception.GlobalException;
@@ -52,6 +53,9 @@ public class AllSportsService {
 
     @Resource
     FootballLiveAddressDao footballLiveAddressDao;
+
+    @Resource
+    AllSportsFootballLineUpDao allSportsFootballLineUpDao;
 
     public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName, Pageable pageable) {
         int pageSize = pageable.getPageSize();
@@ -178,8 +182,8 @@ public class AllSportsService {
         AllSportsFootballMatchLineUpVo footballMatchLineUpVo = redisService.get(FootballMatchKey.matchLineUpKey,String.valueOf(matchId),AllSportsFootballMatchLineUpVo.class);
         if(footballMatchLineUpVo == null) {
             footballMatchLineUpVo = new AllSportsFootballMatchLineUpVo();
-            List<AllSportsHomeMatchLineUp> homeMatchLineUpList = allSportsHomeMatchLineUpDao.getHomeMatchLineUpByMatchId(Long.valueOf(matchId));
-            List<AllSportsAwayMatchLineUp> awayMatchLineUpList = allSportsAwayMatchLineUpDao.getAwayMatchLineUpByMatchId(Long.valueOf(matchId));
+            List<AllSportsFootballLineUp> homeMatchLineUpList = allSportsFootballLineUpDao.getHomeMatchLineUpByMatchId(Long.valueOf(matchId));
+            List<AllSportsFootballLineUp> awayMatchLineUpList = allSportsFootballLineUpDao.getAwayMatchLineUpByMatchId(Long.valueOf(matchId));
             footballMatchLineUpVo.setHomeMatchLineUpList(homeMatchLineUpList);
             footballMatchLineUpVo.setAwayMatchLineList(awayMatchLineUpList);
             redisService.set(FootballMatchKey.matchLineUpKey,matchId,footballMatchLineUpVo);

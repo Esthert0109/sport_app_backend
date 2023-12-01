@@ -45,6 +45,12 @@ public class AllSportsApiFootballController {
         return Result.success(map);
     }
 
+    @GetMapping("/lineup/list")
+    public Result<Map<String,Object>> getAllMatchLineUp(@RequestParam("from")String from, @RequestParam("to")String to){
+        Map<String,Object> map = allSportsApiService.getAllMatchLineUps(from,to);
+        return Result.success(map);
+    }
+
     @GetMapping("/liveScore/{matchId}")
     public Result<Map<String,Object>> getLiveMatchAndLineUpData(@PathVariable("matchId") String matchId){
         Map<String,Object> map = allSportsApiService.getLiveMatchViaLiveDataApi(matchId);

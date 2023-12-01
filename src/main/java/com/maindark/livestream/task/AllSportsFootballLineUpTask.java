@@ -4,13 +4,12 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.maindark.livestream.allSports.AllSportsConfig;
 import com.maindark.livestream.dao.AllSportsAwayMatchLineUpDao;
+import com.maindark.livestream.dao.AllSportsFootballLineUpDao;
 import com.maindark.livestream.dao.AllSportsFootballMatchDao;
 import com.maindark.livestream.dao.AllSportsHomeMatchLineUpDao;
-import com.maindark.livestream.domain.AllSportsAwayMatchLineUp;
-import com.maindark.livestream.domain.AllSportsFootballMatch;
-import com.maindark.livestream.domain.AllSportsHomeMatchLineUp;
-import com.maindark.livestream.domain.BaseFootballMatchLineup;
+import com.maindark.livestream.domain.*;
 import com.maindark.livestream.enums.IsFirst;
+import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.enums.TeamEnum;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
@@ -39,8 +38,11 @@ public class AllSportsFootballLineUpTask {
    @Resource
    AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
+   @Resource
+    AllSportsFootballLineUpDao allSportsFootballLineUpDao;
 
-    @Scheduled(cron = "0 */2 * * * ? ")
+
+    //@Scheduled(cron = "0 */2 * * * ? ")
     public void getAllSportsFootballMatchLineUp(){
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getLivescore());
         String result = HttpUtil.getAllSportsData(url);
@@ -119,43 +121,32 @@ public class AllSportsFootballLineUpTask {
                 if (0 == playerKey.longValue()) {
                     continue;
                 }
-                if (StringUtils.equals("0", teamType)) {
-                    int exist = allSportsHomeMatchLineUpDao.queryExists(playerKey.longValue(), matchId);
-                    BaseFootballMatchLineup allSportsHomeMatchLineUp = getAllSportsLineUp(playerKey.longValue(), playerNumber, playerPosition, matchId, teamId, playerName, first, TeamEnum.HOME.getCode());
-                    if (exist <= 0) {
-                        allSportsHomeMatchLineUpDao.insert((AllSportsHomeMatchLineUp) allSportsHomeMatchLineUp);
-                    } else {
-                        allSportsHomeMatchLineUpDao.updateHomeMatchLineUp((AllSportsHomeMatchLineUp) allSportsHomeMatchLineUp);
-                    }
+                AllSportsFootballLineUp allSportsFootballLineUp = getAllSportsLineUp(playerKey.longValue(), playerNumber, playerPosition, matchId, teamId, playerName, first, teamType);
+                int exist = allSportsFootballLineUpDao.queryExists(playerKey.longValue(), matchId);
+                if (exist <= 0) {
+                    allSportsFootballLineUpDao.insert(allSportsFootballLineUp);
                 } else {
-                    int exist = allSportsAwayMatchLineUpDao.queryExists(playerKey.longValue(), matchId);
-                    BaseFootballMatchLineup allSportsAwayMatchLineUp = getAllSportsLineUp(playerKey.longValue(), playerNumber, playerPosition, matchId, teamId, playerName, first, TeamEnum.AWAY.getCode());
-                    if (exist <= 0) {
-                        allSportsAwayMatchLineUpDao.insert((AllSportsAwayMatchLineUp) allSportsAwayMatchLineUp);
-                    } else {
-                        allSportsAwayMatchLineUpDao.updateAwayMatchLineUp((AllSportsAwayMatchLineUp) allSportsAwayMatchLineUp);
-                    }
+                    allSportsFootballLineUpDao.updateMatchLineUp(allSportsFootballLineUp);
                 }
-
             }
         }
     }
 
 
-    private BaseFootballMatchLineup getAllSportsLineUp(Long playerId, Integer playNumber, Integer playPosition, Long matchId, Long teamId, String playerName, Integer first, String teamType) {
-        BaseFootballMatchLineup  allSportsHomeMatchLineUp;
+    private AllSportsFootballLineUp getAllSportsLineUp(Long playerId, Integer playNumber, Integer playPosition, Long matchId, Long teamId, String playerName, Integer first, String teamType) {
+        AllSportsFootballLineUp allSportsFootballLineUp = new AllSportsFootballLineUp();
         if(StringUtils.equals("0",teamType)){
-            allSportsHomeMatchLineUp = new AllSportsHomeMatchLineUp();
+            allSportsFootballLineUp.setType(LineUpType.HOME.getType());
         } else {
-            allSportsHomeMatchLineUp = new AllSportsAwayMatchLineUp();
+            allSportsFootballLineUp.setType(LineUpType.AWAY.getType());
         }
-        allSportsHomeMatchLineUp.setPlayerId(playerId);
-        allSportsHomeMatchLineUp.setMatchId(matchId);
-        allSportsHomeMatchLineUp.setTeamId(teamId);
-        allSportsHomeMatchLineUp.setShirtNumber(playNumber);
-        allSportsHomeMatchLineUp.setPosition(playPosition);
-        allSportsHomeMatchLineUp.setPlayerName(playerName);
-        allSportsHomeMatchLineUp.setFirst(first);
+        allSportsFootballLineUp.setPlayerId(playerId);
+        allSportsFootballLineUp.setMatchId(matchId);
+        allSportsFootballLineUp.setTeamId(teamId);
+        allSportsFootballLineUp.setShirtNumber(playNumber);
+        allSportsFootballLineUp.setPosition(playPosition);
+        allSportsFootballLineUp.setPlayerName(playerName);
+        allSportsFootballLineUp.setFirst(first);
         String url = allSportsConfig.getAllSportsApi(allSportsConfig.getPlayers()).replace("{}",String.valueOf(playerId));
         String result = HttpUtil.getAllSportsData(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
@@ -168,19 +159,19 @@ public class AllSportsFootballLineUpTask {
                         Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
                         String captain = (String)playMap.get("player_is_captain");
                         if(StringUtils.isBlank(captain)){
-                            allSportsHomeMatchLineUp.setCaptain(0);
+                            allSportsFootballLineUp.setCaptain(0);
                         } else {
-                            allSportsHomeMatchLineUp.setCaptain(1);
+                            allSportsFootballLineUp.setCaptain(1);
                         }
                         String playerImage = (String)playMap.get("player_image");
                         String playerRating = (String)playMap.get("player_rating");
-                        allSportsHomeMatchLineUp.setPlayerLogo(playerImage);
-                        allSportsHomeMatchLineUp.setRating(playerRating);
+                        allSportsFootballLineUp.setPlayerLogo(playerImage);
+                        allSportsFootballLineUp.setRating(playerRating);
                     }
                 }
             }
         }
-        return allSportsHomeMatchLineUp;
+        return allSportsFootballLineUp;
     }
 
     private AllSportsFootballMatch getAllSportsMatch(Map<String,Object> ml) {
