@@ -33,7 +33,7 @@ public class AllSportsBasketballLineUpTask {
     AllSportsBasketballLineUpDao allSportsBasketballLineUpDao;
 
 
-    //@Scheduled(cron = "0 */2 * * * ?")
+    @Scheduled(cron = "0 */2 * * * ?")
     public void getAllSportsBasketballData() {
         String url = allSportsConfig.getAllSportsBasketballApi(allSportsConfig.getBasketballLiveDataUrl());
         String result = HttpUtil.getAllSportsData(url);
