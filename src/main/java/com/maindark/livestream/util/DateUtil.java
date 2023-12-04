@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,36 +29,31 @@ public class DateUtil {
 
     public static LocalDate convertStringToDate(String str){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate date = LocalDate.parse(str,formatter);
-        return date;
+        return LocalDate.parse(str,formatter);
     }
 
     public static String convertDateToStr(LocalDate localDate){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String currentDate = localDate.toString();
-        String str = LocalDate.parse(currentDate,dateFormatter).toString();
-        return str;
+        return LocalDate.parse(currentDate,dateFormatter).toString();
     }
 
     public static String convertLongTimeToMatchDate(Long time) {
         Date sol = new Date(time);
         DateFormat obj = new SimpleDateFormat("yyyy-MM-dd");
-        String timeStr = obj.format(sol);
-        return timeStr;
+        return obj.format(sol);
     }
 
     public static String convertLocalDateToStr(LocalDate localDate){
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String currentDate = localDate.toString();
-        String str = LocalDate.parse(currentDate,dateFormatter).toString();
-        return str;
+        return LocalDate.parse(currentDate,dateFormatter).toString();
     }
 
     public static String convertLocalDateToTime(){
         Date date = new Date();
         DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timeStr = obj.format(date);
-        return timeStr;
+        return obj.format(date);
     }
 
 
