@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -53,6 +55,27 @@ public class DateUtil {
         return str;
     }
 
+    public static String convertLocalDateToTime(){
+        Date date = new Date();
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timeStr = obj.format(date);
+        return timeStr;
+    }
+
+
+    public static Long convertDateToLongTime(){
+      Date date = new Date();
+        System.out.println(date.getTime() + 60 * 60 *24);
+      return date.getTime() + 60 * 60 *24;
+    }
+
+    public static String get16Hex(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH,1);
+        Date date = calendar.getTime();
+        Long time = date.getTime();
+        return Long.toHexString(time);
+    }
 
 
 }
