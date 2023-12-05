@@ -277,7 +277,7 @@ create table live_stream_detail(
     live_date datetime default null comment '直播时间',
     is_popular char(1) default '0' comment '热门',
     PRIMARY KEY (id)
-);
+)ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
 
 --create index
 create index football_match_indexTime on football_match(match_time);

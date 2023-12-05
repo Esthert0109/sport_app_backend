@@ -1,5 +1,9 @@
 package com.maindark.livestream.util;
 
+import com.maindark.livestream.exception.GlobalException;
+import com.maindark.livestream.result.CodeMsg;
+import org.springframework.cglib.core.Local;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -62,6 +66,17 @@ public class DateUtil {
         calendar.add(Calendar.DAY_OF_MONTH,1);
         Date date = calendar.getTime();
         return date.getTime() / 1000;
+    }
+
+    public static Date convertStrToDate(String time){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try{
+            date = dateFormat.parse(time);
+        }catch (Exception e){
+            throw new GlobalException(CodeMsg.SERVER_ERROR);
+        }
+        return date;
     }
 
     public static String get16Hex(){

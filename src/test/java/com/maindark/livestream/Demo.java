@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -59,33 +61,12 @@ public class Demo {
         System.out.println(nowSeconds);
         System.out.println(tomorrowSeconds);
         System.out.println(futureSeconds);
+        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = obj.parse("2023-12-05 10:36:45");
+        LocalDate localDate = LocalDate.parse("2023-12-05 10:36:45");
+        System.out.println(date.toString());
+        System.out.println(localDate.toString());
 
-//        String str = "23^5-11^3-7^0-0^0^0^0^2^1^0^1^4^0^13^1^1^0";
-//        String[] dataArr = str.split("^",17);
-//        for(String data:dataArr){
-//            System.out.println(data);
-//        }
-        String str = "33^11-15^0-0^5-7^4^6^10^3^2^1^4^6^-8^27^1^1^0";
-        String[] dataArr = str.split("[/^]+",19);
-        if(dataArr != null && dataArr.length >0) {
-            String minutes = dataArr[0];
-            String fieldGoalsAttempts = dataArr[1].split("-",2)[0];
-            String fieldGoalsMade = dataArr[1].split("-",2)[1];
-            String threePointGoalsAttempts = dataArr[2].split("-",2)[0];
-            String threePointGoalsMade = dataArr[2].split("-",2)[1];
-            String freeThrowsGoalsAttempts = dataArr[3].split("-",2)[0];
-            String freeThrowsGoalsMade = dataArr[3].split("-",2)[1];
-            String totalRebounds = dataArr[6];
-            String assists = dataArr[7];
-            String steals = dataArr[8];
-            String blocks = dataArr[9];
-            String turnovers = dataArr[10];
-            String personalFouls = dataArr[11];
-            String point = dataArr[13];
-        }
-        for(String dd:dataArr){
-            System.out.println(dd);
-        }
 
     }
 }
