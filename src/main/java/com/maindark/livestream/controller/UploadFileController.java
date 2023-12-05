@@ -34,6 +34,11 @@ public class UploadFileController {
         return Result.success(true);
     }
 
+    /**
+     * upload head
+     */
+
+
     @PostMapping("/upload/tx")
     public Result<String>  upLoadFileByTx(@RequestParam("file")MultipartFile file){
         String fileName = file.getOriginalFilename();
@@ -42,6 +47,19 @@ public class UploadFileController {
         txYunStorageService.uploadFile(file,fileName);
         return Result.success(fileName);
     }
+    /**
+     *  upload cover
+     */
+
+    @PostMapping("/upload/cover")
+    public Result<String>  upLoadCoverByTx(@RequestParam("file")MultipartFile file){
+        String fileName = file.getOriginalFilename();
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        fileName = UUIDUtil.uuid() + suffixName;
+        txYunStorageService.uploadCover(file,fileName);
+        return Result.success(fileName);
+    }
+
 
     @DeleteMapping("/delete/tx/{fileName}")
     public Result<Boolean> deleteFileByTx(@PathVariable String fileName){

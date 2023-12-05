@@ -21,4 +21,6 @@ public class PushAndPlayController {
         Map<String,Object> map = pushAndPlayService.getPushUrl();
         return Result.success(map) ;
     }
+
+
 }

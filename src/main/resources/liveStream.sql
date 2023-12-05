@@ -267,7 +267,17 @@ create table apply_for_live(
     PRIMARY KEY (id)
 )ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
 
-
+DROP TABLE IF EXISTS `live_stream_detail`;
+create table live_stream_detail(
+    id int(11) auto_increment comment '编号',
+    user_id bigint(20) comment '用户ID',
+    cover varchar(255) default null comment '封面',
+    push_host varchar(255) default null comment '推流域名',
+    push_code varchar(255) comment '推流码',
+    live_date datetime default null comment '直播时间',
+    is_popular char(1) default '0' comment '热门',
+    PRIMARY KEY (id)
+);
 
 --create index
 create index football_match_indexTime on football_match(match_time);
@@ -279,7 +289,7 @@ create index football_match_live_data_indexMatch on football_match_live_data(mat
 create index football_competition_index_name on football_competition(name_zh);
 create index update_football_data_index_uniqueKey on update_football_data(unique_key);
 create index football_live_address_index_matchId on football_live_address(match_id);
-
+create index live_stream_detail_index on live_stream_detail(user_id);
 alter table football_match_live_data add column `home_penalty_Num` int COMMENT 'home penalty num';
 alter table football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
 alter table live_stream_user add column `role` char(1) default '0' comment '0 normal user 1 anchor';

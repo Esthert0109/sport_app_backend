@@ -23,6 +23,8 @@ public class TxYunStorageService {
     private String folder;
     @Value("${tengxun.host}")
     private String host;
+    @Value("${tengxun.bucket.name.cover}")
+    private String cover;
 
     @Resource
     private COSClient cosClient;
@@ -31,6 +33,12 @@ public class TxYunStorageService {
         File fileObj = convertMultiPartFileToFile(file);
 //      String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         cosClient.putObject(new PutObjectRequest(bucketName, folder+fileName, fileObj));
+        fileObj.delete();
+    }
+
+    public void uploadCover(MultipartFile file,String fileName) {
+        File fileObj = convertMultiPartFileToFile(file);
+        cosClient.putObject(new PutObjectRequest(bucketName, cover+fileName, fileObj));
         fileObj.delete();
     }
 
