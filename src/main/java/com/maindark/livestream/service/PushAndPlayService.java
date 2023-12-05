@@ -6,6 +6,7 @@ import com.maindark.livestream.domain.LiveStreamDetail;
 import com.maindark.livestream.enums.PopularEnum;
 import com.maindark.livestream.form.LiveStreamDetailForm;
 import com.maindark.livestream.util.DateUtil;
+import com.maindark.livestream.vo.LiveStreamDetailVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class PushAndPlayService {
         return map;
     }
 
-    public Boolean createLiveStream(String userId, LiveStreamDetailForm liveStreamDetailForm) {
+    public Integer createLiveStream(String userId, LiveStreamDetailForm liveStreamDetailForm) {
         Long id = Long.parseLong(userId);
         LiveStreamDetail liveStreamDetail = new LiveStreamDetail();
         Date date = DateUtil.convertStrToDate(liveStreamDetailForm.getCreateTime());
@@ -47,6 +48,18 @@ public class PushAndPlayService {
         liveStreamDetail.setIsPopular(PopularEnum.NO.getCode());
         liveStreamDetail.setTitle(liveStreamDetailForm.getTitle());
         liveStreamDetailDao.insertData(liveStreamDetail);
-        return true;
+        return liveStreamDetail.getId();
+    }
+
+    public LiveStreamDetailVo getLiveStreamDetailById(Integer id) {
+        return liveStreamDetailDao.getLiveStreamDetailById(id);
+    }
+
+    public void updateLiveStreamDetailById(Integer id,LiveStreamDetailForm liveStreamDetailForm) {
+        LiveStreamDetail liveStreamDetail = new LiveStreamDetail();
+        liveStreamDetail.setId(id);
+        liveStreamDetail.setTitle(liveStreamDetailForm.getTitle());
+        liveStreamDetail.setCover(liveStreamDetailForm.getCover());
+        liveStreamDetailDao.updateLiveStreamDetailById(liveStreamDetail);
     }
 }

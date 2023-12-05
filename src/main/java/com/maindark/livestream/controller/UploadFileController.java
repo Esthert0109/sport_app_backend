@@ -44,8 +44,8 @@ public class UploadFileController {
         String fileName = file.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         fileName = UUIDUtil.uuid() + suffixName;
-        txYunStorageService.uploadFile(file,fileName);
-        return Result.success(fileName);
+        String imageUrl = txYunStorageService.uploadFile(file,fileName);
+        return Result.success(imageUrl);
     }
     /**
      *  upload cover
@@ -56,8 +56,8 @@ public class UploadFileController {
         String fileName = file.getOriginalFilename();
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         fileName = UUIDUtil.uuid() + suffixName;
-        txYunStorageService.uploadCover(file,fileName);
-        return Result.success(fileName);
+        String imageUrl = txYunStorageService.uploadCover(file,fileName);
+        return Result.success(imageUrl);
     }
 
 

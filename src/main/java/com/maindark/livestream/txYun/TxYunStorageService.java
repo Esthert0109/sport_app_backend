@@ -29,17 +29,20 @@ public class TxYunStorageService {
     @Resource
     private COSClient cosClient;
 
-    public void uploadFile(MultipartFile file,String fileName) {
+
+    public String uploadFile(MultipartFile file,String fileName) {
         File fileObj = convertMultiPartFileToFile(file);
 //      String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         cosClient.putObject(new PutObjectRequest(bucketName, folder+fileName, fileObj));
         fileObj.delete();
+        return new StringBuilder().append(host).append(folder).append(fileName).toString();
     }
 
-    public void uploadCover(MultipartFile file,String fileName) {
+    public String uploadCover(MultipartFile file,String fileName) {
         File fileObj = convertMultiPartFileToFile(file);
         cosClient.putObject(new PutObjectRequest(bucketName, cover+fileName, fileObj));
         fileObj.delete();
+        return new StringBuilder().append(host).append(cover).append(fileName).toString();
     }
 
     public void deleteFile(String fileName){
