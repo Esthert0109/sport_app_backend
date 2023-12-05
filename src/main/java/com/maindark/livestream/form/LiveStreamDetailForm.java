@@ -13,5 +13,7 @@ public class LiveStreamDetailForm {
     private String cover;
     @NotNull(message = "createTime can be not empty!")
     private String createTime;
+    @NotNull(message = "title can be not empty!")
+    private String title;
 
 }

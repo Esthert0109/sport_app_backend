@@ -45,6 +45,7 @@ public class PushAndPlayService {
         liveStreamDetail.setPushHost(liveStreamDetailForm.getPushHost());
         liveStreamDetail.setPushCode(liveStreamDetailForm.getPushCode());
         liveStreamDetail.setIsPopular(PopularEnum.NO.getCode());
+        liveStreamDetail.setTitle(liveStreamDetailForm.getTitle());
         liveStreamDetailDao.insertData(liveStreamDetail);
         return true;
     }
