@@ -9,10 +9,12 @@ import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.vo.LiveStreamDetailVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -61,5 +63,17 @@ public class PushAndPlayService {
         liveStreamDetail.setTitle(liveStreamDetailForm.getTitle());
         liveStreamDetail.setCover(liveStreamDetailForm.getCover());
         liveStreamDetailDao.updateLiveStreamDetailById(liveStreamDetail);
+    }
+
+    public List<LiveStreamDetailVo> getAllPopularLiveStreamDetails(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        return liveStreamDetailDao.getAllPopularLiveStreamDetails(pageSize,offset);
+    }
+
+    public List<LiveStreamDetailVo> getAllLiveStreamDetails(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        return liveStreamDetailDao.getAllLiveStreamDetails(pageSize,offset);
     }
 }

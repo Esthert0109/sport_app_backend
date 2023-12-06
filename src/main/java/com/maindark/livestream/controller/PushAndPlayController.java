@@ -6,8 +6,11 @@ import com.maindark.livestream.service.PushAndPlayService;
 import com.maindark.livestream.vo.LiveStreamDetailVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,6 +42,23 @@ public class PushAndPlayController {
     public Result<Boolean> updateLiveStreamDetailById(@PathVariable("id")Integer id,@Valid @RequestBody LiveStreamDetailForm liveStreamDetailForm){
         pushAndPlayService.updateLiveStreamDetailById(id,liveStreamDetailForm);
         return Result.success(true);
+    }
+
+    @GetMapping("/list/popular")
+    public Result<List<LiveStreamDetailVo>> getAllPopularLiveStreamDetails(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                           @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"live_date");
+
+        List<LiveStreamDetailVo> list = pushAndPlayService.getAllPopularLiveStreamDetails(request);
+        return Result.success(list);
+    }
+
+    @GetMapping("/list")
+    public Result<List<LiveStreamDetailVo>> getAllLiveStreamDetail(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                   @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"live_date");
+        List<LiveStreamDetailVo> list = pushAndPlayService.getAllLiveStreamDetails(request);
+        return Result.success(list);
     }
 
 
