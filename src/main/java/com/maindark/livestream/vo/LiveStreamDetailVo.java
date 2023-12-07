@@ -8,6 +8,7 @@ import java.util.Date;
 public class LiveStreamDetailVo {
     private Integer id;
     private Long userId;
+    private String sportType;
     private String cover;
     private String title;
     private String pushHost;

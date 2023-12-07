@@ -16,6 +16,8 @@ public class LiveStreamDetail {
     private String pushHost;
     private String pushCode;
     private Long userId;
+    /*0 football 1 basketball*/
+    private String sportType;
     /*0 不热门 1 热门*/
     private String isPopular;
     private Date liveDate;

@@ -271,6 +271,7 @@ DROP TABLE IF EXISTS `live_stream_detail`;
 create table live_stream_detail(
     id int(11) auto_increment comment '编号',
     user_id bigint(20) comment '用户ID',
+    sport_type char(1) comment '直播类型',
     cover varchar(255) default null comment '封面',
     push_host varchar(255) default null comment '推流域名',
     push_code varchar(255) comment '推流码',
@@ -294,6 +295,8 @@ alter table football_match_live_data add column `home_penalty_Num` int COMMENT '
 alter table football_match_live_data add column `away_penalty_Num` int COMMENT 'home penalty num';
 alter table live_stream_user add column `role` char(1) default '0' comment '0 normal user 1 anchor';
   `away_penalty_Num` int COMMENT 'away penalty num',
+alter table live_stream_detail add column `sport_type` char(1) comment '0 football 1 basketball';
+
 
 
 

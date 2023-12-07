@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class LiveStreamDetailForm {
+    private String sportType;
 
     private String pushHost;
 
