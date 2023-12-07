@@ -16,4 +16,6 @@ public class LiveStreamDetailVo {
     /*0 不热门 1 热门*/
     private String isPopular;
     private String liveDate;
+    private String nickName;
+    private String avatar;
 }
