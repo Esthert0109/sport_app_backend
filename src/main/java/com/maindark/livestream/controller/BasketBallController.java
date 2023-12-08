@@ -102,5 +102,11 @@ public class BasketBallController {
         return Result.success(basketballMatchLiveDataVo);
     }
 
+    @GetMapping("/address/{matchId}")
+    public Result<FootballLiveAddressVo> getLiveAddress(@PathVariable("matchId")Integer matchId){
+        FootballLiveAddressVo footballLiveAddressVo = basketBallService.getBasketballLiveAddressByMatchId(matchId);
+        return Result.success(footballLiveAddressVo);
+    }
+
 
 }

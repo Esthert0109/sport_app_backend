@@ -5,6 +5,7 @@ package com.maindark.livestream.service;
 import com.maindark.livestream.dao.BasketballLineUpDao;
 import com.maindark.livestream.dao.BasketballMatchDao;
 import com.maindark.livestream.dao.BasketballMatchLiveDataDao;
+import com.maindark.livestream.dao.FootballLiveAddressDao;
 import com.maindark.livestream.domain.BasketballLineUp;
 import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.exception.GlobalException;
@@ -16,6 +17,7 @@ import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.BasketballMatchLineUpVo;
 import com.maindark.livestream.vo.BasketballMatchLiveDataVo;
 import com.maindark.livestream.vo.BasketballMatchVo;
+import com.maindark.livestream.vo.FootballLiveAddressVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +49,9 @@ public class BasketBallService {
 
     @Resource
     TxYunConfig txYunConfig;
+
+    @Resource
+    FootballLiveAddressDao footballLiveAddressDao;
 
 
 
@@ -216,4 +221,7 @@ public class BasketBallService {
     }
 
 
+    public FootballLiveAddressVo getBasketballLiveAddressByMatchId(Integer matchId) {
+        return footballLiveAddressDao.getLiveAddressByMatchId(matchId,2);
+    }
 }
