@@ -395,7 +395,7 @@ public class FootBallService {
     }
 
     public FootballLiveAddressVo getFootballLiveAddressByMatchId(Integer matchId) {
-        return footballLiveAddressDao.getLiveAddressByMatchId(matchId);
+        return footballLiveAddressDao.getLiveAddressByMatchId(matchId,1);
     }
 
     public Map<String, Object> getMatchLineUp(Integer matchId) {
