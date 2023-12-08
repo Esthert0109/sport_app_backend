@@ -22,8 +22,8 @@ public interface FootballLiveAddressDao {
             " where match_id=#{matchId}")
     void updateFootballLiveAddressByMatchId(FootballLiveAddress footballLiveAddress);
 
-    @Select("select sport_id,match_id,push_url1,push_url2,push_url3 from football_live_address where match_id=#{matchId}")
-    FootballLiveAddressVo getLiveAddressByMatchId(@Param("matchId") Integer matchId);
+    @Select("select sport_id,match_id,push_url1,push_url2,push_url3 from football_live_address where sport_id=#{sportid} and match_id=#{matchId}")
+    FootballLiveAddressVo getLiveAddressByMatchId(@Param("matchId") Integer matchId,@Param("sportId")Integer sportId);
 
 
 }

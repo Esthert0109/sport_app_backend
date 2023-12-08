@@ -103,4 +103,7 @@ public interface BasketballMatchDao {
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
             " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where co.user_id = #{userId} limit 3")
     List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(@Param("userId") Long userId);
+
+    @Select("select * from basketball_match where home_team_id=#{homeTeamId} and away_team_id=#{awayTeamid} and match_time >=#{nowSeconds} order by match_time asc limit 1")
+    BasketballMatch getBasketMatchByHomeTeamIdAndAwayTeamId(@Param("homeTeamId") Long homeTeamId, @Param("awayTeamId") Long awayTeamId,@Param("nowSeconds")Long nowSeconds);
 }

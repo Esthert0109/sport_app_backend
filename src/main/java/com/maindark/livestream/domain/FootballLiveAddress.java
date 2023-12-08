@@ -11,6 +11,7 @@ import java.util.Date;
 public class FootballLiveAddress {
     @Id
     private Integer id;
+    /* 1 football 2 basketball*/
     private Integer sportId;
     private Integer matchId;
     private Long matchTime;

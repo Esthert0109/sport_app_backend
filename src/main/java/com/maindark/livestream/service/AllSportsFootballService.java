@@ -28,10 +28,7 @@ import java.util.stream.Stream;
 public class AllSportsFootballService {
 
 
-    @Resource
-    AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
-    @Resource
-    AllSportsAwayMatchLineUpDao allSportsAwayMatchLineUpDao;
+
 
     @Resource
     AllSportsFootballLiveDataDao allSportsFootballLiveDataDao;
@@ -197,12 +194,12 @@ public class AllSportsFootballService {
 
     public String getLiveAddress(String homeTeamName,String awayTeamName) {
         homeTeamName = homeTeamName.trim();
-        FootballTeamVo homFootballTeamVo = footballTeamDao.getTeamBynName(homeTeamName);
+        FootballTeamVo homFootballTeamVo = footballTeamDao.getTeamByName(homeTeamName);
         if(homFootballTeamVo == null){
             throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
         }
         awayTeamName = awayTeamName.trim();
-        FootballTeamVo awayFootballTeamVo = footballTeamDao.getTeamBynName(awayTeamName);
+        FootballTeamVo awayFootballTeamVo = footballTeamDao.getTeamByName(awayTeamName);
         if(awayFootballTeamVo == null) {
             throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
         }
@@ -211,11 +208,13 @@ public class AllSportsFootballService {
         Integer homeTeamId = homFootballTeamVo.getId();
         // get away team id
         Integer awayTeamId = awayFootballTeamVo.getId();
-        FootballMatch footballMatch = footballMatchDao.getFootballMatchByHomeTeamIdAndAwayTeamId(homeTeamId,awayTeamId);
+        LocalDate now = LocalDate.now();
+        Long nowSeconds = DateUtil.convertDateToLongTime(now);
+        FootballMatch footballMatch = footballMatchDao.getFootballMatchByHomeTeamIdAndAwayTeamId(homeTeamId,awayTeamId,nowSeconds);
         if(footballMatch == null){
             throw new GlobalException(CodeMsg.FOOTBALL_MATCH_IS_NOT_EXISTED);
         }
-        FootballLiveAddressVo footballLiveAddressVo = footballLiveAddressDao.getLiveAddressByMatchId(footballMatch.getId());
+        FootballLiveAddressVo footballLiveAddressVo = footballLiveAddressDao.getLiveAddressByMatchId(footballMatch.getId(),1);
         if(footballLiveAddressVo == null){
             throw new GlobalException(CodeMsg.FOOTBALL_LIVE_ADDRESS_IS_NOT_EXISTED);
         }

@@ -23,4 +23,7 @@ public interface BasketballTeamDao {
 
     @Select("select count(1) from basketball_team where team_id =#{teamId}")
     Integer queryExist(@Param("teamId")Long teamId);
+
+    @Select("select * from basketball_team where name_en=#{teamName} limit 1")
+    BasketballTeam getTeamByName(@Param("teamName")String teamName);
 }

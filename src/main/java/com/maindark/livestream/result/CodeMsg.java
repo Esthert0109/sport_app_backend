@@ -40,6 +40,10 @@ public class CodeMsg {
 
     // nami basketball
     public static CodeMsg BASKET_BALL_ERROR = new CodeMsg(500610,"basketball service is wrong, please connect to our administrator!");
+    public static CodeMsg BASKETBALL_MATCH_IS_NOT_EXISTED = new CodeMsg(500611,"basketball match is not existed!");
+    public static CodeMsg BASKETBALL_LIVE_ADDRESS_IS_NOT_EXISTED = new CodeMsg(500612,"basketball live address is not existed!");
+    public static CodeMsg BASKETBALL_TEAM_IS_NOT_EXISTED = new CodeMsg(500613,"basketball team is not existed, please choose another team name");
+
 
     // football match error
     public static CodeMsg FOOT_BALL_MATCH_PARAMS_ERROR = new CodeMsg(500710,"competition name or team name can be not empty!");
