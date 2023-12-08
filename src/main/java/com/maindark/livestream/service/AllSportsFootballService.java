@@ -195,14 +195,23 @@ public class AllSportsFootballService {
         return allSportsFootballMatchLiveDataVo;
     }
 
-    public String getLiveAddress(String teamName) {
-        FootballTeamVo footballTeamVo = footballTeamDao.getTeamBynName(teamName);
-        if(footballTeamVo == null){
+    public String getLiveAddress(String homeTeamName,String awayTeamName) {
+        homeTeamName = homeTeamName.trim();
+        FootballTeamVo homFootballTeamVo = footballTeamDao.getTeamBynName(homeTeamName);
+        if(homFootballTeamVo == null){
             throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
         }
+        awayTeamName = awayTeamName.trim();
+        FootballTeamVo awayFootballTeamVo = footballTeamDao.getTeamBynName(awayTeamName);
+        if(awayFootballTeamVo == null) {
+            throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
+        }
+
         // get home team id
-        Integer teamId = footballTeamVo.getId();
-        FootballMatch footballMatch = footballMatchDao.getFootballMatchByHomeTeamId(teamId);
+        Integer homeTeamId = homFootballTeamVo.getId();
+        // get away team id
+        Integer awayTeamId = awayFootballTeamVo.getId();
+        FootballMatch footballMatch = footballMatchDao.getFootballMatchByHomeTeamIdAndAwayTeamId(homeTeamId,awayTeamId);
         if(footballMatch == null){
             throw new GlobalException(CodeMsg.FOOTBALL_MATCH_IS_NOT_EXISTED);
         }

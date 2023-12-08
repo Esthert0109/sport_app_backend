@@ -125,9 +125,9 @@ public class AllSportsFootballController {
         return Result.success(footballMatchLiveData);
     }
 
-    @GetMapping("/address/{teamName}")
-    public Result<String> getLiveAddress(@PathVariable("teamName")String teamName){
-        String address = allSportsService.getLiveAddress(teamName);
+    @GetMapping("/address")
+    public Result<String> getLiveAddress(@RequestParam("homeTeamName")String homeTeamName,@RequestParam("awayTeamName") String awayTeamName){
+        String address = allSportsService.getLiveAddress(homeTeamName,awayTeamName);
         return Result.success(address);
     }
 
