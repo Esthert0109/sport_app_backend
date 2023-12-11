@@ -42,12 +42,18 @@ public class AllSportsCollectionController {
 
     @GetMapping("/basketball/list")
     public Result<List<BasketballMatchVo>> getAllCollection(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         List<BasketballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getAllBasketballCollectionByUserId(userId);
         return Result.success(liveStreamCollectionVos);
     }
     @GetMapping("/basketball/list/3")
     public Result<List<BasketballMatchVo>> getThreeCollections(LiveStreamUser liveStreamUser) {
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
         Long userId = liveStreamUser.getId();
         List<BasketballMatchVo> liveStreamCollectionVos = allSportsCollectionService.getThreeBasketballCollectionsByUserId(userId);
         return Result.success(liveStreamCollectionVos);
