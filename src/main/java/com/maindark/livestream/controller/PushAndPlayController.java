@@ -61,6 +61,12 @@ public class PushAndPlayController {
         return Result.success(list);
     }
 
+    @DeleteMapping("/{id}")
+    public Result<Boolean> deleteLiveRoom(@PathVariable("id")Integer id){
+        pushAndPlayService.deleteLiveRoomById(id);
+        return Result.success(true);
+    }
+
 
 
 

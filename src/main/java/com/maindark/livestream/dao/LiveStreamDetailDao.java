@@ -22,4 +22,7 @@ public interface LiveStreamDetailDao {
     List<LiveStreamDetailVo> getAllPopularLiveStreamDetails(@Param("pageSize")int pageSize,@Param("offset")long offset);
     @Select("select t.id, t.user_id,t.sport_type, t.cover, t.title, t.push_host, t.push_code, date_format(t.live_date,'%Y-%m-%d %H:%i:%s') as live_date, t.is_popular,u.nickname,u.head as avatar from live_stream_detail t left join live_stream_user u on t.user_id= u.id  order by t.live_date desc limit #{pageSize} offset #{offset}")
     List<LiveStreamDetailVo> getAllLiveStreamDetails(@Param("pageSize")int pageSize,@Param("offset")long offset);
+
+    @Delete("delete from live_stream_detail where id=#{id}")
+    void deleteLiveStreamDetailById(@Param("id") Integer id);
 }

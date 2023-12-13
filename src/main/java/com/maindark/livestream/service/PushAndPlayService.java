@@ -77,4 +77,8 @@ public class PushAndPlayService {
         long offset = pageable.getOffset();
         return liveStreamDetailDao.getAllLiveStreamDetails(pageSize,offset);
     }
+
+    public void deleteLiveRoomById(Integer id) {
+        liveStreamDetailDao.deleteLiveStreamDetailById(id);
+    }
 }
