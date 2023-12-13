@@ -158,9 +158,9 @@ public class AllSportsFootballLineUpTask {
                     if(playArray != null && !playArray.isEmpty()){
                         Map<String,Object> playMap = (Map<String, Object>) playArray.get(0);
                         String captain = (String)playMap.get("player_is_captain");
-                        if(StringUtils.isBlank(captain)){
+                        if(StringUtils.equals("0",captain)||StringUtils.equals("",captain)){
                             allSportsFootballLineUp.setCaptain(0);
-                        } else {
+                        } else if(StringUtils.equals("1",captain)) {
                             allSportsFootballLineUp.setCaptain(1);
                         }
                         String playerImage = (String)playMap.get("player_image");
