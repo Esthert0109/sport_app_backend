@@ -40,13 +40,13 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id,t1.home_team_name," +
             "t1.away_team_name,t1.home_team_logo,t1.away_team_logo,t1.home_team_score,t1.away_team_score," +
             "t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up " +
-            "from live_stream.football_match t1 left join live_stream.football_competition fc " +
+            "from football_match t1 left join  football_competition fc " +
             "on t1.competition_id = fc.id where t1.id=#{id}")
     FootballMatchVo getFootballMatchVoById(@Param("id") Integer id);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id from live_stream.football_match t1 left join live_stream.football_competition fc on " +
+            "t1.status_id from football_match t1 left join  football_competition fc on " +
             "t1.competition_id = fc.id where fc.name_zh like'%${competitionName}%' and" +
             " t1.status_id > 0 and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} " +
             "order by t1.match_time asc limit #{limit} offset #{offset}")
@@ -54,14 +54,14 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id from football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id " +
+            "t1.status_id from football_match t1 left join football_competition fc on t1.competition_id = fc.id " +
             "where t1.home_team_name like '%${teamName}%' " +
             "and t1.status_id > 0 and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByHomeTeamName(@Param("teamName") String teamName,@Param("nowSeconds")Long nowSeconds,@Param("tomorrowSeconds")Long tomorrowSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id from football_match t1 left join live_stream.football_competition fc on t1.competition_id = fc.id " +
+            "t1.status_id from football_match t1 left join  football_competition fc on t1.competition_id = fc.id " +
             "where t1.away_team_name like'%${teamName}%' " +
             "and t1.status_id > 0 and t1.match_time >=#{nowSeconds} and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByAwayTeamName(@Param("teamName") String teamName,@Param("nowSeconds")Long nowSeconds,@Param("tomorrowSeconds")Long tomorrowSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
@@ -72,35 +72,35 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition " +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition " +
             "fc on t1.competition_id = fc.id where t1.status_id in(2,3,4,5) and t1.match_time >=#{nowSeconds} and " +
             "t1.match_time<#{tomorrowSeconds} order by t1.match_time asc")
     List<FootballMatchVo> getFootballMatchByTime(@Param("nowSeconds")Long nowSeconds, @Param("tomorrowSeconds")Long tomorrowSeconds);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id where t1.status_id = 8 and t1.match_time >=#{pastSeconds} " +
             "and t1.match_time<#{nowSeconds} order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchesPast(@Param("pastSeconds")Long pastSeconds, @Param("nowSeconds")Long nowSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id where t1.status_id > 1 and t1.status_id <=5 and t1.match_time >=#{nowSeconds} " +
             "and t1.match_time<#{tomorrowSeconds} order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchesStart(@Param("nowSeconds")Long nowSeconds, @Param("tomorrowSeconds")Long tomorrowSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id where t1.status_id = 1 and t1.match_time >=#{tomorrowSeconds} " +
             "and t1.match_time<#{futureSeconds} order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchesFuture(@Param("tomorrowSeconds")Long tomorrowSeconds, @Param("futureSeconds")Long futureSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id where t1.match_time >=#{currentSeconds} and " +
             "t1.match_time<#{deadlineSeconds} order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchByDate(@Param("currentSeconds") Long currentSeconds, @Param("deadlineSeconds") Long deadlineSeconds,@Param("limit")Integer limit,@Param("offset")long offset);
@@ -110,7 +110,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
 
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id where t1.match_time >=#{nowSeconds} and " +
             "t1.match_time<#{tomorrowSeconds} and t1.status_id = 1 order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchNotStart(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds,
@@ -118,7 +118,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
                                                    @Param("offset") long offset);
     @Select("select t1.id,t1.competition_id,t1.home_team_name,t1.away_team_name,t1.home_team_logo," +
             "t1.away_team_logo,t1.home_team_score,t1.away_team_score,t1.match_time,fc.name_zh as competitionName," +
-            "t1.status_id,t1.line_up from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "t1.status_id,t1.line_up from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id where t1.match_time >=#{nowSeconds} and " +
             "t1.match_time<#{tomorrowSeconds} and t1.status_id = 8 order by t1.match_time asc limit #{limit} offset #{offset}")
     List<FootballMatchVo> getFootballMatchFinished(@Param("nowSeconds") Long nowSeconds, @Param("tomorrowSeconds") Long tomorrowSeconds,
@@ -127,15 +127,15 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
     @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id," +
             "t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score," +
             "t1.match_time,fc.name_zh as competitionName,t1.status_id,t1.line_up " +
-            "from live_stream.football_match t1 left join live_stream.football_competition fc" +
+            "from  football_match t1 left join  football_competition fc" +
             " on t1.competition_id = fc.id left join live_stream_collection co on t1.id= co.match_id " +
             "where co.user_id=#{userId}")
     List<FootballMatchVo> getAllFootballCollections(@Param("userId") Long userId);
 
     @Select("select t1.id,t1.competition_id,t1.home_team_id,t1.away_team_id," +
             "t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score,t1.match_time," +
-            "fc.name_zh as competitionName,t1.status_id,t1.line_up from live_stream.football_match t1 " +
-            "left join live_stream.football_competition fc on t1.competition_id = fc.id left join " +
+            "fc.name_zh as competitionName,t1.status_id,t1.line_up from  football_match t1 " +
+            "left join  football_competition fc on t1.competition_id = fc.id left join " +
             "live_stream_collection co on t1.id= co.match_id where co.user_id=#{userId} limit 3")
     List<FootballMatchVo> getThreeFootballCollections(@Param("userId") Long userId);
 
