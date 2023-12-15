@@ -19,7 +19,7 @@ public interface AllSportsFootballLineUpDao {
     @Select("select * from all_sports_football_line_up where type= 0 and  match_id=#{matchId}")
     List<AllSportsFootballLineUp> getHomeMatchLineUpByMatchId(@Param("matchId") Long matchId);
 
-    @Select("select * from all_sports_football_line_up where type= 0 and  match_id=#{matchId}")
+    @Select("select * from all_sports_football_line_up where type= 1 and  match_id=#{matchId}")
     List<AllSportsFootballLineUp> getAwayMatchLineUpByMatchId(@Param("matchId") Long matchId);
     @Update("update all_sports_football_line_up set rating=#{rating} where player_id=#{playerId} and match_id=#{matchId} ")
     void updateMatchLineUp(AllSportsFootballLineUp allSportsFootballLineUp);
