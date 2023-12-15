@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/users/")
@@ -78,6 +80,12 @@ public class LiveStreamUserController {
         String head = resetHeadForm.getHead();
         liveStreamUserService.updateHead(token,id,head);
         return Result.success(true);
+    }
+
+    @GetMapping("/popular-anchor")
+    public Result<List<LiveStreamUserVo>> getPopularAnchors(){
+        List<LiveStreamUserVo> popularAnchors = liveStreamUserService.getPopularAnchors();
+       return Result.success(popularAnchors);
     }
 
 

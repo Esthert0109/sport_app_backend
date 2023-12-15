@@ -21,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -159,5 +160,7 @@ public class LiveStreamUserService {
     }
 
 
-
+    public List<LiveStreamUserVo> getPopularAnchors() {
+        return liveStreamUserDao.getPopularAnchors();
+    }
 }

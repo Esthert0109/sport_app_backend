@@ -1,7 +1,10 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.LiveStreamUser;
+import com.maindark.livestream.vo.LiveStreamUserVo;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface LiveStreamUserDao {
@@ -21,5 +24,7 @@ public interface LiveStreamUserDao {
 
     @Update("update live_stream_user set head=#{head} where id=#{id}")
     void updateHead(LiveStreamUser user);
+    @Select("select id,nickname,head,popular_anchor from live_stream_user where popular_anchor = '1'")
+    List<LiveStreamUserVo> getPopularAnchors();
 
 }

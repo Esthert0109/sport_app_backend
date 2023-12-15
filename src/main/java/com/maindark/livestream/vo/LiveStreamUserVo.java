@@ -7,4 +7,5 @@ public class LiveStreamUserVo {
     private Long id;
     private String nickName;
     private String head;
+    private String popularAnchor;
 }
