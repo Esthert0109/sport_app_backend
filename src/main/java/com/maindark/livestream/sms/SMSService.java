@@ -56,6 +56,10 @@ public class SMSService {
         Random random = new Random();
         int OTPNumber = random.nextInt(9000) + 1000;
         String messageContent = smsConfig.getContent() + OTPNumber;
+        if(mobileNumber.startsWith("86")){
+            messageContent = smsConfig.getChinaContent().replace("%%",OTPNumber+"");
+        }
+        //String messageContent = smsConfig.getContent() + OTPNumber;
         // 自动生成一个 referenceID
         String referenceID = UUIDUtil.uuid();
         String param = "apiKey=" + smsConfig.getApiKey()

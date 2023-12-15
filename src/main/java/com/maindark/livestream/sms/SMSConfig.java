@@ -13,5 +13,6 @@ public class SMSConfig {
     private String content;
     private String apiKey;
     private String url;
+    private String chinaContent;
     private int maxCount;
 }
