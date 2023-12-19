@@ -24,7 +24,7 @@ public interface LiveStreamUserDao {
 
     @Update("update live_stream_user set head=#{head} where id=#{id}")
     void updateHead(LiveStreamUser user);
-    @Select("select id,nickname,head,popular_anchor from live_stream_user where popular_anchor = '1'")
+    @Select("select id,nickname,head,popular_anchor from live_stream_user where role= '1' and  popular_anchor = '1'")
     List<LiveStreamUserVo> getPopularAnchors();
 
 }
