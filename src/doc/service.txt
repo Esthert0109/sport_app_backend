@@ -2,3 +2,6 @@ Server-Ip:--198.148.116.174  142.171.64.254
 Server-Port:22
 Server-account:root
 Server-password:--1Xk95XyiSq  --Vl5q4NRn5w  --5goNzP837D  a5yZem15B1
+
+-- 這個已經不在使用了
+
