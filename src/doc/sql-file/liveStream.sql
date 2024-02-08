@@ -1,8 +1,8 @@
 
 
 --mysql:account:root password:livestream:ma6oH
-CREATE USER 'springUser'@'%' IDENTIFIED BY 'livestream:ma6oH';
-GRANT ALL PRIVILEGES ON *.* TO 'springUser'@'%' WITH GRANT OPTION;
+CREATE USER 'mallUser'@'%' IDENTIFIED BY 'livestream:ma6oH';
+GRANT ALL PRIVILEGES ON *.* TO 'mallUser'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
 GRANT SELECT, INSERT ON live_stream.* TO ‘springUser’@’localhost’;

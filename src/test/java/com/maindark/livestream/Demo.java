@@ -55,17 +55,19 @@ public class Demo {
         LocalDate past = now.minusDays(2);
         long nowSeconds = DateUtil.convertDateToLongTime(now);
         long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
+        long tomorrowSeconds1 = DateUtil.convertDateToLongTime();
         long futureSeconds = DateUtil.convertDateToLongTime(future);
         long pastSeconds = DateUtil.convertDateToLongTime(past);
-        System.out.println(pastSeconds);
-        System.out.println(nowSeconds);
+        //System.out.println(pastSeconds);
+        //System.out.println(nowSeconds);
         System.out.println(tomorrowSeconds);
-        System.out.println(futureSeconds);
-        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = obj.parse("2023-12-05 10:36:45");
-        LocalDate localDate = LocalDate.parse("2023-12-05 10:36:45");
-        System.out.println(date.toString());
-        System.out.println(localDate.toString());
+        System.out.println(tomorrowSeconds1);
+        //System.out.println(futureSeconds);
+//        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date date = obj.parse("2023-12-05 10:36:45");
+//        LocalDate localDate = LocalDate.parse("2023-12-05 10:36:45");
+//        System.out.println(date.toString());
+//        System.out.println(localDate.toString());
 
 
     }

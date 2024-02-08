@@ -67,7 +67,7 @@ public class FootBallTask {
 
 
     /* execute every ten minutes every day*/
-    @Scheduled(cron = "0 */10 * * * ?")
+    @Scheduled(cron = "0 */30 * * * ?")
     //second, minute, hour, day of month, month, day(s) of week
     public void getAllMatchOrUpdate(){
         //Get all match
@@ -186,7 +186,7 @@ public class FootBallTask {
 
 
     /* execute this task every 20 seconds*/
-    @Scheduled(cron = "*/20 * * * * ?")
+    @Scheduled(cron = "*/30 * * * * ?")
     public void getUpdateDataFromNami(){
         String url = namiConfig.getNormalUrl(namiConfig.getUpdateDataUrl());
         String result = HttpUtil.getNaMiData(url);
@@ -227,7 +227,7 @@ public class FootBallTask {
 
 
     /* execute this task every two seconds*/
-    @Scheduled(cron = "*/2 * * * * ?")
+    @Scheduled(cron = "*/30 * * * * ?")
     public void getMatchResult(){
         String url = namiConfig.getNormalUrl(namiConfig.getFootballMatchLiveUrl());
         String result = HttpUtil.getNaMiData(url);
@@ -453,7 +453,7 @@ public class FootBallTask {
 
 
     /* Get live url*/
-    @Scheduled(cron = " 0 */10 * * * ?")
+    @Scheduled(cron = " 0 */20 * * * ?")
     public void getLiveUrlAddress(){
         String url = namiConfig.getFootballLiveAddress(namiConfig.getFootballLiveAddress());
         String result = HttpUtil.getNaMiData(url);
