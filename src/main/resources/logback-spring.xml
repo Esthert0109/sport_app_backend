@@ -19,7 +19,7 @@
             </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/home/server/var/log/tomcat/liveStream/info.%d.log</fileNamePattern>
+            <fileNamePattern>/home/server/var/log/tomcat/livestream/info.%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
     <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -32,7 +32,7 @@
             </pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/home/server/var/log/tomcat/liveStream/error.%d.log</fileNamePattern>
+            <fileNamePattern>/home/server/var/log/tomcat/livestream/error.%d.log</fileNamePattern>
         </rollingPolicy>
     </appender>
     <root level="info">
