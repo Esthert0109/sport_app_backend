@@ -22,5 +22,6 @@ public class BasketballMatchVo {
     private String matchTimeStr;
     private String statusStr;
     private String matchDate;
+    private Boolean hasCollected;
 
 }

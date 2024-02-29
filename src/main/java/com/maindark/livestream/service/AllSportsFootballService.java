@@ -3,6 +3,7 @@ package com.maindark.livestream.service;
 import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.AllSportsFootballLineUp;
 import com.maindark.livestream.domain.FootballMatch;
+import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.redis.FootballListKey;
 import com.maindark.livestream.redis.RedisService;
@@ -51,6 +52,9 @@ public class AllSportsFootballService {
     @Resource
     AllSportsFootballLineUpDao allSportsFootballLineUpDao;
 
+    @Resource
+    FollowService followService;
+
     public List<FootballMatchVo> getFootBallMatchList(String competitionName, String teamName, Pageable pageable) {
         int pageSize = pageable.getPageSize();
         long offset = pageable.getOffset();
@@ -90,37 +94,49 @@ public class AllSportsFootballService {
 
 
 
-    public Map<String,List<FootballMatchVo>> getFootballMatchesStarts(Pageable pageable) {
-        Long offset = pageable.getOffset();
-        Integer pageSize = pageable.getPageSize();
+    public Map<String,List<FootballMatchVo>> getFootballMatchesStarts(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
+        int pageSize = pageable.getPageSize();
         // get all today's start matches
         LocalDate now = LocalDate.now();
         String nowDate = DateUtil.convertDateToStr(now);
         LocalDate tomorrow = now.plusDays(1);
         String tomorrowDate = DateUtil.convertDateToStr(tomorrow);
         List<FootballMatchVo> startMatches = allSportsFootballMatchDao.getAllSportsStart(nowDate,tomorrowDate,pageSize,offset);
+        Stream<FootballMatchVo> stream =startMatches.stream().peek(footballMatchVo -> {
+            Integer matchId = footballMatchVo.getId();
+            Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+            log.info("hasCollected:{}",hasCollected);
+            footballMatchVo.setHasCollected(hasCollected);
+        });
+
         Map<String,List<FootballMatchVo>> results = new HashMap<>();
-        results.put("start",startMatches);
+        results.put("start",StreamToListUtil.getArrayListFromStream(stream));
         return results;
     }
 
-    public Map<String,List<FootballMatchVo>> getFootballMatchesPasts(Pageable pageable) {
-        Long offset = pageable.getOffset();
-        Integer pageSize = pageable.getPageSize();
+    public Map<String,List<FootballMatchVo>> getFootballMatchesPasts(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
+        int pageSize = pageable.getPageSize();
         // get all past matches
         LocalDate now = LocalDate.now();
         String nowDate = DateUtil.convertDateToStr(now);
         LocalDate past = now.minusDays(6);
         String pastDate = DateUtil.convertDateToStr(past);
         List<FootballMatchVo> pastMatches = allSportsFootballMatchDao.getAllSportsPast(pastDate,nowDate,pageSize,offset);
+        Stream<FootballMatchVo> stream = pastMatches.stream().peek(footballMatchVo -> {
+            Integer matchId = footballMatchVo.getId();
+            Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+            footballMatchVo.setHasCollected(hasCollected);
+        });
         Map<String,List<FootballMatchVo>> results = new HashMap<>();
-        results.put("pass",pastMatches);
+        results.put("pass",StreamToListUtil.getArrayListFromStream(stream));
         return results;
     }
 
-    public Map<String,List<FootballMatchVo>> getFootballMatchesFuture(Pageable pageable) {
-        Long offset = pageable.getOffset();
-        Integer pageSize = pageable.getPageSize();
+    public Map<String,List<FootballMatchVo>> getFootballMatchesFuture(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
+        int pageSize = pageable.getPageSize();
         // get all future matches in seven days
         LocalDate now = LocalDate.now();
         LocalDate tomorrow = now.plusDays(1);
@@ -128,8 +144,13 @@ public class AllSportsFootballService {
         LocalDate future = now.plusDays(6);
         String futureDate = DateUtil.convertDateToStr(future);
         List<FootballMatchVo> futureMatches = allSportsFootballMatchDao.getAllSportsFuture(tomorrowDate,futureDate,pageSize,offset);
+        Stream<FootballMatchVo> stream = futureMatches.stream().peek(footballMatchVo -> {
+            Integer matchId = footballMatchVo.getId();
+            Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+            footballMatchVo.setHasCollected(hasCollected);
+        });
         Map<String,List<FootballMatchVo>> results = new HashMap<>();
-        results.put("future",futureMatches);
+        results.put("future",StreamToListUtil.getArrayListFromStream(stream));
         return results;
     }
 
@@ -160,16 +181,27 @@ public class AllSportsFootballService {
         return results;
     }
 
-    public List<FootballMatchVo> getMatchListByDate(String date,Pageable pageable,String checkData) {
+    public List<FootballMatchVo> getMatchListByDate(Long userId,String date,Pageable pageable,String checkData) {
         date = DateUtil.convertDateToStr(DateUtil.convertStringToDate(date));
         int pageSize = pageable.getPageSize();
         long offset = pageable.getOffset();
+        List<FootballMatchVo> list = null;
         if(StringUtils.equals("true",checkData)){
-            return allSportsFootballMatchDao.getTodayNotStartMatches(date,pageSize,offset);
+            list = allSportsFootballMatchDao.getTodayNotStartMatches(date,pageSize,offset);
+            //return allSportsFootballMatchDao.getTodayNotStartMatches(date,pageSize,offset);
         } else if(StringUtils.equals("false",checkData)){
-            return allSportsFootballMatchDao.getTodayFinishedMatches(date,pageSize,offset);
+            list = allSportsFootballMatchDao.getTodayFinishedMatches(date,pageSize,offset);
+            //return allSportsFootballMatchDao.getTodayFinishedMatches(date,pageSize,offset);
+        } else {
+            list = allSportsFootballMatchDao.getAllSportsByDate(date,pageSize,offset);
         }
-        return allSportsFootballMatchDao.getAllSportsByDate(date,pageSize,offset);
+        Stream<FootballMatchVo> stream = list.stream().peek(footballMatchVo -> {
+            Integer matchId = footballMatchVo.getId();
+            Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+            footballMatchVo.setHasCollected(hasCollected);
+        });
+//        return allSportsFootballMatchDao.getAllSportsByDate(date,pageSize,offset);
+        return StreamToListUtil.getArrayListFromStream(stream);
     }
 
     public AllSportsFootballMatchLineUpVo getFootballMatchLineUpByMatchId(String matchId) {

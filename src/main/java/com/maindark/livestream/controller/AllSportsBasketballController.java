@@ -1,5 +1,7 @@
 package com.maindark.livestream.controller;
 
+import com.maindark.livestream.domain.LiveStreamUser;
+import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.AllSportsBasketballService;
 import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
@@ -27,19 +29,26 @@ public class AllSportsBasketballController {
 
 
     @GetMapping("/now-list")
-    public Result<List<BasketballMatchVo>> getList(@RequestParam(required = false) String competitionName,
-                                                 @RequestParam(required = false) String teamName,
-                                                 @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                 @RequestParam(value = "size", defaultValue = "10") Integer size){
+    public Result<List<BasketballMatchVo>> getList(LiveStreamUser liveStreamUser, @RequestParam(required = false) String competitionName,
+                                                   @RequestParam(required = false) String teamName,
+                                                   @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                   @RequestParam(value = "size", defaultValue = "10") Integer size){
+        if(liveStreamUser == null) {
+            return Result.error(CodeMsg.LOGIN_IN);
+        }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
         List<BasketballMatchVo> result = allSportsBasketballService.getBasketBallMatchList(competitionName,teamName,request);
         return Result.success(result);
     }
     @GetMapping("/list-start")
-    public Result<Map<String, List<BasketballMatchVo>>> getAllMatchesStarts(@RequestParam(value = "page", defaultValue = "1") Integer page,
+    public Result<Map<String, List<BasketballMatchVo>>> getAllMatchesStarts(LiveStreamUser liveStreamUser,@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                             @RequestParam(value = "size", defaultValue = "10") Integer size){
+        if(liveStreamUser == null) {
+            return Result.error(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
-        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesStarts(request);
+        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesStarts(userId,request);
         return Result.success(results);
     }
 
@@ -49,10 +58,14 @@ public class AllSportsBasketballController {
      */
 
     @GetMapping("/list-past")
-    public Result<Map<String,List<BasketballMatchVo>>> getAllMatchesPasts( @RequestParam(value = "page", defaultValue = "1") Integer page,
+    public Result<Map<String,List<BasketballMatchVo>>> getAllMatchesPasts(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
+        if(liveStreamUser == null) {
+            return Result.error(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
-        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesPasts(request);
+        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesPasts(userId,request);
         return Result.success(results);
     }
 
@@ -63,10 +76,14 @@ public class AllSportsBasketballController {
      */
 
     @GetMapping("/list-future")
-    public Result<Map<String,List<BasketballMatchVo>>> getFootballMatchesFuture( @RequestParam(value = "page", defaultValue = "1") Integer page,
+    public Result<Map<String,List<BasketballMatchVo>>> getFootballMatchesFuture(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                                @RequestParam(value = "size", defaultValue = "10") Integer size){
+        if(liveStreamUser == null) {
+            return Result.error(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
-        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesFuture(request);
+        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesFuture(userId,request);
         return Result.success(results);
     }
 
@@ -81,12 +98,16 @@ public class AllSportsBasketballController {
      *
      */
     @GetMapping("/list/{date}")
-    public Result<List<BasketballMatchVo>> getMatchesByDate(@PathVariable("date")String date,
+    public Result<List<BasketballMatchVo>> getMatchesByDate(LiveStreamUser liveStreamUser,@PathVariable("date")String date,
                                                           @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                           @RequestParam(value = "size", defaultValue = "10") Integer size,
                                                           @RequestParam(required = false) String checkData){
+        if(liveStreamUser == null) {
+            return Result.error(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
-        List<BasketballMatchVo> basketballMatchVos = allSportsBasketballService.getMatchListByDate(date,request,checkData);
+        List<BasketballMatchVo> basketballMatchVos = allSportsBasketballService.getMatchListByDate(userId,date,request,checkData);
         return Result.success(basketballMatchVos);
     }
 

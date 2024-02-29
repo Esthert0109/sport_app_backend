@@ -23,4 +23,5 @@ public class FootballMatchVo {
     private String homeFormation;
     private String awayFormation;
     private String matchDate;
+    private Boolean hasCollected;
 }

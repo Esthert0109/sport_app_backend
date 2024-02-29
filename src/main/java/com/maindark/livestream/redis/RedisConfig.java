@@ -3,6 +3,9 @@ package com.maindark.livestream.redis;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,4 +21,6 @@ public class RedisConfig {
     private int poolMaxTotal;
     private int poolMaxdle;
     private int poolmaxWait;
+
+
 }

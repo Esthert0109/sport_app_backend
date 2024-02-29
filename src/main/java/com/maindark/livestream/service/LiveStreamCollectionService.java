@@ -4,6 +4,7 @@ import com.maindark.livestream.dao.BasketballMatchDao;
 import com.maindark.livestream.dao.FootballMatchDao;
 import com.maindark.livestream.dao.LiveStreamCollectionDao;
 import com.maindark.livestream.domain.LiveStreamCollection;
+import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.enums.StatusEnum;
 import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.redis.FootballMatchKey;
@@ -34,6 +35,9 @@ public class LiveStreamCollectionService {
 
     @Resource
     BasketballMatchDao basketballMatchDao;
+
+    @Resource
+    FollowService followService;
 
     public List<FootballMatchVo> getAllFootballCollectionByUserId(Long userId) {
         List<FootballMatchVo> list = footballMatchDao.getAllFootballCollections(userId);
@@ -103,6 +107,7 @@ public class LiveStreamCollectionService {
         liveStreamCollection.setCategory(collectionForm.getCategory());
         liveStreamCollection.setStatus(StatusEnum.UP.getCode());
         liveStreamCollectionDao.insert(liveStreamCollection);
+        followService.follow(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), Integer.parseInt(collectionForm.getMatchId()));
         return liveStreamCollection;
     }
 
