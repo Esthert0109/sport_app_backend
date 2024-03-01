@@ -3,6 +3,7 @@ package com.maindark.livestream.service;
 import com.alibaba.fastjson2.JSON;
 import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.*;
+import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.nami.NamiConfig;
 import com.maindark.livestream.redis.FootballMatchKey;
@@ -60,6 +61,9 @@ public class FootBallService {
     @Resource
     TxYunConfig txYunConfig;
 
+    @Resource
+    FollowService followService;
+
 
     public String getNormalUrl(String normalUrl) {
         return namiConfig.getHost() + normalUrl + "?user=" + namiConfig.getUser() + "&secret=" + namiConfig.getSecretKey();
@@ -113,8 +117,8 @@ public class FootBallService {
     }
 
 
-    public Map<String, List<FootballMatchVo>> getFootballMatchesStarts(Pageable pageable) {
-        Long offset = pageable.getOffset();
+    public Map<String, List<FootballMatchVo>> getFootballMatchesStarts(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all today's start matches
         LocalDate now = LocalDate.now();
@@ -122,14 +126,14 @@ public class FootBallService {
         LocalDate tomorrow = now.plusDays(1);
         Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
         List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds, tomorrowSeconds, limit, offset);
-        startMatches = getFootballMatchVos(startMatches);
+        startMatches = getFootballMatchVos(userId,startMatches);
         Map<String, List<FootballMatchVo>> results = new HashMap<>();
         results.put("start", startMatches);
         return results;
     }
 
-    public Map<String, List<FootballMatchVo>> getFootballMatchesPasts(Pageable pageable) {
-        Long offset = pageable.getOffset();
+    public Map<String, List<FootballMatchVo>> getFootballMatchesPasts(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all past matches
         LocalDate now = LocalDate.now();
@@ -137,14 +141,14 @@ public class FootBallService {
         LocalDate past = now.minusDays(6);
         Long pastSeconds = DateUtil.convertDateToLongTime(past);
         List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds, nowSeconds, limit, offset);
-        pastMatches = getFootballMatchVos(pastMatches);
+        pastMatches = getFootballMatchVos(userId,pastMatches);
         Map<String, List<FootballMatchVo>> results = new HashMap<>();
         results.put("pass", pastMatches);
         return results;
     }
 
-    public Map<String, List<FootballMatchVo>> getFootballMatchesFuture(Pageable pageable) {
-        Long offset = pageable.getOffset();
+    public Map<String, List<FootballMatchVo>> getFootballMatchesFuture(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all future matches in seven days
         LocalDate now = LocalDate.now();
@@ -152,7 +156,7 @@ public class FootBallService {
         LocalDate future = now.plusDays(6);
         Long futureSeconds = DateUtil.convertDateToLongTime(future);
         List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds, futureSeconds, limit, offset);
-        futureMatches = getFootballMatchVos(futureMatches);
+        futureMatches = getFootballMatchVos(userId,futureMatches);
         Map<String, List<FootballMatchVo>> results = new HashMap<>();
         results.put("future", futureMatches);
         return results;
@@ -163,8 +167,8 @@ public class FootBallService {
      *
      * get all matches in seven days
      * */
-    public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays(Pageable pageable) {
-        Long offset = pageable.getOffset();
+    public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays(Long userId,Pageable pageable) {
+        long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all start matches
         LocalDate now = LocalDate.now();
@@ -179,11 +183,11 @@ public class FootBallService {
         Long pastSeconds = DateUtil.convertDateToLongTime(past);
         log.info("get past date:{},now date:{},tomorrow date:{},future date:{}", pastSeconds, nowSeconds, tomorrowSeconds, futureSeconds);
         List<FootballMatchVo> pastMatches = footballMatchDao.getFootballMatchesPast(pastSeconds, nowSeconds, limit, offset);
-        pastMatches = getFootballMatchVos(pastMatches);
+        pastMatches = getFootballMatchVos(userId,pastMatches);
         List<FootballMatchVo> startMatches = footballMatchDao.getFootballMatchesStart(nowSeconds, tomorrowSeconds, limit, offset);
-        startMatches = getFootballMatchVos(startMatches);
+        startMatches = getFootballMatchVos(userId,startMatches);
         List<FootballMatchVo> futureMatches = footballMatchDao.getFootballMatchesFuture(nowSeconds, futureSeconds, limit, offset);
-        futureMatches = getFootballMatchVos(futureMatches);
+        futureMatches = getFootballMatchVos(userId,futureMatches);
         Map<String, List<FootballMatchVo>> results = new HashMap<>();
         results.put("pass", pastMatches);
         results.put("start", startMatches);
@@ -193,7 +197,7 @@ public class FootBallService {
         return results;
     }
 
-    private List<FootballMatchVo> getFootballMatchVos(List<FootballMatchVo> futureMatches) {
+    private List<FootballMatchVo> getFootballMatchVos(Long userId,List<FootballMatchVo> futureMatches) {
         if (futureMatches != null && !futureMatches.isEmpty()) {
             Stream<FootballMatchVo> footballMatchVoStream = futureMatches.stream().map(vo -> {
                 vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
@@ -201,6 +205,9 @@ public class FootBallService {
                 vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
                 vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null ? txYunConfig.getDefaultLogo() : vo.getHomeTeamLogo());
                 vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null ? txYunConfig.getDefaultLogo() : vo.getAwayTeamLogo());
+                Integer matchId = vo.getId();
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                vo.setHasCollected(hasCollected);
                 return vo;
             });
             futureMatches = getArrayListFromStream(footballMatchVoStream);
@@ -208,7 +215,7 @@ public class FootBallService {
         return futureMatches;
     }
 
-    public List<FootballMatchVo> getMatchListByDate(String date, Pageable pageable, String checkData) {
+    public List<FootballMatchVo> getMatchListByDate(Long userId,String date, Pageable pageable, String checkData) {
         long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         List<FootballMatchVo> footballMatchVos = null;
@@ -219,21 +226,21 @@ public class FootBallService {
             LocalDate tomorrow = now.plusDays(1);
             Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
             footballMatchVos = footballMatchDao.getFootballMatchNotStart(nowSeconds, tomorrowSeconds, limit, offset);
-            footballMatchVos = getFootballMatchVos(footballMatchVos);
+            footballMatchVos = getFootballMatchVos(userId,footballMatchVos);
         } else if (StringUtils.equals("false", checkData)) {
             LocalDate currentDate = DateUtil.convertStringToDate(date);
             LocalDate deadline = currentDate.plusDays(1);
             Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
             Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
             footballMatchVos = footballMatchDao.getFootballMatchFinished(currentSeconds, deadlineSeconds, limit, offset);
-            footballMatchVos = getFootballMatchVos(footballMatchVos);
+            footballMatchVos = getFootballMatchVos(userId,footballMatchVos);
         } else {
             LocalDate currentDate = DateUtil.convertStringToDate(date);
             LocalDate deadline = currentDate.plusDays(1);
             Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
             Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
             footballMatchVos = footballMatchDao.getFootballMatchByDate(currentSeconds, deadlineSeconds, limit, offset);
-            footballMatchVos = getFootballMatchVos(footballMatchVos);
+            footballMatchVos = getFootballMatchVos(userId,footballMatchVos);
         }
         return footballMatchVos;
     }

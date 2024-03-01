@@ -106,7 +106,6 @@ public class AllSportsFootballService {
         Stream<FootballMatchVo> stream =startMatches.stream().peek(footballMatchVo -> {
             Integer matchId = footballMatchVo.getId();
             Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
-            log.info("hasCollected:{}",hasCollected);
             footballMatchVo.setHasCollected(hasCollected);
         });
 

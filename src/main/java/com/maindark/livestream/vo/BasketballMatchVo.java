@@ -2,7 +2,6 @@ package com.maindark.livestream.vo;
 
 import lombok.Data;
 
-import java.util.List;
 
 @Data
 public class BasketballMatchVo {

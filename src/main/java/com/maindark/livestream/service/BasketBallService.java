@@ -7,6 +7,7 @@ import com.maindark.livestream.dao.BasketballMatchDao;
 import com.maindark.livestream.dao.BasketballMatchLiveDataDao;
 import com.maindark.livestream.dao.FootballLiveAddressDao;
 import com.maindark.livestream.domain.BasketballLineUp;
+import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.result.CodeMsg;
@@ -52,6 +53,9 @@ public class BasketBallService {
 
     @Resource
     FootballLiveAddressDao footballLiveAddressDao;
+
+    @Resource
+    FollowService followService;
 
 
 
@@ -103,7 +107,7 @@ public class BasketBallService {
 
 
 
-    public Map<String, List<BasketballMatchVo>> getBasketballMatchesStarts(Pageable pageable) {
+    public Map<String, List<BasketballMatchVo>> getBasketballMatchesStarts(Long userId,Pageable pageable) {
         Long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all today's start matches
@@ -112,13 +116,13 @@ public class BasketBallService {
         LocalDate tomorrow = now.plusDays(1);
         Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
         List<BasketballMatchVo> startMatches = basketballMatchDao.getBasketballMatchesStart(nowSeconds,tomorrowSeconds,limit,offset);
-        startMatches = getBasketballMatchVos(startMatches);
+        startMatches = getBasketballMatchVos(userId,startMatches);
         Map<String,List<BasketballMatchVo>> results = new HashMap<>();
         results.put("start",startMatches);
         return results;
     }
 
-    public Map<String, List<BasketballMatchVo>> getBasketballMatchesPasts(Pageable pageable) {
+    public Map<String, List<BasketballMatchVo>> getBasketballMatchesPasts(Long userId,Pageable pageable) {
         Long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all past matches
@@ -127,13 +131,13 @@ public class BasketBallService {
         LocalDate past = now.minusDays(6);
         Long pastSeconds = DateUtil.convertDateToLongTime(past);
         List<BasketballMatchVo> pastMatches = basketballMatchDao.getBasketballMatchesPast(pastSeconds,nowSeconds,limit,offset);
-        pastMatches = getBasketballMatchVos(pastMatches);
+        pastMatches = getBasketballMatchVos(userId,pastMatches);
         Map<String,List<BasketballMatchVo>> results = new HashMap<>();
         results.put("pass",pastMatches);
         return results;
     }
 
-    public Map<String, List<BasketballMatchVo>> getBasketballMatchesFuture(Pageable pageable) {
+    public Map<String, List<BasketballMatchVo>> getBasketballMatchesFuture(Long userId,Pageable pageable) {
         Long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         // get all future matches in seven days
@@ -142,13 +146,13 @@ public class BasketBallService {
         LocalDate future = now.plusDays(6);
         Long futureSeconds = DateUtil.convertDateToLongTime(future);
         List<BasketballMatchVo> futureMatches = basketballMatchDao.getBasketballMatchesFuture(nowSeconds,futureSeconds,limit,offset);
-        futureMatches = getBasketballMatchVos(futureMatches);
+        futureMatches = getBasketballMatchVos(userId,futureMatches);
         Map<String,List<BasketballMatchVo>> results = new HashMap<>();
         results.put("future",futureMatches);
         return results;
     }
 
-    public List<BasketballMatchVo> getMatchListByDate(String date, Pageable pageable, String checkData) {
+    public List<BasketballMatchVo> getMatchListByDate(Long userId,String date, Pageable pageable, String checkData) {
         long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         List<BasketballMatchVo> basketballMatchVos;
@@ -159,21 +163,21 @@ public class BasketBallService {
             LocalDate tomorrow = now.plusDays(1);
             Long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
             basketballMatchVos = basketballMatchDao.getBasketballMatchNotStart(nowSeconds,tomorrowSeconds,limit,offset);
-            basketballMatchVos = getBasketballMatchVos(basketballMatchVos);
+            basketballMatchVos = getBasketballMatchVos(userId,basketballMatchVos);
         } else if(StringUtils.equals("false",checkData)) {
             LocalDate currentDate = DateUtil.convertStringToDate(date);
             LocalDate deadline = currentDate.plusDays(1);
             Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
             Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
             basketballMatchVos = basketballMatchDao.getBasketballMatchFinished(currentSeconds,deadlineSeconds,limit,offset);
-            basketballMatchVos = getBasketballMatchVos(basketballMatchVos);
+            basketballMatchVos = getBasketballMatchVos(userId,basketballMatchVos);
         } else {
             LocalDate currentDate = DateUtil.convertStringToDate(date);
             LocalDate deadline = currentDate.plusDays(1);
             Long currentSeconds = DateUtil.convertDateToLongTime(currentDate);
             Long deadlineSeconds = DateUtil.convertDateToLongTime(deadline);
             basketballMatchVos = basketballMatchDao.getBasketballMatchByDate(currentSeconds,deadlineSeconds,limit,offset);
-            basketballMatchVos = getBasketballMatchVos(basketballMatchVos);
+            basketballMatchVos = getBasketballMatchVos(userId,basketballMatchVos);
         }
         return basketballMatchVos;
     }
@@ -205,7 +209,7 @@ public class BasketBallService {
     }
 
 
-    private List<BasketballMatchVo> getBasketballMatchVos(List<BasketballMatchVo> futureMatches) {
+    private List<BasketballMatchVo> getBasketballMatchVos(Long userId,List<BasketballMatchVo> futureMatches) {
         if(futureMatches != null && !futureMatches.isEmpty()){
             Stream<BasketballMatchVo> basketballMatchVoStream = futureMatches.stream().map(vo ->{
                 vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
@@ -213,6 +217,9 @@ public class BasketBallService {
                 vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
                 vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getHomeTeamLogo());
                 vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getAwayTeamLogo());
+                int matchId = vo.getId().intValue();
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                vo.setHasCollected(hasCollected);
                 return vo;
             });
             futureMatches = StreamToListUtil.getArrayListFromStream(basketballMatchVoStream);
