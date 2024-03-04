@@ -34,38 +34,44 @@ public class AllSportsCollectionService {
     @Resource
     FollowService followService;
 
-    public Map<String,List<FootballMatchVo>> getAllFootballCollectionByUserId(Long userId, Pageable pageable) {
+    public List<Map<String,Object>> getAllFootballCollectionByUserId(Long userId, Pageable pageable) {
         int limit = pageable.getPageSize();
         long offset = pageable.getOffset();
         List<FootballMatchVo> list = allSportsFootballMatchDao.getAllSportsMatchByUserId(userId,limit,offset);
         Set<String> set = new LinkedHashSet<>();
         list.forEach(footballMatchVo -> set.add(footballMatchVo.getMatchDate()));
-        Map<String,List<FootballMatchVo>> map = new HashMap<>();
+        List<Map<String,Object>> res = new ArrayList<>();
         set.forEach(date ->{
+            Map<String,Object> map = new HashMap<>();
             Stream<FootballMatchVo> s = list.stream().filter(footballMatchVo -> footballMatchVo.getMatchDate().equals(date));
             List<FootballMatchVo> dates = StreamToListUtil.getArrayListFromStream(s);
-            map.put(date,dates);
+            map.put("date",date);
+            map.put("data",dates);
+            res.add(map);
         });
-        return map;
+        return res;
     }
 
     public List<FootballMatchVo> getThreeFootballCollectionsByUserId(Long userId) {
         return allSportsFootballMatchDao.getThreeCollectionsByUserId(userId);
     }
 
-    public Map<String,List<BasketballMatchVo>> getAllBasketballCollectionByUserId(Long userId,Pageable pageable) {
+    public List<Map<String,Object>> getAllBasketballCollectionByUserId(Long userId,Pageable pageable) {
         int limit = pageable.getPageSize();
         long offset = pageable.getOffset();
         List<BasketballMatchVo> list = allSportsBasketballMatchDao.getAllSportsMatchByUserId(userId,limit,offset);
         Set<String> set = new LinkedHashSet<>();
         list.forEach(footballMatchVo -> set.add(footballMatchVo.getMatchDate()));
-        Map<String,List<BasketballMatchVo>> map = new HashMap<>();
+        List<Map<String,Object>> res = new ArrayList<>();
         set.forEach(date ->{
+            Map<String,Object> map = new HashMap<>();
             Stream<BasketballMatchVo> s = list.stream().filter(footballMatchVo -> footballMatchVo.getMatchDate().equals(date));
             List<BasketballMatchVo> dates = StreamToListUtil.getArrayListFromStream(s);
-            map.put(date,dates);
+            map.put("date",date);
+            map.put("data",dates);
+            res.add(map);
         });
-        return map;
+        return res;
     }
 
     public List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(Long userId) {

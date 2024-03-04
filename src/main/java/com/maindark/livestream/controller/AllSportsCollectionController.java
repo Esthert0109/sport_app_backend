@@ -25,14 +25,14 @@ public class AllSportsCollectionController {
     AllSportsCollectionService allSportsCollectionService;
 
     @GetMapping("/football/list")
-    public Result<Map<String,List<FootballMatchVo>>> getAllFootballCollection(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
+    public Result<List<Map<String,Object>>> getAllFootballCollection(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                               @RequestParam(value = "size", defaultValue = "10") Integer size) {
         if(liveStreamUser == null){
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
         Long userId = liveStreamUser.getId();
-        Map<String,List<FootballMatchVo>> liveStreamCollectionVos = allSportsCollectionService.getAllFootballCollectionByUserId(userId,request);
+        List<Map<String,Object>> liveStreamCollectionVos = allSportsCollectionService.getAllFootballCollectionByUserId(userId,request);
         return Result.success(liveStreamCollectionVos);
     }
     @GetMapping("/football/list/3")
@@ -46,14 +46,14 @@ public class AllSportsCollectionController {
     }
 
     @GetMapping("/basketball/list")
-    public Result<Map<String,List<BasketballMatchVo>>> getAllCollection(LiveStreamUser liveStreamUser,@RequestParam(value = "page", defaultValue = "1") Integer page,
+    public Result<List<Map<String,Object>>> getAllCollection(LiveStreamUser liveStreamUser,@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                             @RequestParam(value = "size", defaultValue = "10") Integer size) {
         if(liveStreamUser == null){
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
         Long userId = liveStreamUser.getId();
-        Map<String,List<BasketballMatchVo>> liveStreamCollectionVos = allSportsCollectionService.getAllBasketballCollectionByUserId(userId,request);
+        List<Map<String,Object>> liveStreamCollectionVos = allSportsCollectionService.getAllBasketballCollectionByUserId(userId,request);
         return Result.success(liveStreamCollectionVos);
     }
     @GetMapping("/basketball/list/3")
