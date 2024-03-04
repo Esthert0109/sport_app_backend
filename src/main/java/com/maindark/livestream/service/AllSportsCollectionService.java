@@ -10,11 +10,13 @@ import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class AllSportsCollectionService {
 
     @Resource
@@ -63,7 +65,8 @@ public class AllSportsCollectionService {
         allSportsCollection.setMatchId(Long.parseLong(collectionForm.getMatchId()));
         allSportsCollection.setStatus(StatusEnum.UP.getCode());
         allSportsCollectionDao.insert(allSportsCollection);
-        followService.follow(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(),Integer.parseInt(collectionForm.getMatchId()) );
+        followService.follow(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(),Integer.parseInt(collectionForm.getMatchId()));
+        log.info("collection-en-match:{}",collectionForm.getMatchId());
         return allSportsCollection;
     }
 

@@ -78,6 +78,12 @@ public class PushAndPlayService {
         return liveStreamDetailDao.getAllLiveStreamDetails(pageSize,offset);
     }
 
+    public List<LiveStreamDetailVo> getAllLiveStreamDetailsBySportType(Pageable pageable,String sportType) {
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        return liveStreamDetailDao.getAllLiveStreamDetailsBySportType(sportType,pageSize,offset);
+    }
+
     public void deleteLiveRoomById(Integer id) {
         liveStreamDetailDao.deleteLiveStreamDetailById(id);
     }

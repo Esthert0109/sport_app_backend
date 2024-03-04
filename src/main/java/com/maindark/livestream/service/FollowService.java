@@ -3,6 +3,7 @@ package com.maindark.livestream.service;
 
 import com.maindark.livestream.util.RedisKeyUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Slf4j
 public class FollowService {
 
     @Resource
@@ -26,8 +28,10 @@ public class FollowService {
             public Object execute(RedisOperations operations) throws DataAccessException {
                 // 某个用户关注的实体
                 String followeeKey = RedisKeyUtil.getFolloweeKey(userId,entityType);
+                log.info("followeeKey:{}",followeeKey);
                 // 某个实体拥有的粉丝
                 String followerKey = RedisKeyUtil.getFollowerKey(entityType,entityId);
+                log.info("followerKey:{}",followerKey);
                 operations.multi();
                 operations.opsForZSet().add(followeeKey,entityId,System.currentTimeMillis());
                 operations.opsForZSet().add(followerKey,userId,System.currentTimeMillis());

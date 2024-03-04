@@ -61,6 +61,14 @@ public class PushAndPlayController {
         return Result.success(list);
     }
 
+    @GetMapping("/list/{sportType}")
+    public Result<List<LiveStreamDetailVo>> getAllLiveStreamDetailBySportType(@PathVariable("sportType")String sportType,@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                   @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"live_date");
+        List<LiveStreamDetailVo> list = pushAndPlayService.getAllLiveStreamDetailsBySportType(request,sportType);
+        return Result.success(list);
+    }
+
     @DeleteMapping("/{id}")
     public Result<Boolean> deleteLiveRoom(@PathVariable("id")Integer id){
         pushAndPlayService.deleteLiveRoomById(id);
