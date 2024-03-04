@@ -7,13 +7,16 @@ import com.maindark.livestream.domain.AllSportsCollection;
 import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.enums.StatusEnum;
 import com.maindark.livestream.form.CollectionForm;
+import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -31,16 +34,38 @@ public class AllSportsCollectionService {
     @Resource
     FollowService followService;
 
-    public List<FootballMatchVo> getAllFootballCollectionByUserId(Long userId) {
-        return allSportsFootballMatchDao.getAllSportsMatchByUserId(userId);
+    public Map<String,List<FootballMatchVo>> getAllFootballCollectionByUserId(Long userId, Pageable pageable) {
+        int limit = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        List<FootballMatchVo> list = allSportsFootballMatchDao.getAllSportsMatchByUserId(userId,limit,offset);
+        Set<String> set = new LinkedHashSet<>();
+        list.forEach(footballMatchVo -> set.add(footballMatchVo.getMatchDate()));
+        Map<String,List<FootballMatchVo>> map = new HashMap<>();
+        set.forEach(date ->{
+            Stream<FootballMatchVo> s = list.stream().filter(footballMatchVo -> footballMatchVo.getMatchDate().equals(date));
+            List<FootballMatchVo> dates = StreamToListUtil.getArrayListFromStream(s);
+            map.put(date,dates);
+        });
+        return map;
     }
 
     public List<FootballMatchVo> getThreeFootballCollectionsByUserId(Long userId) {
         return allSportsFootballMatchDao.getThreeCollectionsByUserId(userId);
     }
 
-    public List<BasketballMatchVo> getAllBasketballCollectionByUserId(Long userId) {
-        return allSportsBasketballMatchDao.getAllSportsMatchByUserId(userId);
+    public Map<String,List<BasketballMatchVo>> getAllBasketballCollectionByUserId(Long userId,Pageable pageable) {
+        int limit = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        List<BasketballMatchVo> list = allSportsBasketballMatchDao.getAllSportsMatchByUserId(userId,limit,offset);
+        Set<String> set = new LinkedHashSet<>();
+        list.forEach(footballMatchVo -> set.add(footballMatchVo.getMatchDate()));
+        Map<String,List<BasketballMatchVo>> map = new HashMap<>();
+        set.forEach(date ->{
+            Stream<BasketballMatchVo> s = list.stream().filter(footballMatchVo -> footballMatchVo.getMatchDate().equals(date));
+            List<BasketballMatchVo> dates = StreamToListUtil.getArrayListFromStream(s);
+            map.put(date,dates);
+        });
+        return map;
     }
 
     public List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(Long userId) {
@@ -56,6 +81,8 @@ public class AllSportsCollectionService {
 
     public void deleteCollectionById(Long userId, Long matchId) {
         allSportsCollectionDao.deleteCollectionByUserIdAndMatchId(userId,matchId);
+        // cancel follow
+        followService.unfollow(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(),matchId.intValue());
     }
 
     public AllSportsCollection createCollection(Long userId, CollectionForm collectionForm) {

@@ -53,7 +53,7 @@ public interface AllSportsBasketballMatchDao {
     List<BasketballMatchVo> getAllSportsByDate(@Param("date") String date, @Param("pageSize") Integer pageSize, @Param("offset") Long offset);
 
     @Select("select t.match_id as id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_score as home_team_score,t.away_score as away_team_score from all_sports_basketball_match t inner join all_sports_collection co on co.match_id = t.match_id where co.user_id=#{userId} order by t.match_date desc,t.match_time asc  ")
-    List<BasketballMatchVo> getAllSportsMatchByUserId(@Param("userId") Long userId);
+    List<BasketballMatchVo> getAllSportsMatchByUserId(@Param("userId") Long userId,@Param("pageSize") Integer pageSize, @Param("offset") Long offset);
 
     @Select("select t.match_id as id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_score as home_team_score,t.away_score as away_team_score from all_sports_basketball_match t inner join all_sports_collection co on co.match_id= t.match_id where co.user_id=#{userId} order by t.match_date desc,t.match_time asc limit 3")
     List<BasketballMatchVo> getThreeCollectionsByUserId(@Param("userId") Long userId);

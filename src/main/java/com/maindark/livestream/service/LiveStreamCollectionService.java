@@ -97,6 +97,8 @@ public class LiveStreamCollectionService {
 
     public void deleteCollectionById(Long userId, Integer id) {
         liveStreamCollectionDao.deleteCollectionById(userId, id);
+        // cancel follow
+        followService.unfollow(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(),id);
     }
 
 
