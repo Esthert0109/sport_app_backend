@@ -12,12 +12,15 @@ import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.MatchDataConvertUtil;
+import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class LiveStreamCollectionService {
@@ -39,12 +42,26 @@ public class LiveStreamCollectionService {
     @Resource
     FollowService followService;
 
-    public List<FootballMatchVo> getAllFootballCollectionByUserId(Long userId) {
-        List<FootballMatchVo> list = footballMatchDao.getAllFootballCollections(userId);
+    public List<Map<String,Object>> getAllFootballCollectionByUserId(Long userId, Pageable pageable) {
+        int limit = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        List<Map<String,Object>> res = new ArrayList<>();
+        List<FootballMatchVo> list = footballMatchDao.getAllFootballCollections(userId,limit,offset);
         if (list != null && !list.isEmpty()) {
             list = MatchDataConvertUtil.getFootballMatchVos(list);
+            Set<String> set = new LinkedHashSet<>();
+            list.forEach(footballMatchVo -> set.add(footballMatchVo.getMatchDate()));
+            List<FootballMatchVo> finalList = list;
+            set.forEach(date ->{
+                Map<String,Object> map = new HashMap<>();
+                Stream<FootballMatchVo> s = finalList.stream().filter(footballMatchVo -> footballMatchVo.getMatchDate().equals(date));
+                List<FootballMatchVo> dates = StreamToListUtil.getArrayListFromStream(s);
+                map.put("date",date);
+                map.put("data",dates);
+                res.add(map);
+            });
         }
-        return list;
+        return res;
     }
 
     public List<FootballMatchVo> getThreeFootballCollectionsByUserId(Long userId) {
@@ -55,12 +72,26 @@ public class LiveStreamCollectionService {
         return list;
     }
 
-    public List<BasketballMatchVo> getAllBasketballCollectionByUserId(Long userId) {
-        List<BasketballMatchVo> list = basketballMatchDao.getAllBasketballCollectionsByUserId(userId);
+    public List<Map<String,Object>> getAllBasketballCollectionByUserId(Long userId,Pageable pageable) {
+        int limit = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        List<Map<String,Object>> res = new ArrayList<>();
+        List<BasketballMatchVo> list = basketballMatchDao.getAllBasketballCollectionsByUserId(userId,limit,offset);
         if(list != null && !list.isEmpty()) {
             list = MatchDataConvertUtil.getBasketballMatchVos(list);
+            Set<String> set = new LinkedHashSet<>();
+            list.forEach(footballMatchVo -> set.add(footballMatchVo.getMatchDate()));
+            List<BasketballMatchVo> finalList = list;
+            set.forEach(date ->{
+                Map<String,Object> map = new HashMap<>();
+                Stream<BasketballMatchVo> s = finalList.stream().filter(footballMatchVo -> footballMatchVo.getMatchDate().equals(date));
+                List<BasketballMatchVo> dates = StreamToListUtil.getArrayListFromStream(s);
+                map.put("date",date);
+                map.put("data",dates);
+                res.add(map);
+            });
         }
-        return list ;
+        return res ;
     }
 
     public List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(Long userId) {

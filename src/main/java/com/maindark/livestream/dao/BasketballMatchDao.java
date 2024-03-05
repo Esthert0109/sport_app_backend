@@ -96,8 +96,8 @@ public interface BasketballMatchDao {
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +
-            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where co.user_id = #{userId}")
-    List<BasketballMatchVo> getAllBasketballCollectionsByUserId(@Param("userId") Long userId);
+            " basketball_match b left join basketball_competition c on b.competition_id = c.competition_id left join live_stream_collection co on b.match_id= co.match_id where co.user_id = #{userId} order by b.match_time desc limit #{limit} offset #{offset}")
+    List<BasketballMatchVo> getAllBasketballCollectionsByUserId(@Param("userId") Long userId,@Param("limit") Integer limit, @Param("offset") long offset);
 
     @Select("select b.match_id as id,b.competition_id,b.home_team_name,b.away_team_name,b.home_team_logo,b.away_team_logo," +
             "b.match_time,b.status_id,b.home_score as home_team_score,b.away_score as away_team_score,c.name_zh as competition_name from" +

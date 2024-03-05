@@ -10,9 +10,12 @@ import com.maindark.livestream.service.LiveStreamCollectionService;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/collections")
@@ -22,12 +25,14 @@ public class LiveStreamCollectionController {
     LiveStreamCollectionService liveStreamCollectionService;
 
     @GetMapping("/football/list")
-    public Result<List<FootballMatchVo>> getAllFootballCollection(LiveStreamUser liveStreamUser) {
+    public Result<List<Map<String,Object>>> getAllFootballCollection(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                     @RequestParam(value = "size", defaultValue = "10") Integer size) {
         if(liveStreamUser == null) {
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
         Long userId = liveStreamUser.getId();
-        List<FootballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllFootballCollectionByUserId(userId);
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
+        List<Map<String,Object>> liveStreamCollectionVos = liveStreamCollectionService.getAllFootballCollectionByUserId(userId,request);
         return Result.success(liveStreamCollectionVos);
     }
 
@@ -53,12 +58,14 @@ public class LiveStreamCollectionController {
 
 
     @GetMapping("/basketball/list")
-    public Result<List<BasketballMatchVo>> getAllBasketballCollection(LiveStreamUser liveStreamUser) {
+    public Result<List<Map<String,Object>>> getAllBasketballCollection(LiveStreamUser liveStreamUser,@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                      @RequestParam(value = "size", defaultValue = "10") Integer size) {
         if(liveStreamUser == null) {
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
         Long userId = liveStreamUser.getId();
-        List<BasketballMatchVo> liveStreamCollectionVos = liveStreamCollectionService.getAllBasketballCollectionByUserId(userId);
+        List<Map<String,Object>> liveStreamCollectionVos = liveStreamCollectionService.getAllBasketballCollectionByUserId(userId,request);
         return Result.success(liveStreamCollectionVos);
     }
 
