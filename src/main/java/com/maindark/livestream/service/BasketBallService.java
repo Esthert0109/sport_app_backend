@@ -59,7 +59,7 @@ public class BasketBallService {
 
 
 
-    public List<BasketballMatchVo> getBasketballMatchList(String competitionName, String teamName, Pageable pageable) {
+    public List<BasketballMatchVo> getBasketballMatchList(String competitionName, String teamName, Pageable pageable,Long userId) {
         long offset = pageable.getOffset();
         Integer limit = pageable.getPageSize();
         List<BasketballMatchVo> list = new ArrayList<>();
@@ -89,7 +89,7 @@ public class BasketBallService {
             }
         }
         if(list != null && !list.isEmpty()){
-            Stream<BasketballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() >= nowSeconds).map(data ->{
+            Stream<BasketballMatchVo> stream = list.stream().filter(data ->data.getMatchTime() >= nowSeconds).peek(data ->{
                 Long matchTime = data.getMatchTime() * 1000;
                 String timeStr = DateUtil.interceptTime(matchTime);
                 data.setMatchTimeStr(timeStr);
@@ -98,7 +98,11 @@ public class BasketBallService {
                 data.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(statusId));
                 data.setHomeTeamLogo(data.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():data.getHomeTeamLogo());
                 data.setAwayTeamLogo(data.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():data.getAwayTeamLogo());
-                return data;
+                if(userId != null) {
+                    int matchId = data.getId().intValue();
+                    Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                    data.setHasCollected(hasCollected);
+                }
             });
             list = StreamToListUtil.getArrayListFromStream(stream);
         }
@@ -211,16 +215,17 @@ public class BasketBallService {
 
     private List<BasketballMatchVo> getBasketballMatchVos(Long userId,List<BasketballMatchVo> futureMatches) {
         if(futureMatches != null && !futureMatches.isEmpty()){
-            Stream<BasketballMatchVo> basketballMatchVoStream = futureMatches.stream().map(vo ->{
+            Stream<BasketballMatchVo> basketballMatchVoStream = futureMatches.stream().peek(vo ->{
                 vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
                 vo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
                 vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
                 vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getHomeTeamLogo());
                 vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getAwayTeamLogo());
-                int matchId = vo.getId().intValue();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
-                vo.setHasCollected(hasCollected);
-                return vo;
+                if(userId != null) {
+                    int matchId = vo.getId().intValue();
+                    Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                    vo.setHasCollected(hasCollected);
+                }
             });
             futureMatches = StreamToListUtil.getArrayListFromStream(basketballMatchVoStream);
         }

@@ -26,12 +26,16 @@ public class BasketBallController {
      * get today's all matches via competition's name or team's name
      * */
     @GetMapping("/now-list")
-    public Result<List<BasketballMatchVo>> getList(@RequestParam(required = false) String competitionName,
+    public Result<List<BasketballMatchVo>> getList(LiveStreamUser liveStreamUser,@RequestParam(required = false) String competitionName,
                                                    @RequestParam(required = false) String teamName,
                                                    @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
+        }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
-        List<BasketballMatchVo> result = basketBallService.getBasketballMatchList(competitionName,teamName, request);
+        List<BasketballMatchVo> result = basketBallService.getBasketballMatchList(competitionName,teamName, request,userId);
         return Result.success(result);
     }
 
@@ -44,10 +48,10 @@ public class BasketBallController {
     @GetMapping("/list-start")
     public Result<Map<String,List<BasketballMatchVo>>> getAllMatchesStarts(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                            @RequestParam(value = "size", defaultValue = "10") Integer size){
-        if(liveStreamUser == null){
-            return Result.error(CodeMsg.LOGIN_IN);
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
         }
-        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
         Map<String,List<BasketballMatchVo>> results = basketBallService.getBasketballMatchesStarts(userId,request);
         return Result.success(results);
@@ -57,10 +61,10 @@ public class BasketBallController {
     @GetMapping("/list-past")
     public Result<Map<String,List<BasketballMatchVo>>> getAllMatchesPasts(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
-        if(liveStreamUser == null){
-            return Result.error(CodeMsg.LOGIN_IN);
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
         }
-        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
         Map<String,List<BasketballMatchVo>> results = basketBallService.getBasketballMatchesPasts(userId,request);
         return Result.success(results);
@@ -75,10 +79,10 @@ public class BasketBallController {
     @GetMapping("/list-future")
     public Result<Map<String,List<BasketballMatchVo>>> getFootballMatchesFuture(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                                @RequestParam(value = "size", defaultValue = "10") Integer size){
-        if(liveStreamUser == null){
-            return Result.error(CodeMsg.LOGIN_IN);
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
         }
-        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
         Map<String,List<BasketballMatchVo>> results = basketBallService.getBasketballMatchesFuture(userId,request);
         return Result.success(results);
@@ -94,10 +98,10 @@ public class BasketBallController {
                                                           @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                           @RequestParam(value = "size", defaultValue = "10") Integer size,
                                                           @RequestParam(required = false) String checkData){
-        if(liveStreamUser == null){
-            return Result.error(CodeMsg.LOGIN_IN);
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
         }
-        Long userId = liveStreamUser.getId();
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
         List<BasketballMatchVo> footballMatchVos = basketBallService.getMatchListByDate(userId,date,request,checkData);
         return Result.success(footballMatchVos);
