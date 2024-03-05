@@ -29,8 +29,7 @@ public class AllSportsBasketballController {
 
 
     @GetMapping("/now-list")
-    public Result<List<BasketballMatchVo>> getList(LiveStreamUser liveStreamUser, @RequestParam(required = false) String competitionName,
-                                                   @RequestParam(required = false) String teamName,
+    public Result<List<BasketballMatchVo>> getList(LiveStreamUser liveStreamUser, @RequestParam("search") String search,
                                                    @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
         Long userId = null;
@@ -38,7 +37,7 @@ public class AllSportsBasketballController {
             userId = liveStreamUser.getId();
         }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
-        List<BasketballMatchVo> result = allSportsBasketballService.getBasketBallMatchList(competitionName,teamName,request,userId);
+        List<BasketballMatchVo> result = allSportsBasketballService.getBasketBallMatchList(search,request,userId);
         return Result.success(result);
     }
     @GetMapping("/list-start")

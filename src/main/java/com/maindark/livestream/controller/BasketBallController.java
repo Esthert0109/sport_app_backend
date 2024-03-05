@@ -26,8 +26,7 @@ public class BasketBallController {
      * get today's all matches via competition's name or team's name
      * */
     @GetMapping("/now-list")
-    public Result<List<BasketballMatchVo>> getList(LiveStreamUser liveStreamUser,@RequestParam(required = false) String competitionName,
-                                                   @RequestParam(required = false) String teamName,
+    public Result<List<BasketballMatchVo>> getList(LiveStreamUser liveStreamUser,@RequestParam("search") String search,
                                                    @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
         Long userId = null;
@@ -35,7 +34,7 @@ public class BasketBallController {
             userId = liveStreamUser.getId();
         }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_time");
-        List<BasketballMatchVo> result = basketBallService.getBasketballMatchList(competitionName,teamName, request,userId);
+        List<BasketballMatchVo> result = basketBallService.getBasketballMatchList(search,request,userId);
         return Result.success(result);
     }
 

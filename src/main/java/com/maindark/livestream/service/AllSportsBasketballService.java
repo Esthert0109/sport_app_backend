@@ -47,34 +47,25 @@ public class AllSportsBasketballService {
     @Resource
     FollowService followService;
 
-    public List<BasketballMatchVo> getBasketBallMatchList(String competitionName, String teamName, Pageable pageable,Long userId) {
+    public List<BasketballMatchVo> getBasketBallMatchList(String search, Pageable pageable,Long userId) {
         int pageSize = pageable.getPageSize();
         long offset = pageable.getOffset();
-        if(StringUtils.isBlank(competitionName) && StringUtils.isBlank(teamName)) {
-            throw new GlobalException(CodeMsg.FOOT_BALL_MATCH_PARAMS_ERROR);
-        }
+
         List<BasketballMatchVo> list = new ArrayList<>();
         LocalDate now = LocalDate.now();
         LocalDate tomorrow = now.plusDays(1);
         String from = DateUtil.convertDateToStr(now);
         String to = DateUtil.convertDateToStr(tomorrow);
-        if (!StringUtils.isBlank(competitionName)){
-            list = allSportsBasketballMatchDao.getAllSportsBasketMatchByCompetitionName(competitionName,from,to,pageSize,offset);
-        } else if (!StringUtils.isBlank(teamName)) {
-            List<BasketballMatchVo> homeTeams = allSportsBasketballMatchDao.getAllSportsBasketMatchByHomeTeamName(teamName,from,to,pageSize,offset);
-            if(homeTeams != null && !homeTeams.isEmpty()){
-                for(BasketballMatchVo vo:homeTeams){
-                    list.add(vo);
-                }
-            }
-            List<BasketballMatchVo> awayTeams = allSportsBasketballMatchDao.getAllSportsBasketMatchByAwayTeamName(teamName,from,to,pageSize,offset);
-            if(awayTeams != null && !awayTeams.isEmpty()) {
-                for (BasketballMatchVo vo:
-                     awayTeams) {
-                    list.add(vo);
-                }
-            }
+        list = allSportsBasketballMatchDao.getAllSportsBasketMatchByCompetitionName(search,from,to,pageSize,offset);
+        List<BasketballMatchVo> homeTeams = allSportsBasketballMatchDao.getAllSportsBasketMatchByHomeTeamName(search,from,to,pageSize,offset);
+        if(homeTeams != null && !homeTeams.isEmpty()) {
+            list.addAll(homeTeams);
         }
+        List<BasketballMatchVo> awayTeams = allSportsBasketballMatchDao.getAllSportsBasketMatchByAwayTeamName(search,from,to,pageSize,offset);
+        if(awayTeams != null && !awayTeams.isEmpty()) {
+            list.addAll(awayTeams);
+        }
+
         if(list != null && !list.isEmpty()) {
             Stream<BasketballMatchVo> stream = list.stream().filter(data -> data.getMatchDate().equals(from));
             if(userId != null) {
