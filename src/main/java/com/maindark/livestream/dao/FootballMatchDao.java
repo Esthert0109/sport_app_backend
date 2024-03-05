@@ -136,7 +136,7 @@ public interface FootballMatchDao extends BasicDao<FootballMatch> {
             "t1.home_team_name,t1.away_team_name,t1.home_team_score,t1.away_team_score,t1.match_time," +
             "fc.name_zh as competitionName,t1.status_id,t1.line_up from  football_match t1 " +
             "left join  football_competition fc on t1.competition_id = fc.id left join " +
-            "live_stream_collection co on t1.id= co.match_id where co.user_id=#{userId} limit 3")
+            "live_stream_collection co on t1.id= co.match_id where co.user_id=#{userId} order by t1.match_time desc limit 3")
     List<FootballMatchVo> getThreeFootballCollections(@Param("userId") Long userId);
 
 }

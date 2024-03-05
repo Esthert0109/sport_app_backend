@@ -56,10 +56,13 @@ public interface AllSportsFootballMatchDao {
     @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name," +
             "t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up," +
             "t.home_formation,t.away_formation from all_sports_football_match t inner join all_sports_collection co on co.match_id = t.id where " +
-            "co.user_id=#{userId} order by t.match_date desc,t.match_time asc limit #{limit} offset #{offset}  ")
+            "co.user_id=#{userId} order by t.match_date desc,t.match_time desc limit #{limit} offset #{offset}  ")
     List<FootballMatchVo> getAllSportsMatchByUserId(@Param("userId") Long userId,@Param("limit")int limit,@Param("offset")long offset);
 
-    @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation from all_sports_football_match t inner join all_sports_collection co on co.match_id= t.id where co.user_id=#{userId} order by t.match_date desc,t.match_time asc limit 3")
+    @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name," +
+            "t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score," +
+            "t.line_up,t.home_formation,t.away_formation from all_sports_football_match t inner join all_sports_collection co on co.match_id= t.id " +
+            "where co.user_id=#{userId} order by t.match_date desc,t.match_time desc limit 3")
     List<FootballMatchVo> getThreeCollectionsByUserId(@Param("userId") Long userId);
     @Select("select t.id,t.competition_name,t.match_time as matchTimeStr,t.status as statusStr,t.match_date,t.home_team_name,t.away_team_name,t.home_team_logo,t.away_team_logo,t.status,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation from all_sports_football_match t where t.id=#{matchId}")
     FootballMatchVo getAllSportsFootballMatchByMatchId(@Param("matchId")Long matchId);
