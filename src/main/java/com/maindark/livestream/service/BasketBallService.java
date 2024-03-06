@@ -1,7 +1,6 @@
 package com.maindark.livestream.service;
 
 
-
 import com.maindark.livestream.dao.BasketballLineUpDao;
 import com.maindark.livestream.dao.BasketballMatchDao;
 import com.maindark.livestream.dao.BasketballMatchLiveDataDao;
@@ -9,8 +8,6 @@ import com.maindark.livestream.dao.FootballLiveAddressDao;
 import com.maindark.livestream.domain.BasketballLineUp;
 import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.enums.LineUpType;
-import com.maindark.livestream.exception.GlobalException;
-import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.txYun.TxYunConfig;
 import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
