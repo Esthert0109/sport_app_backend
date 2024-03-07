@@ -49,9 +49,7 @@ public class DateUtil {
     }
 
     public static String convertLocalDateToStr(LocalDate localDate){
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String currentDate = localDate.toString();
-        return LocalDate.parse(currentDate,dateFormatter).toString();
+        return localDate.toString();
     }
 
     public static String convertLocalDateToTime(){

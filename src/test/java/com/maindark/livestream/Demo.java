@@ -48,7 +48,7 @@ public class Demo {
     }
 
     public static void main(String[] args) throws Exception {
-        LocalDate now = LocalDate.now();
+    /*    LocalDate now = LocalDate.now();
         //jintian yi jieshu mingtian wei kaisai  zuotian yijieshu
         LocalDate tomorrow = now.plusDays(1);
         LocalDate future = now.plusDays(2);
@@ -57,17 +57,20 @@ public class Demo {
         long tomorrowSeconds = DateUtil.convertDateToLongTime(tomorrow);
         long tomorrowSeconds1 = DateUtil.convertDateToLongTime();
         long futureSeconds = DateUtil.convertDateToLongTime(future);
-        long pastSeconds = DateUtil.convertDateToLongTime(past);
+        long pastSeconds = DateUtil.convertDateToLongTime(past);*/
+        LocalDate localDate = LocalDate.now();
+        String from = DateUtil.convertLocalDateToStr(localDate);
         //System.out.println(pastSeconds);
-        //System.out.println(nowSeconds);
+       /* System.out.println(nowSeconds);
         System.out.println(tomorrowSeconds);
-        System.out.println(tomorrowSeconds1);
+        System.out.println(tomorrowSeconds1);*/
         //System.out.println(futureSeconds);
 //        DateFormat obj = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        Date date = obj.parse("2023-12-05 10:36:45");
 //        LocalDate localDate = LocalDate.parse("2023-12-05 10:36:45");
 //        System.out.println(date.toString());
 //        System.out.println(localDate.toString());
+        System.out.println(from);
 
 
     }
