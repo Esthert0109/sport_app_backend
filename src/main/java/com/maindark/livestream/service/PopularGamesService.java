@@ -2,7 +2,7 @@ package com.maindark.livestream.service;
 
 import com.maindark.livestream.dao.PopularGamesDao;
 import com.maindark.livestream.vo.PopularGamesVo;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
 @Service
 public class PopularGamesService {
 
+    @Resource
     private PopularGamesDao popularGamesDao;
 
     public List<PopularGamesVo> getAllPopularGames() {

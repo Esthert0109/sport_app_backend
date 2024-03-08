@@ -3,6 +3,7 @@ package com.maindark.livestream.vo;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class PopularGamesVo {
@@ -13,6 +14,6 @@ public class PopularGamesVo {
     private String gameAndroidUrl;
     private String gameIphoneUrl;
     private Integer sort;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
+    private Date createdTime;
+    private Date updatedTime;
 }
