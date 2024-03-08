@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface PopularGamesDao {
 
-    @Select("select * from pop_game")
+    @Select("select * from pop_game LIMIT 5")
     List<PopularGamesVo> getAllPopularGames();
 }
 
