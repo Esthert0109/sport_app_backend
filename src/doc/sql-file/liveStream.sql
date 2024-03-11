@@ -248,4 +248,18 @@ create index football_competition_index_name on football_competition(name_zh);
 create index update_football_data_index_uniqueKey on update_football_data(unique_key);
 create index football_live_address_index_matchId on football_live_address(match_id);
 
+
+drop table if exists pop_game;
+create table pop_game(
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY ,
+  game_name_en varchar(255)  COMMENT 'game english name',
+  game_name_cn varchar(255)  COMMENT 'game chinese name',
+  game_logo varchar(255)  COMMENT 'game img url',
+  game_android_url varchar(255) COMMENT 'game android url',
+  game_iphone_url varchar(255) COMMENT 'game iphone url',
+  sort int(2)  COMMENT 'game sort',
+  created_time TIMESTAMP NOT NULL DEFAULT NOW()	COMMENT '创建时间',
+  updated_time TIMESTAMP NOT NULL DEFAULT NOW()	COMMENT '修改时间'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
  
