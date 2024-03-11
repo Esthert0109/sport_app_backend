@@ -17,11 +17,9 @@ public class PopularGamesController {
     @Resource
     PopularGamesService popularGamesService;
 
-
     @GetMapping("/getAll")
     public Result<List<PopularGamesVo>> getAllPopularGame(){
-        List<PopularGamesVo> res = popularGamesService.getAllPopularGames();
-        return Result.success(res) ;
+        return Result.success(popularGamesService.getAllPopularGames());
     }
 
 
