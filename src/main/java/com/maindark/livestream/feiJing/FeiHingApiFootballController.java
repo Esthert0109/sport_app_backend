@@ -1,7 +1,6 @@
 package com.maindark.livestream.feiJing;
 
 import com.maindark.livestream.result.Result;
-import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
