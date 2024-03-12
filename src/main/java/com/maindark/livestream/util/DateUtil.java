@@ -2,6 +2,7 @@ package com.maindark.livestream.util;
 
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.result.CodeMsg;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cglib.core.Local;
 
 import java.text.DateFormat;
@@ -83,6 +84,21 @@ public class DateUtil {
         Date date = calendar.getTime();
         Long time = date.getTime();
         return Long.toHexString(time);
+    }
+
+    public static String convertStrToNormalDate(String time){
+        String date = time.substring(0,9);
+        String[] arr = date.split("/");
+        String month = arr[1];
+        if(month.length() == 1){
+            arr[1] = "0" + month;
+        }
+        date = StringUtils.join(arr,"-");
+        return date;
+    }
+
+    public static String convertStrToNormalTime(String time){
+        return time.substring(10,14);
     }
 
 

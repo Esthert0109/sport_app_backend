@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maindark.livestream.dao.FeiJingFootballMatchDao">
+    <resultMap id="TAddressResult" type="com.maindark.livestream.domain.feijing.FeiJingFootballMatch" >
+        <id column="match_id" property="matchId" jdbcType="INTEGER" />
+        <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
+        <result column="season" property="season" jdbcType="VARCHAR" />
+        <result column="kind" property="kind" jdbcType="INTEGER" />
+        <result column="league_en" property="leagueEn" jdbcType="VARCHAR" />
+        <result column="league_en_short" property="leagueEnShort" jdbcType="VARCHAR" />
+        <result column="league_cns_short" property="leagueCnsShort" jdbcType="VARCHAR" />
+        <result column="status_id" property="statusId" jdbcType="INTEGER" />
+        <result column="match_time" property="matchTime" jdbcType="VARCHAR" />
+        <result column="match_date" property="matchDate" jdbcType="VARCHAR" />
+        <result column="home_team_id" property="homeTeamId" jdbcType="INTEGER" />
+        <result column="away_team_id" property="awayTeamId" jdbcType="INTEGER" />
+        <result column="home_team_name_en" property="homeTeamNameEn" jdbcType="VARCHAR" />
+        <result column="home_team_name_cn" property="homeTeamNameCn" jdbcType="VARCHAR" />
+        <result column="away_team_name_en" property="awayTeamNameEn" jdbcType="VARCHAR" />
+        <result column="away_team_name_cn" property="awayTeamNameCn" jdbcType="VARCHAR" />
+        <result column="home_team_logo" property="homeTeamLogo" jdbcType="VARCHAR" />
+        <result column="away_team_logo" property="awayTeamLogo" jdbcType="VARCHAR" />
+        <result column="home_team_score" property="homeTeamScore" jdbcType="INTEGER" />
+        <result column="away_team_score" property="awayTeamScore" jdbcType="INTEGER" />
+        <result column="home_formation" property="homeFormation" jdbcType="VARCHAR" />
+        <result column="away_formation" property="awayFormation" jdbcType="VARCHAR" />
+        <result column="venue" property="venue" jdbcType="VARCHAR" />
+        <result column="line_up" property="lineUp" jdbcType="INTEGER" />
+        <result column="updated_at" property="updatedTime"      jdbcType="VARCHAR"  />
+    </resultMap>
+
+    <update id="updateMatchScoreByMatchId" parameterType="FeiJingFootballMatch">
+        update fei_jing_football_match
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="statusId != null ">status_id = #{statusId},</if>
+            <if test="homeTeamScore != null ">home_team_score = #{homeTeamScore},</if>
+            <if test="awayTeamScore != null ">away_team_score = #{awayTeamScore},</if>
+            <if test="lineUp != null ">line_up = #{lineUp},</if>
+        </trim>
+        where match_id = #{matchId}
+    </update>
+</mapper>

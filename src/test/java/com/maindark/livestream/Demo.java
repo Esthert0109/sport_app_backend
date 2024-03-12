@@ -2,16 +2,15 @@ package com.maindark.livestream;
 
 import com.maindark.livestream.util.DateUtil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Demo {
     public static void liveRtmpFeed() throws IOException, InterruptedException {
@@ -70,8 +69,14 @@ public class Demo {
 //        LocalDate localDate = LocalDate.parse("2023-12-05 10:36:45");
 //        System.out.println(date.toString());
 //        System.out.println(localDate.toString());
-        System.out.println(from);
+        //System.out.println(from);
 
-
+        String time = "2024/3/12 9:59:14";
+        String date = DateUtil.convertStrToNormalDate(time);
+        String str = DateUtil.convertStrToNormalTime(time);
+        System.out.println(date);
+        System.out.println(str);
     }
+
+
 }

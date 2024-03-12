@@ -3,10 +3,8 @@ package com.maindark.livestream.task;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.maindark.livestream.allSports.AllSportsConfig;
-import com.maindark.livestream.dao.AllSportsAwayMatchLineUpDao;
 import com.maindark.livestream.dao.AllSportsFootballLineUpDao;
 import com.maindark.livestream.dao.AllSportsFootballMatchDao;
-import com.maindark.livestream.dao.AllSportsHomeMatchLineUpDao;
 import com.maindark.livestream.domain.*;
 import com.maindark.livestream.enums.IsFirst;
 import com.maindark.livestream.enums.LineUpType;
@@ -32,11 +30,6 @@ public class AllSportsFootballLineUpTask {
 
     @Resource
     AllSportsFootballMatchDao allSportsFootballMatchDao;
-
-    @Resource
-    AllSportsAwayMatchLineUpDao allSportsAwayMatchLineUpDao;
-   @Resource
-   AllSportsHomeMatchLineUpDao allSportsHomeMatchLineUpDao;
 
    @Resource
     AllSportsFootballLineUpDao allSportsFootballLineUpDao;
