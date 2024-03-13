@@ -1,9 +1,11 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.AnchorFollow;
+import com.maindark.livestream.vo.AnchorFollowVo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Mapper
 public interface AnchorFollowDao {
@@ -20,4 +22,7 @@ public interface AnchorFollowDao {
 
     @Select("Select * from anchor_follow where anchor_id = #{anchorId} and follower_id = #{followerId}")
     AnchorFollow getFollowDetailsByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
+
+    @Select("Select * from anchor_follow where follower_id = #{followerId} and status = true Order By follow_updated_time DESC")
+    List<AnchorFollowVo> getFollowingListByFollowerId(@Param("followerId") Long followerId);
 }

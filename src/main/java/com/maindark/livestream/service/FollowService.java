@@ -4,6 +4,8 @@ package com.maindark.livestream.service;
 import com.maindark.livestream.dao.AnchorFollowDao;
 import com.maindark.livestream.domain.AnchorFollow;
 import com.maindark.livestream.util.RedisKeyUtil;
+import com.maindark.livestream.vo.AnchorFollowVo;
+import com.maindark.livestream.vo.LiveStreamUserVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -23,6 +25,9 @@ public class FollowService {
 
     /*@Resource
     TCustomerService tCustomerService;*/
+
+    @Resource
+    LiveStreamUserService liveStreamUserService;
 
     @Resource
     AnchorFollowDao anchorFollowDao;
@@ -131,8 +136,19 @@ public class FollowService {
         // if follow not existed, create a new follow
             anchorFollowDao.createFollowAnchor(anchorId, followerId);
         }
+    }
 
+    // get all following list
+    public List<AnchorFollowVo> getFollowingListByFollowerId(Long followerId) {
+        List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByFollowerId(followerId);
 
+        for(AnchorFollowVo anchor: followingList) {
+            LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
+            anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
+            anchor.setAnchorDetails(anchorDetail);
+        }
+
+        return followingList;
     }
 
 
@@ -140,4 +156,6 @@ public class FollowService {
     public Boolean checkIfFollowed(Long anchorId, Long followerId){
         return anchorFollowDao.checkFollowExistByAnchorIdFollowerId(anchorId, followerId);
     }
+
+
 }
