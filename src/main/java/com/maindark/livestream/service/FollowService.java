@@ -1,6 +1,8 @@
 package com.maindark.livestream.service;
 
 
+import com.maindark.livestream.dao.AnchorFollowDao;
+import com.maindark.livestream.domain.AnchorFollow;
 import com.maindark.livestream.util.RedisKeyUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,9 @@ public class FollowService {
 
     /*@Resource
     TCustomerService tCustomerService;*/
+
+    @Resource
+    AnchorFollowDao anchorFollowDao;
 
     public void follow(Integer userId,int entityType,int entityId) {
         redisTemplate.execute(new SessionCallback() {
@@ -109,5 +114,30 @@ public class FollowService {
         return list;
     }*/
 
+    // create follow and unfollow
+    public void createFollow(Long anchorId, Long followerId) {
 
+        // if follow existed before
+        if(checkIfFollowed(anchorId, followerId) == true){
+            //check the followed status
+            AnchorFollow followDetails = anchorFollowDao.getFollowDetailsByAnchorIdFollowerId(anchorId, followerId);
+            Boolean followStatus = followDetails.getStatus();
+            Long id = followDetails.getId();
+
+            //if following, then unfollow, else follow back
+            anchorFollowDao.updateFollowAnchorStatusById(id, !followStatus);
+
+        }else{
+        // if follow not existed, create a new follow
+            anchorFollowDao.createFollowAnchor(anchorId, followerId);
+        }
+
+
+    }
+
+
+    //  check if follow existed
+    public Boolean checkIfFollowed(Long anchorId, Long followerId){
+        return anchorFollowDao.checkFollowExistByAnchorIdFollowerId(anchorId, followerId);
+    }
 }
