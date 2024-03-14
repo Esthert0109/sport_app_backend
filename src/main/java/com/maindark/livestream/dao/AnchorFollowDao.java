@@ -23,6 +23,6 @@ public interface AnchorFollowDao {
     @Select("Select * from anchor_follow where anchor_id = #{anchorId} and follower_id = #{followerId}")
     AnchorFollow getFollowDetailsByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
-    @Select("Select * from anchor_follow where follower_id = #{followerId} and status = true Order By follow_updated_time DESC")
+    @Select("SELECT * FROM anchor_follow WHERE follower_id = #{followerId} AND status = true ORDER BY streaming_status DESC, follow_updated_time DESC")
     List<AnchorFollowVo> getFollowingListByFollowerId(@Param("followerId") Long followerId);
 }

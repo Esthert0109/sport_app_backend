@@ -11,6 +11,7 @@ public class AnchorFollowVo {
 
     private Long id;
     private Long anchorId;
+    private Boolean streamingStatus;
     private LiveStreamUserVo anchorDetails;
     private Long followerId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
