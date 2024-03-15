@@ -1,5 +1,8 @@
 package com.maindark.livestream.feiJing;
 
+import com.maindark.livestream.dao.FeijingBasketballMatchDao;
+import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
+import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
 import com.maindark.livestream.result.Result;
 import jakarta.annotation.Resource;
 import org.apache.ibatis.annotations.Select;
@@ -17,6 +20,9 @@ public class FeiJingApiBasketballController {
     @Resource
     FeiJingApiBasketballService feijingApiBasketballService;
 
+//    @Resource
+//    FeijingBasketballMatchDao feijingBasketballMatchDao;
+
 //    @GetMapping("/teams")
 //    public Result<Boolean> getAllTeams(){
 //        feijingApiBasketballService.getAllTeams();
@@ -28,9 +34,16 @@ public class FeiJingApiBasketballController {
 //        List<Map<String,Object>> res = feijingApiBasketballService.getMatchByDate(matchDate);
 //        return Result.success(res);
 //    }
-    @GetMapping("/pending")
-    @Select("select * from fei_jing_basketball_match where match_state = 0")
-    public Result<Boolean> getUpcomingMatches(){
+
+    @GetMapping("/matches")
+    public Result<Boolean> getMatches(){
+        feijingApiBasketballService.getMatches();
         return Result.success(true);
+    }
+
+    @GetMapping("/pending")
+    public Result<List<Map<String, Object>>> getUpcomingMatches(){
+        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
+        return Result.success(matches);
     }
 }
