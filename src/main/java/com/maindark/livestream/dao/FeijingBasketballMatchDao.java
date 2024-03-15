@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface FeijingBasketballMatchDao {
 
@@ -20,4 +22,12 @@ public interface FeijingBasketballMatchDao {
             ",#{matchState},#{homeTeamId},#{homeTeamEn},#{homeTeamChs},#{awayTeamId},#{awayTeamEn}," +
             "#{awayTeamChs},#{homeScore},#{awayScore},#{season},#{kind},#{updatedDate})")
     void insertData(FeijingBasketballMatch feijingBasketballMatch);
+
+
+    @Select("select * from fei_jing_basketball_match where match_state = 0")
+    List<FeijingBasketballMatch> getMatchesByState();
+
+
+
+
 }
