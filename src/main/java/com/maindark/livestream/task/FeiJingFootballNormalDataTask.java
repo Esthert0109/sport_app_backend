@@ -3,7 +3,6 @@ package com.maindark.livestream.task;
 import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.dao.FeiJingFootballMatchDao;
 import com.maindark.livestream.dao.FeiJingFootballTeamDao;
-import com.maindark.livestream.domain.AllSportsBasketballMatch;
 import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
 import com.maindark.livestream.domain.feijing.FeiJingFootballTeam;
 import com.maindark.livestream.feiJing.FeiJingConfig;
@@ -34,7 +33,7 @@ public class FeiJingFootballNormalDataTask {
     FeiJingFootballMatchDao feiJingFootballMatchDao;
 
     @Scheduled(cron = "0 0 0 * * ?")
-    public void getBasketballMatch(){
+    public void getFootballMatch(){
         LocalDate localDate = LocalDate.now();
         String from = DateUtil.convertLocalDateToStr(localDate);
         String url = feiJingConfig.getTeamMatch()+from;
@@ -86,10 +85,17 @@ public class FeiJingFootballNormalDataTask {
                 feiJingFootballMatch.setLineUp(StringUtils.equals("",lineUp)?0:1);
                 feiJingFootballMatch.setUpdatedTime(updateTime);
                 feiJingFootballMatch.setStatusId(statusId);
-                String homeTeamLogo = feiJingFootballTeamDao.getTeamLogoByTeamId(homeTeamId);
-                String awayTeamLogo = feiJingFootballTeamDao.getTeamLogoByTeamId(awayTeamId);
-                if(!StringUtils.equals("",homeTeamLogo)) feiJingFootballMatch.setHomeTeamLogo(homeTeamLogo);
-                if(!StringUtils.equals("",awayTeamLogo)) feiJingFootballMatch.setAwayTeamLogo(awayTeamLogo);
+                FeiJingFootballTeam  homeTeam = feiJingFootballTeamDao.getTeamLogoByTeamId(homeTeamId);
+                if(homeTeam != null) {
+                    feiJingFootballMatch.setHomeTeamLogo(homeTeam.getLogo());
+                    feiJingFootballMatch.setHomeCoach(homeTeam.getCoachCn());
+                }
+
+                FeiJingFootballTeam awayTeam = feiJingFootballTeamDao.getTeamLogoByTeamId(awayTeamId);
+                if(awayTeam != null) {
+                    feiJingFootballMatch.setAwayCoach(awayTeam.getCoachCn());
+                    feiJingFootballMatch.setAwayTeamLogo(awayTeam.getLogo());
+                }
                 int existed = feiJingFootballMatchDao.queryExisted(matchId);
                 if(existed <=0) {
                     feiJingFootballMatchDao.insertData(feiJingFootballMatch);

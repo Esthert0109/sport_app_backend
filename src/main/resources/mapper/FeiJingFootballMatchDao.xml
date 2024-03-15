@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.maindark.livestream.dao.FeiJingFootballMatchDao">
-    <resultMap id="TAddressResult" type="com.maindark.livestream.domain.feijing.FeiJingFootballMatch" >
+    <resultMap id="FootballResult" type="com.maindark.livestream.domain.feijing.FeiJingFootballMatch" >
         <id column="match_id" property="matchId" jdbcType="INTEGER" />
         <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
         <result column="season" property="season" jdbcType="VARCHAR" />

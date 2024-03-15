@@ -1,10 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface FeiJingFootballMatchDao {
@@ -22,4 +19,6 @@ public interface FeiJingFootballMatchDao {
     int  queryExisted(@Param("matchId")Integer matchId);
 
     void updateMatchScoreByMatchId(FeiJingFootballMatch feiJingFootballMatch);
+    @Update("update fei_jing_football_match set home_formation = #{homeFormation},away_formation=#{awayFormation} where match_id=#{matchId}")
+    void updateFormationByMatchId(@Param("homeFormation") String homeFormation, @Param("awayFormation") String awayFormation, @Param("matchId") Integer matchId);
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.dao.FeiJingFootballMatchDao;
 import com.maindark.livestream.dao.FeiJingFootballTeamDao;
 import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
+import com.maindark.livestream.domain.feijing.FeiJingFootballTeam;
 import com.maindark.livestream.feiJing.FeiJingConfig;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
@@ -90,10 +91,18 @@ public class FeiJingFootballCurrentMatchTask {
         feiJingFootballMatch.setLineUp(StringUtils.equals("",lineUp)?0:1);
         feiJingFootballMatch.setUpdatedTime(updateTime);
         feiJingFootballMatch.setStatusId(statusId);
-        String homeTeamLogo = feiJingFootballTeamDao.getTeamLogoByTeamId(homeTeamId);
-        String awayTeamLogo = feiJingFootballTeamDao.getTeamLogoByTeamId(awayTeamId);
-        if(!StringUtils.equals("",homeTeamLogo)) feiJingFootballMatch.setHomeTeamLogo(homeTeamLogo);
-        if(!StringUtils.equals("",awayTeamLogo)) feiJingFootballMatch.setAwayTeamLogo(awayTeamLogo);
+        feiJingFootballMatch.setMatchTime(matchTime);
+        FeiJingFootballTeam homeTeam = feiJingFootballTeamDao.getTeamLogoByTeamId(homeTeamId);
+        if(homeTeam != null) {
+            feiJingFootballMatch.setHomeTeamLogo(homeTeam.getLogo());
+            feiJingFootballMatch.setHomeCoach(homeTeam.getCoachCn());
+        }
+
+        FeiJingFootballTeam awayTeam = feiJingFootballTeamDao.getTeamLogoByTeamId(awayTeamId);
+        if(awayTeam != null) {
+            feiJingFootballMatch.setAwayCoach(awayTeam.getCoachCn());
+            feiJingFootballMatch.setAwayTeamLogo(awayTeam.getLogo());
+        }
         return feiJingFootballMatch;
     }
 

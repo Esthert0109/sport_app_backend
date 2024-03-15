@@ -13,5 +13,11 @@ public class FeiJingConfig {
     private String teamMatch;
     private String todayMatch;
     private String changeMatch;
-    private String lineUp;
+    private String lineup;
+    private String liveData;
+    private String basketballTeam;
+    private String basketballMatch;
+    private String basketballTodayMatch;
+    private String basketballChangeMatch;
+
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maindark.livestream.dao.FeiJingBasketballMatchDao">
+    <resultMap id="BasketballResult" type="com.maindark.livestream.domain.feijing.FeiJingBasketballMatch" >
+        <id column="match_id" property="matchId" jdbcType="INTEGER" />
+        <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
+        <result column="season" property="season" jdbcType="VARCHAR" />
+        <result column="competition_name" property="competitionName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="match_time" property="matchTime" jdbcType="VARCHAR" />
+        <result column="match_date" property="matchDate" jdbcType="VARCHAR" />
+        <result column="home_team_id" property="homeTeamId" jdbcType="INTEGER" />
+        <result column="away_team_id" property="awayTeamId" jdbcType="INTEGER" />
+        <result column="home_team_name" property="homeTeamName" jdbcType="VARCHAR" />
+        <result column="home_team_cns" property="homeTeamCns" jdbcType="VARCHAR" />
+        <result column="away_team_name" property="awayTeamName" jdbcType="VARCHAR" />
+        <result column="away_team_cns" property="awayTeamCns" jdbcType="VARCHAR" />
+        <result column="home_team_logo" property="homeTeamLogo" jdbcType="VARCHAR" />
+        <result column="away_team_logo" property="awayTeamLogo" jdbcType="VARCHAR" />
+        <result column="home_score" property="homeTeamScore" jdbcType="INTEGER" />
+        <result column="h_f_quarter" property="hFQuarter" jdbcType="INTEGER" />
+        <result column="h_s_quarter" property="hSQuarter" jdbcType="INTEGER" />
+        <result column="h_t_quarter" property="hTQuarter" jdbcType="INTEGER" />
+        <result column="h_4_quarter" property="h4Quarter" jdbcType="INTEGER" />
+        <result column="away_score" property="awayTeamScore" jdbcType="INTEGER" />
+        <result column="a_f_quarter" property="aFQuarter" jdbcType="INTEGER" />
+        <result column="a_s_quarter" property="aSQuarter" jdbcType="INTEGER" />
+        <result column="a_t_quarter" property="aTQuarter" jdbcType="INTEGER" />
+        <result column="a_4_quarter" property="a4Quarter" jdbcType="INTEGER" />
+        <result column="has_state" property="hasState" jdbcType="BOOLEAN" />
+    </resultMap>
+
+    <update id="updateMatchScoreByMatchId" parameterType="FeiJingBasketballMatch">
+        update fei_jing_basketball_match
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null and status != '' ">status = #{status},</if>
+            <if test="homeTeamScore != null ">home_score = #{homeTeamScore},</if>
+            <if test="hFQuarter != null ">h_f_quarter = #{hFQuarter},</if>
+            <if test="hSQuarter != null ">h_s_quarter = #{hSQuarter},</if>
+            <if test="hTQuarter != null ">h_t_quarter = #{hTQuarter},</if>
+            <if test="h4Quarter != null ">h_4_quarter = #{h4Quarter},</if>
+            <if test="awayTeamScore != null ">away_score = #{awayTeamScore},</if>
+            <if test="aFQuarter != null ">a_f_quarter = #{aFQuarter},</if>
+            <if test="aSQuarter != null ">a_s_quarter = #{aSQuarter},</if>
+            <if test="aTQuarter != null ">a_t_quarter = #{aTQuarter},</if>
+            <if test="a4Quarter != null ">a_4_quarter = #{a4Quarter},</if>
+            <if test="hasState != null ">has_state = #{hasState},</if>
+        </trim>
+        where match_id = #{matchId}
+    </update>
+</mapper>

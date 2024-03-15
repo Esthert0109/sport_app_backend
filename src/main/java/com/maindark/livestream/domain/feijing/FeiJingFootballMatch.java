@@ -28,6 +28,8 @@ public class FeiJingFootballMatch {
     private Integer awayTeamScore;
     private String homeFormation;
     private String awayFormation;
+    private String homeCoach;
+    private String awayCoach;
     private String venue;
     /*if there is a line-up 0 no 1 yes*/
     private Integer lineUp;
