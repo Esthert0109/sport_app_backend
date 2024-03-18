@@ -31,7 +31,7 @@ public class FeiJingBasketballCurrentMatchTask {
     @Resource
     FeiJingBasketballMatchDao feiJingBasketballMatchDao;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     public void getCurrentMatch(){
         String url = feiJingConfig.getBasketballTodayMatch();
         String result = HttpUtil.sendGet(url);
