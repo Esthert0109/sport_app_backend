@@ -17,10 +17,10 @@ public interface FeiJingFootballLineUpDao {
     int queryExists(@Param("playerId")Integer playerId, @Param("matchId")Integer matchId);
 
     @Select("select * from fei_jing_football_line_up where type= 0 and  match_id=#{matchId}")
-    List<AllSportsFootballLineUp> getHomeMatchLineUpByMatchId(@Param("matchId") Integer matchId);
+    List<FeiJingFootballLineUp> getHomeMatchLineUpByMatchId(@Param("matchId") Integer matchId);
 
     @Select("select * from fei_jing_football_line_up where type= 1 and  match_id=#{matchId}")
-    List<AllSportsFootballLineUp> getAwayMatchLineUpByMatchId(@Param("matchId") Integer matchId);
+    List<FeiJingFootballLineUp> getAwayMatchLineUpByMatchId(@Param("matchId") Integer matchId);
     @Update("update fei_jing_football_line_up set rating=#{rating} where player_id=#{playerId} and match_id=#{matchId} ")
     void updateMatchLineUp(FeiJingFootballLineUp allSportsFootballLineUp);
 
