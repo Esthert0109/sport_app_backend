@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "feijing-basketball")
+@ConfigurationProperties(prefix = "feijing.basketball")
 public class FeiJingBasketballConfig {
-    private String teamMatch;
+    private String match;
 }

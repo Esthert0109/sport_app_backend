@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `fei_jing_basketball_match`;
-CREATE TABLE `fei_jing_basketball_match`
+DROP TABLE IF EXISTS `fei_jing_basketball_all_match`;
+CREATE TABLE `fei_jing_basketball_all_match`
 (
     `match_id`       bigint NOT NULL COMMENT '赛程ID',
     `competition_id` bigint NOT NULL COMMENT '联赛ID',

@@ -36,8 +36,8 @@ public class FeiJingApiBasketballController {
 //    }
 
     @GetMapping("/matches")
-    public Result<Boolean> getMatches(){
-        feijingApiBasketballService.getMatches();
+    public Result<Boolean> getAllMatches(){
+        feijingApiBasketballService.getAllMatches();
         return Result.success(true);
     }
 

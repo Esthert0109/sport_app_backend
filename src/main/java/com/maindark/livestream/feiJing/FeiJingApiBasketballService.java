@@ -81,8 +81,8 @@ public class FeiJingApiBasketballService {
 //    }
 //}
 
-    public void getMatches() {
-        String url = feiJingBasketballConfig.getTeamMatch();
+    public void getAllMatches() {
+        String url = feiJingBasketballConfig.getMatch();
         String result = HttpUtil.sendGet(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         List<Map<String, Object>> matchList = (List<Map<String, Object>>) resultObj.get("matchList");
