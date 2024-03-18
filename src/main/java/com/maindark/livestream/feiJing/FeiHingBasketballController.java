@@ -23,10 +23,10 @@ public class FeiHingBasketballController {
         return Result.success(true);
     }
 
-    @GetMapping("match/{matchDate}")
+    @GetMapping("/match/{matchDate}")
     public Result<List<Map<String,Object>>> getMatches(@PathVariable("matchDate")String matchDate){
-        feiHingApiBasketballService.getMatchesByDate(matchDate);
-        return null;
+        List<Map<String,Object>> res = feiHingApiBasketballService.getMatchesByDate(matchDate);
+        return Result.success(res);
     }
 
 
