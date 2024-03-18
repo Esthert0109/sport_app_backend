@@ -21,6 +21,6 @@ public class FeiJingConfig {
     private String basketballChangeMatch;
     private String basketballInfo;
     private String footballInfo;
-
+    private String basketballLineup;
 
 }

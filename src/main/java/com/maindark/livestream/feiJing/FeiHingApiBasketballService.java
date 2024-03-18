@@ -32,7 +32,7 @@ public class FeiHingApiBasketballService {
         String url = feiJingConfig.getBasketballTeam();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> teamlist = (List<Map<String,Object>>) resultObj.get("teamList");
+        List<Map<String,Object>> teamlist = (List<Map<String,Object>>) resultObj.get("TeamList");
         if(teamlist != null && !teamlist.isEmpty()) {
             teamlist.forEach(obj ->{
                 Integer teamId = (Integer) obj.get("teamId");

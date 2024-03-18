@@ -45,12 +45,12 @@ CREATE TABLE `fei_jing_basketball_match` (
   PRIMARY KEY (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `all_sports_basketball_line_up`;
-CREATE TABLE `all_sports_basketball_line_up` (
-  `id` int(11) auto_increment COMMENT 'id',
-  `match_id` bigint(20) NOT NULL  COMMENT 'match_id',
+DROP TABLE IF EXISTS `fei_jing_basketball_line_up`;
+CREATE TABLE `fei_jing_basketball_line_up` (
+  `id` int NOT NULL auto_increment  COMMENT 'id',
+  `match_id` int NOT NULL  COMMENT 'match_id',
   `type` int(1) not null COMMENT '0 home 1 away',
-  `player_id` bigint(20) COMMENT 'player id',
+  `player_id` int COMMENT 'player id',
   `player_name` varchar(128) NOT NULL COMMENT 'player_name',
   `minutes` varchar(8)  COMMENT 'minutes',
   `point` varchar(8)  COMMENT 'point',
@@ -69,25 +69,9 @@ CREATE TABLE `all_sports_basketball_line_up` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `all_sports_basketball_match_live_data`;
-CREATE TABLE `all_sports_basketball_match_live_data` (
-  `id` int(11) auto_increment COMMENT 'id',
-  `match_id` bigint(20) NOT NULL  COMMENT 'match_id',
-  `status` varchar(16) NOT NULL COMMENT 'status',
-  `match_time` varchar(8) COMMENT 'match time',
-  `match_date` varchar(32) COMMENT 'match_date',
-  `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
-  `away_team_name` varchar(255) NOT NULL COMMENT 'home team name',
-  `home_team_logo` varchar(255) COMMENT 'home team logo',
-  `away_team_logo` varchar(255) COMMENT 'away team logo',
-  `h_f_quarter` int(3) NOT NULL COMMENT 'hf_quarter',
-  `h_s_quarter` int(3) NOT NULL COMMENT 'hs_quarter',
-  `h_t_quarter` int(3) NOT NULL COMMENT 'ht_quarter',
-  `h_4_quarter` int(3) NOT NULL COMMENT 'h4_quarter',
-  `a_f_quarter` int(3) NOT NULL COMMENT 'af_quarter',
-  `a_s_quarter` int(3) NOT NULL COMMENT 'as_quarter',
-  `a_t_quarter` int(3) NOT NULL COMMENT 'at_quarter',
-  `a_4_quarter` varchar(32)  COMMENT 'a4_quarter',
+DROP TABLE IF EXISTS `fei_jing_basketball_match_live_data`;
+CREATE TABLE `fei_jing_basketball_match_live_data` (
+  `match_id` int NOT NULL  COMMENT 'match_id',
   `h_blocks` varchar(32)  COMMENT '盖帽',
   `h_field_goals` varchar(32)  COMMENT '投篮',
   `h_free_throws` varchar(32)  COMMENT '罚球',
@@ -104,8 +88,6 @@ CREATE TABLE `all_sports_basketball_match_live_data` (
   `a_steals` varchar(32)  COMMENT '抢断',
   `a_three_point_goals` varchar(32)  COMMENT '3分球进球数',
   `a_turn_overs` varchar(32)  COMMENT '失误',
-  `home_score` int(3)  COMMENT 'home score',
-  `away_score` int(3)  COMMENT 'away score',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`match_id`)
 ) ENGINE=InnoDB auto_increment=1 DEFAULT CHARSET=utf8mb4;
 
