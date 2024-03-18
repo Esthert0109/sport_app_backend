@@ -1,6 +1,6 @@
 package com.maindark.livestream.task;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSON;
 import com.maindark.livestream.dao.FeiJingFootballLineUpDao;
 import com.maindark.livestream.dao.FeiJingFootballMatchDao;
@@ -67,10 +67,10 @@ public class FeiHingFootballLineUpTask {
             for (Object o : jsonArray) {
                 Map<String, Object> map = (Map<String, Object>) o;
                 String playerName = (String) map.get("nameChs");
-                Integer playerNumber = (Integer) map.get("number");
+                String playerNumber = (String) map.get("number");
                 String playerPosition = (String) map.get("positionId");
                 Integer playerId = (Integer) map.get("playerId");
-                FeiJingFootballLineUp footballLineUp = getAllSportsLineUp(playerId, playerNumber, playerPosition, matchId, playerName, first, teamType);
+                FeiJingFootballLineUp footballLineUp = getAllSportsLineUp(playerId, Integer.parseInt(playerNumber), playerPosition, matchId, playerName, first, teamType);
                 int exist = feiJingFootballLineUpDao.queryExists(playerId, matchId);
                 if (exist <= 0) {
                     feiJingFootballLineUpDao.insert(footballLineUp);
