@@ -1,13 +1,16 @@
 package com.maindark.livestream.task;
 
 import com.alibaba.fastjson.JSON;
+import com.maindark.livestream.dao.FeiJingFootballInfoDao;
 import com.maindark.livestream.dao.FeiJingFootballMatchDao;
 import com.maindark.livestream.dao.FeiJingFootballTeamDao;
 import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
 import com.maindark.livestream.domain.feijing.FeiJingFootballTeam;
+import com.maindark.livestream.domain.feijing.FeiJingInfo;
 import com.maindark.livestream.feiJing.FeiJingConfig;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
+import io.swagger.v3.core.util.Json;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +34,9 @@ public class FeiJingFootballNormalDataTask {
 
     @Resource
     FeiJingFootballMatchDao feiJingFootballMatchDao;
+
+    @Resource
+    FeiJingFootballInfoDao feiJingFootballInfoDao;
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void getFootballMatch(){
@@ -138,4 +144,51 @@ public class FeiJingFootballNormalDataTask {
         }
     }
 
+    @Scheduled(cron = "0 */5 * * * *")
+    public void getFootballInfo(){
+        String url = feiJingConfig.getFootballInfo();
+        String result = HttpUtil.sendGet(url);
+        Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
+        List<Map<String, Object>> infoList = (List<Map<String, Object>>) resultObj.get("list");
+        if(infoList != null && !infoList.isEmpty()) {
+            infoList.forEach(info -> {
+                Integer recordId = (Integer) info.get("recordId");
+                int existed = feiJingFootballInfoDao.queryExisted(recordId);
+
+//                if not existed
+                if(existed <=0){
+                    FeiJingInfo feiJingInfo = getFeiJingFootballInfo(info);
+                    feiJingFootballInfoDao.insertData(feiJingInfo);
+                }
+            });
+        }
+    }
+
+
+    public FeiJingInfo getFeiJingFootballInfo(Map<String, Object> info){
+        FeiJingInfo feiJingInfo = new FeiJingInfo();
+        Integer recordId = (Integer) info.get("recordId");
+        Integer matchId = (Integer) info.get("matchId");
+        Integer leagueId = (Integer) info.get("leagueId");
+        String leagueName = (String) info.get("leagueName");
+        String homeTeam = (String) info.get("homeTeam");
+        String awayTeam = (String) info.get("awayTeam");
+        Integer type = (Integer) info.get("type");
+        String title = (String) info.get("title");
+        String content = (String) info.get("content");
+        String updateTime = (String) info.get("updateTime");
+
+        feiJingInfo.setRecordId(recordId);
+        feiJingInfo.setMatchId(matchId);
+        feiJingInfo.setLeagueId(leagueId);
+        feiJingInfo.setLeagueName(leagueName);
+        feiJingInfo.setHomeTeam(homeTeam);
+        feiJingInfo.setAwayTeam(awayTeam);
+        feiJingInfo.setType(type);
+        feiJingInfo.setTitle(title);
+        feiJingInfo.setContent(content);
+        feiJingInfo.setUpdateTime(updateTime);
+
+        return feiJingInfo;
+    }
 }
