@@ -23,6 +23,13 @@ public interface AnchorFollowDao {
     @Select("Select * from follow where anchor_id = #{anchorId} and follower_id = #{followerId}")
     AnchorFollow getFollowDetailsByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
-    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY streaming_status DESC, follow_updated_time DESC")
-    List<AnchorFollowVo> getFollowingListByFollowerId(@Param("followerId") Long followerId);
+    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY streaming_status DESC, follow_updated_time DESC LIMIT #{limit} OFFSET #{offset}")
+    List<AnchorFollowVo> getFollowingListByFollowerId(@Param("followerId") Long followerId, @Param("limit") Integer limit, @Param("offset") Long offset);
+
+    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY follow_updated_time DESC LIMIT #{limit} OFFSET #{offset}")
+    List<AnchorFollowVo> getFollowingListByDescOrder(@Param("followerId") Long followerId, @Param("limit") Integer limit, @Param("offset") Long offset);
+
+    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY follow_updated_time ASC LIMIT #{limit} OFFSET #{offset}")
+    List<AnchorFollowVo> getFollowingListByAscOrder(@Param("followerId") Long followerId, @Param("limit") Integer limit, @Param("offset") Long offset);
+
 }

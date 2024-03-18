@@ -10,6 +10,7 @@ import com.maindark.livestream.service.LiveStreamUserService;
 import com.maindark.livestream.vo.AnchorFollowVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,12 +35,41 @@ public class AnchorFollowController {
     }
 
     @GetMapping(value = "/following")
-    public Result<List<AnchorFollowVo>> getFollowingListByFollowerId(LiveStreamUser liveStreamUser){
+    public Result<List<AnchorFollowVo>> getFollowingListByFollowerId(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "15") Integer size){
+
         if(liveStreamUser == null){
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
 
-        List<AnchorFollowVo> followingList= followService.getFollowingListByFollowerId(liveStreamUser.getId());
+        PageRequest request = PageRequest.of(page -1, size);
+
+        List<AnchorFollowVo> followingList= followService.getFollowingListByFollowerId(liveStreamUser.getId(), request);
+
+        return Result.success(followingList);
+
+    }
+
+    @GetMapping(value = "/following/desc")
+    public Result<List<AnchorFollowVo>> getFollowingListByDescOrder(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "15") Integer size){
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        PageRequest request = PageRequest.of(page -1, size);
+
+        List<AnchorFollowVo> followingList= followService.getFollowingListByDescOrder(liveStreamUser.getId(), request);
+
+        return Result.success(followingList);
+
+    }
+
+    @GetMapping(value = "/following/asc")
+    public Result<List<AnchorFollowVo>> getFollowingListByAscOrder(LiveStreamUser liveStreamUser, @RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "size", defaultValue = "15") Integer size){
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        PageRequest request = PageRequest.of(page -1, size);
+
+        List<AnchorFollowVo> followingList= followService.getFollowingListByAscOrder(liveStreamUser.getId(), request);
 
         return Result.success(followingList);
 
