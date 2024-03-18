@@ -34,12 +34,12 @@
         update fei_jing_basketball_match
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null and status != '' ">status = #{status},</if>
-            <if test="homeTeamScore != null ">home_score = #{homeScore},</if>
+            <if test="homeScore != null ">home_score = #{homeScore},</if>
             <if test="hFQuarter != null ">h_f_quarter = #{hFQuarter},</if>
             <if test="hSQuarter != null ">h_s_quarter = #{hSQuarter},</if>
             <if test="hTQuarter != null ">h_t_quarter = #{hTQuarter},</if>
             <if test="h4Quarter != null ">h_4_quarter = #{h4Quarter},</if>
-            <if test="awayTeamScore != null ">away_score = #{awayScore},</if>
+            <if test="awayScore != null ">away_score = #{awayScore},</if>
             <if test="aFQuarter != null ">a_f_quarter = #{aFQuarter},</if>
             <if test="aSQuarter != null ">a_s_quarter = #{aSQuarter},</if>
             <if test="aTQuarter != null ">a_t_quarter = #{aTQuarter},</if>
