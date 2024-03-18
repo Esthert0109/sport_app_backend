@@ -9,6 +9,8 @@ import com.maindark.livestream.vo.LiveStreamUserVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
@@ -139,8 +141,11 @@ public class FollowService {
     }
 
     // get all following list
-    public List<AnchorFollowVo> getFollowingListByFollowerId(Long followerId) {
-        List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByFollowerId(followerId);
+    public List<AnchorFollowVo> getFollowingListByFollowerId(Long followerId, Pageable pageable) {
+
+        Integer limit = pageable.getPageSize();
+        Long offset = pageable.getOffset();
+        List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByFollowerId(followerId,limit, offset );
 
         for(AnchorFollowVo anchor: followingList) {
             LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
@@ -148,6 +153,33 @@ public class FollowService {
             anchor.setAnchorDetails(anchorDetail);
         }
 
+        return followingList;
+    }
+
+    public List<AnchorFollowVo> getFollowingListByDescOrder(Long followerId, Pageable pageable) {
+        Integer limit = pageable.getPageSize();
+        Long offset = pageable.getOffset();
+        List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByDescOrder(followerId,limit, offset );
+
+        for(AnchorFollowVo anchor: followingList) {
+            LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
+            anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
+            anchor.setAnchorDetails(anchorDetail);
+        }
+
+        return followingList;
+    }
+
+    public List<AnchorFollowVo> getFollowingListByAscOrder(Long followerId, Pageable pageable) {
+        Integer limit = pageable.getPageSize();
+        Long offset = pageable.getOffset();
+        List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByAscOrder(followerId,limit, offset );
+
+        for(AnchorFollowVo anchor: followingList) {
+            LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
+            anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
+            anchor.setAnchorDetails(anchorDetail);
+        }
         return followingList;
     }
 
