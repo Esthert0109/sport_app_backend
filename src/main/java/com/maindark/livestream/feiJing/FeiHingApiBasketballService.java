@@ -8,6 +8,7 @@ import com.maindark.livestream.domain.feijing.FeiJingBasketballTeam;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 
@@ -59,7 +60,7 @@ public class FeiHingApiBasketballService {
     }
 
     public List<Map<String, Object>> getMatchesByDate(String matchDate) {
-        String url = feiJingConfig.getBasketballMatch() + matchDate;
+        String url = feiJingConfig.getBasketballMatch() +matchDate;
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
         List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
@@ -79,16 +80,16 @@ public class FeiHingApiBasketballService {
                 Integer homeTeamId = (Integer) match.get("homeTeamId");
                 Integer awayTeamId = (Integer) match.get("awayTeamId");
                 Integer statusId = (Integer) match.get("matchState");
-                Integer homeTeamScore = (Integer) match.get("homeScore");
-                Integer home1 = (Integer) match.get("home1");
-                Integer home2 = (Integer) match.get("home2");
-                Integer home3 = (Integer) match.get("home3");
-                Integer home4 = (Integer) match.get("home4");
-                Integer awayTeamScore = (Integer) match.get("awayScore");
-                Integer away1 = (Integer) match.get("away1");
-                Integer away2 = (Integer) match.get("away2");
-                Integer away3 = (Integer) match.get("away3");
-                Integer away4 = (Integer) match.get("away4");
+                String homeTeamScore = (String) match.get("homeScore");
+                String home1 = (String) match.get("home1");
+                String home2 = (String) match.get("home2");
+                String home3 = (String) match.get("home3");
+                String home4 = (String) match.get("home4");
+                String awayTeamScore = (String) match.get("awayScore");
+                String away1 = (String) match.get("away1");
+                String away2 = (String) match.get("away2");
+                String away3 = (String) match.get("away3");
+                String away4 = (String) match.get("away4");
                 String season = (String) match.get("season");
                 Boolean hasStats = (Boolean) match.get("hasStats");
                 feiJingBasketballMatch.setHasState(hasStats);
@@ -102,16 +103,16 @@ public class FeiHingApiBasketballService {
                 feiJingBasketballMatch.setHomeTeamCns(homeTeamNameCn);
                 feiJingBasketballMatch.setAwayTeamName(awayTeamNameEn);
                 feiJingBasketballMatch.setAwayTeamCns(awayTeamNameCn);
-                feiJingBasketballMatch.setHomeScore(homeTeamScore);
-                feiJingBasketballMatch.setHFQuarter(home1);
-                feiJingBasketballMatch.setHTQuarter(home2);
-                feiJingBasketballMatch.setHTQuarter(home3);
-                feiJingBasketballMatch.setH4Quarter(home4);
-                feiJingBasketballMatch.setAwayScore(awayTeamScore);
-                feiJingBasketballMatch.setAFQuarter(away1);
-                feiJingBasketballMatch.setASQuarter(away2);
-                feiJingBasketballMatch.setATQuarter(away3);
-                feiJingBasketballMatch.setA4Quarter(away4);
+                feiJingBasketballMatch.setHomeScore((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(homeTeamScore)));
+                feiJingBasketballMatch.setHFQuarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(home1)));
+                feiJingBasketballMatch.setHSQuarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(home2)));
+                feiJingBasketballMatch.setHTQuarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(home3)));
+                feiJingBasketballMatch.setH4Quarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(home4)));
+                feiJingBasketballMatch.setAwayScore((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(awayTeamScore)));
+                feiJingBasketballMatch.setAFQuarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(away1)));
+                feiJingBasketballMatch.setASQuarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(away2)));
+                feiJingBasketballMatch.setATQuarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(away3)));
+                feiJingBasketballMatch.setA4Quarter((StringUtils.equals("", homeTeamScore) ? 0 : Integer.parseInt(away4)));
                 feiJingBasketballMatch.setMatchDate(DateUtil.convertStrToNormalDate(match_date));
                 feiJingBasketballMatch.setMatchTime(DateUtil.convertStrToNormalTime(match_date));
                 feiJingBasketballMatch.setStatus(String.valueOf(statusId));

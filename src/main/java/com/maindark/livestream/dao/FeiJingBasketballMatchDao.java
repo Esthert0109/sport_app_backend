@@ -18,8 +18,8 @@ public interface FeiJingBasketballMatchDao {
             "away_coach, has_state, season) values(" +
             "#{matchId},#{competitionId},#{competitionName},#{homeTeamId},#{awayTeamId},#{homeTeamName}," +
             "#{homeTeamCns},#{awayTeamName},#{awayTeamCns},#{homeTeamLogo},#{awayTeamLogo},#{status},#{matchTime}," +
-            "#{matchDate},#{hFQuater},#{hSQuater},#{hTQuater},#{h4Quater}," +
-            "#{aFQuater},#{aSQuater},#{aTQuater},#{a4Quater},#{homeScore},#{awayScore},#{homeCoach}," +
+            "#{matchDate},#{hFQuarter},#{hSQuarter},#{hTQuarter},#{h4Quarter}," +
+            "#{aFQuarter},#{aSQuarter},#{aTQuarter},#{a4Quarter},#{homeScore},#{awayScore},#{homeCoach}," +
             "#{awayCoach},#{hasState},#{season})")
     void insertData(FeiJingBasketballMatch feiJingBasketballMatch);
     @Select("select count(1) from fei_jing_basketball_match where match_id=#{matchId}")
