@@ -41,9 +41,9 @@ public class FeiJingApiBasketballController {
         return Result.success(true);
     }
 
-    @GetMapping("/pending")
-    public Result<List<Map<String, Object>>> getUpcomingMatches(){
-        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
-        return Result.success(matches);
-    }
+//    @GetMapping("/pending")
+//    public Result<List<Map<String, Object>>> getUpcomingMatches(){
+//        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
+//        return Result.success(matches);
+//    }
 }
