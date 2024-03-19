@@ -3,11 +3,18 @@ package com.maindark.livestream.feiJing;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.maindark.livestream.dao.FeiJingFootballLineUpDao;
 import com.maindark.livestream.dao.FeiJingFootballMatchDao;
 import com.maindark.livestream.dao.FeiJingFootballTeamDao;
+import com.maindark.livestream.domain.AllSportsFootballLineUp;
+import com.maindark.livestream.domain.feijing.FeiJingFootballLineUp;
 import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
 import com.maindark.livestream.domain.feijing.FeiJingFootballTeam;
+import com.maindark.livestream.enums.IsFirst;
+import com.maindark.livestream.enums.LineUpType;
+import com.maindark.livestream.enums.TeamEnum;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
@@ -27,6 +34,9 @@ public class FeiHingApiFootballService {
 
     @Resource
     FeiJingFootballMatchDao feiJingFootballMatchDao;
+
+    @Resource
+    FeiJingFootballLineUpDao feiJingFootballLineUpDao;
 
 
     public void getAllTeams(){
@@ -112,10 +122,17 @@ public class FeiHingApiFootballService {
                 feiJingFootballMatch.setLineUp(StringUtils.equals("",lineUp)?0:1);
                 feiJingFootballMatch.setUpdatedTime(updateTime);
                 feiJingFootballMatch.setStatusId(statusId);
-                String homeTeamLogo = feiJingFootballTeamDao.getTeamLogoByTeamId(homeTeamId);
-                String awayTeamLogo = feiJingFootballTeamDao.getTeamLogoByTeamId(awayTeamId);
-                if(!StringUtils.equals("",homeTeamLogo)) feiJingFootballMatch.setHomeTeamLogo(homeTeamLogo);
-                if(!StringUtils.equals("",awayTeamLogo)) feiJingFootballMatch.setAwayTeamLogo(awayTeamLogo);
+                FeiJingFootballTeam  homeTeam = feiJingFootballTeamDao.getTeamLogoByTeamId(homeTeamId);
+                if(homeTeam != null) {
+                    feiJingFootballMatch.setHomeTeamLogo(homeTeam.getLogo());
+                    feiJingFootballMatch.setHomeCoach(homeTeam.getCoachCn());
+                }
+
+                FeiJingFootballTeam awayTeam = feiJingFootballTeamDao.getTeamLogoByTeamId(awayTeamId);
+                if(awayTeam != null) {
+                    feiJingFootballMatch.setAwayCoach(awayTeam.getCoachCn());
+                    feiJingFootballMatch.setAwayTeamLogo(awayTeam.getLogo());
+                }
                 int existed = feiJingFootballMatchDao.queryExisted(matchId);
                 if(existed <=0) {
                     feiJingFootballMatchDao.insertData(feiJingFootballMatch);
@@ -125,4 +142,66 @@ public class FeiHingApiFootballService {
         return matchList;
 
     }
+
+    public List<Map<String, Object>> getLineUpData() {
+        String url = feiJingConfig.getLineup();
+        String result = HttpUtil.sendGet(url);
+        Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
+        List<Map<String,Object>> lineupList = (List<Map<String,Object>>) resultObj.get("lineupList");
+        if(lineupList != null && !lineupList.isEmpty()){
+            lineupList.forEach(match ->{
+                Integer matchId = (Integer)match.get("matchId");
+                String homeFormation = (String)match.get("homeArray");
+                String awayFormation = (String)match.get("awayArray");
+                feiJingFootballMatchDao.updateFormationByMatchId(homeFormation,awayFormation,matchId);
+                JSONArray homeLineup = (JSONArray) match.get("homeLineup");
+                JSONArray awayLineup = (JSONArray) match.get("awayLineup");
+                JSONArray homeBackup = (JSONArray) match.get("homeBackup");
+                JSONArray awayBackup = (JSONArray) match.get("awayBackup");
+                getMatchLineUp(homeLineup,matchId,homeBackup, TeamEnum.HOME.getCode());
+                getMatchLineUp(awayLineup,matchId,awayBackup, TeamEnum.AWAY.getCode());
+            });
+        }
+        return lineupList;
+    }
+
+    private void getMatchLineUp(JSONArray startingLineups, Integer matchId,JSONArray substitutes,String teamType){
+        setAllSportsFootballMatchLineUp(startingLineups, matchId, IsFirst.YES.getCode(),teamType);
+        setAllSportsFootballMatchLineUp(substitutes, matchId,IsFirst.NO.getCode(), teamType);
+    }
+
+    private void setAllSportsFootballMatchLineUp(JSONArray jsonArray, Integer matchId, Integer first, String teamType) {
+        if(jsonArray != null){
+            for (Object o : jsonArray) {
+                Map<String, Object> map = (Map<String, Object>) o;
+                String playerName = (String) map.get("nameChs");
+                Integer playerNumber = (Integer) map.get("number");
+                String playerPosition = (String) map.get("positionId");
+                Integer playerId = (Integer) map.get("playerId");
+                FeiJingFootballLineUp footballLineUp = getAllSportsLineUp(playerId, playerNumber, playerPosition, matchId, playerName, first, teamType);
+                int exist = feiJingFootballLineUpDao.queryExists(playerId, matchId);
+                if (exist <= 0) {
+                    feiJingFootballLineUpDao.insert(footballLineUp);
+                }
+            }
+        }
+    }
+
+    private FeiJingFootballLineUp getAllSportsLineUp(Integer playerId, Integer playNumber, String playPosition, Integer matchId, String playerName, Integer first, String teamType) {
+        FeiJingFootballLineUp footballLineUp = new FeiJingFootballLineUp();
+        if(StringUtils.equals("0",teamType)){
+            footballLineUp.setType(LineUpType.HOME.getType());
+        } else {
+            footballLineUp.setType(LineUpType.AWAY.getType());
+        }
+        footballLineUp.setPlayerId(playerId);
+        footballLineUp.setMatchId(matchId);
+        footballLineUp.setShirtNumber(playNumber);
+        footballLineUp.setPosition(Integer.parseInt(playPosition));
+        footballLineUp.setPlayerName(playerName);
+        footballLineUp.setFirst(first);
+        return footballLineUp;
+    }
+
+
 }

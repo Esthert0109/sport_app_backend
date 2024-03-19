@@ -15,17 +15,17 @@ DROP TABLE IF EXISTS `fei_jing_football_line_up`;
 CREATE TABLE `fei_jing_football_line_up` (
     `id` int(11) auto_increment COMMENT 'id',
     `type` int(1) COMMENT 'type 0 home 1 away',
-    `player_id` bigint(20) COMMENT 'player id',
-    `match_id` bigint(20) not null COMMENT 'match id',
-    `team_id` bigint(20) COMMENT 'team id',
+    `player_id` int COMMENT 'player id',
+    `match_id` int not null COMMENT 'match id',
     `first` int COMMENT 'first 0 no 1 yes ',
     `captain` int COMMENT 'captain 0 no 1 yes',
     `player_name` varchar(255) NOT NULL COMMENT 'player name',
-    `player_logo` varchar(255)  COMMENT 'player logo',
     `shirt_number` int COMMENT 'shirt number',
     `position` int  COMMENT '球员位置',
     `rating` varchar(8) COMMENT 'rating',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE unq_player_match (player_id,match_id),
+    index idx_match_id (match_id)
 ) ENGINE=InnoDB auto_increment = 1 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `fei_jing_football_match`;
@@ -61,21 +61,7 @@ CREATE TABLE `fei_jing_football_match` (
 
 DROP TABLE IF EXISTS `fei_jing_football_match_live_data`;
 CREATE TABLE `fei_jing_football_match_live_data` (
-  `id` int  NOT NULL auto_increment    COMMENT 'id',
-  `match_id` bigint not null COMMENT 'match id',
-  `status` varchar(16) COMMENT 'football status',
-  `match_time` varchar(8) COMMENT 'match time',
-  `match_date` varchar(32) COMMENT 'match_date',
-  `home_team_name` varchar(255) NOT NULL COMMENT 'home team name',
-  `away_team_name` varchar(255) NOT NULL COMMENT 'home team name',
-  `home_team_logo` varchar(255) COMMENT 'home team logo',
-  `away_team_logo` varchar(255) COMMENT 'away team logo',
-  `referee_name` varchar(255)  COMMENT 'referee name',
-  `venue_name` varchar(255)  COMMENT 'stadium name',
-  `home_formation` varchar(255)  COMMENT 'home formation',
-  `away_formation` varchar(255)  COMMENT 'away formation',
-  `home_coach` varchar(255) COMMENT 'home coach',
-  `away_coach` varchar(255) COMMENT  'away coach',
+  `match_id` int not null COMMENT 'match id',
   `home_attack_num` int COMMENT 'homeAttackNum',
   `away_attack_num` int COMMENT 'awayAttackNum',
   `home_attack_danger_num` int COMMENT 'homeAttackDangerNum',
@@ -92,7 +78,7 @@ CREATE TABLE `fei_jing_football_match_live_data` (
   `away_red_card_num` int COMMENT 'awayRedCardNum',
   `home_yellow_card_num` int COMMENT 'homeYellowCardNum',
   `away_yellow_card_num` int COMMENT 'awayYellowCardNum',
-  `home_score` int COMMENT 'homeScore',
-  `away_score` int COMMENT 'awayScore',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+

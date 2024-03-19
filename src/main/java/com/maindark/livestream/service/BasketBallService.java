@@ -9,7 +9,6 @@ import com.maindark.livestream.domain.BasketballLineUp;
 import com.maindark.livestream.enums.EntityTypeEnum;
 import com.maindark.livestream.enums.LineUpType;
 import com.maindark.livestream.txYun.TxYunConfig;
-import com.maindark.livestream.util.BasketballMatchStatus;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.BasketballMatchLineUpVo;
@@ -80,7 +79,7 @@ public class BasketBallService {
                 data.setMatchTimeStr(timeStr);
                 data.setMatchDate(DateUtil.convertLongTimeToMatchDate(matchTime));
                 Integer statusId = data.getStatusId();
-                data.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(statusId));
+                //data.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(statusId));
                 data.setHomeTeamLogo(data.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():data.getHomeTeamLogo());
                 data.setAwayTeamLogo(data.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():data.getAwayTeamLogo());
                 if(userId != null) {
@@ -185,7 +184,7 @@ public class BasketBallService {
         if(basketballMatchLiveDataVo != null) {
             BasketballMatchVo basketballMatchVo = basketballMatchDao.getBasketBallMatchById(matchId);
             if(basketballMatchVo != null) {
-                basketballMatchLiveDataVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchLiveDataVo.getStatus()));
+                //basketballMatchLiveDataVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchLiveDataVo.getStatus()));
                 basketballMatchLiveDataVo.setMatchTimeStr(DateUtil.interceptTime(basketballMatchVo.getMatchTime()*1000));
                 basketballMatchLiveDataVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(basketballMatchVo.getMatchTime() * 1000));
                 basketballMatchLiveDataVo.setHomeTeamName(basketballMatchVo.getHomeTeamName());
@@ -202,7 +201,7 @@ public class BasketBallService {
         if(futureMatches != null && !futureMatches.isEmpty()){
             Stream<BasketballMatchVo> basketballMatchVoStream = futureMatches.stream().peek(vo ->{
                 vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
-                vo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
+                //vo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
                 vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
                 vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getHomeTeamLogo());
                 vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null?txYunConfig.getDefaultLogo():vo.getAwayTeamLogo());

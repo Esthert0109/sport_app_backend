@@ -28,4 +28,9 @@ public class FeiHingApiFootballController {
         List<Map<String,Object>> res = feiHingApiFootballService.getMatchByDate(matchDate);
         return Result.success(res);
     }
+    @GetMapping("/lineup")
+    public Result<List<Map<String,Object>>> getLineUpData(){
+        List<Map<String,Object>> res = feiHingApiFootballService.getLineUpData();
+        return Result.success(res);
+    }
 }

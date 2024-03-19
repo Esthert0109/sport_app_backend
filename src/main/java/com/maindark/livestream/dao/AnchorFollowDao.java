@@ -11,18 +11,25 @@ import java.util.List;
 public interface AnchorFollowDao {
 
 
-    @Insert("insert into anchor_follow(anchor_id, follower_id) values (#{anchorId}, #{followerId})")
+    @Insert("insert into follow(anchor_id, follower_id) values (#{anchorId}, #{followerId})")
     void createFollowAnchor(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
-    @Update("update anchor_follow set status = #{status} ,follow_updated_time = NOW() where id = #{id}")
+    @Update("update follow set status = #{status} ,follow_updated_time = NOW() where id = #{id}")
     void updateFollowAnchorStatusById(@Param("id") Long id, @Param("status") Boolean status);
 
-    @Select("SELECT EXISTS(SELECT 1 FROM anchor_follow where anchor_id = #{anchorId} and follower_id = #{followerId})")
+    @Select("SELECT EXISTS(SELECT 1 FROM follow where anchor_id = #{anchorId} and follower_id = #{followerId})")
     boolean checkFollowExistByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
-    @Select("Select * from anchor_follow where anchor_id = #{anchorId} and follower_id = #{followerId}")
+    @Select("Select * from follow where anchor_id = #{anchorId} and follower_id = #{followerId}")
     AnchorFollow getFollowDetailsByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
-    @Select("Select * from anchor_follow where follower_id = #{followerId} and status = true Order By follow_updated_time DESC")
-    List<AnchorFollowVo> getFollowingListByFollowerId(@Param("followerId") Long followerId);
+    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY streaming_status DESC, follow_updated_time DESC LIMIT #{limit} OFFSET #{offset}")
+    List<AnchorFollowVo> getFollowingListByFollowerId(@Param("followerId") Long followerId, @Param("limit") Integer limit, @Param("offset") Long offset);
+
+    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY follow_updated_time DESC LIMIT #{limit} OFFSET #{offset}")
+    List<AnchorFollowVo> getFollowingListByDescOrder(@Param("followerId") Long followerId, @Param("limit") Integer limit, @Param("offset") Long offset);
+
+    @Select("SELECT * FROM follow WHERE follower_id = #{followerId} AND status = true ORDER BY follow_updated_time ASC LIMIT #{limit} OFFSET #{offset}")
+    List<AnchorFollowVo> getFollowingListByAscOrder(@Param("followerId") Long followerId, @Param("limit") Integer limit, @Param("offset") Long offset);
+
 }

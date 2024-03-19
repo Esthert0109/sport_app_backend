@@ -16,8 +16,8 @@ public interface FeiJingFootballTeamDao {
     @Select("select count(1) from fei_jing_football_team where team_id=#{teamId}")
     int queryExisted(@Param("teamId")Integer teamId);
 
-    @Select("select logo from fei_jing_football_team where team_id=#{teamId}")
-    String getTeamLogoByTeamId(@Param("teamId")Integer teamId);
+    @Select("select logo,coach_cn from fei_jing_football_team where team_id=#{teamId}")
+    FeiJingFootballTeam getTeamLogoByTeamId(@Param("teamId")Integer teamId);
 
 
 }

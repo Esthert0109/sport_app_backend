@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class BasketballMatchVo {
-    private Long id;
+    private Integer id;
     private Long competitionId;
     private String competitionName;
     private Long homeTeamId;
@@ -17,10 +17,10 @@ public class BasketballMatchVo {
     private Long matchTime;
     private String homeTeamLogo;
     private String awayTeamLogo;
+    private String status;
     private Integer statusId;
     private String matchTimeStr;
     private String statusStr;
     private String matchDate;
     private Boolean hasCollected;
-
 }

@@ -262,4 +262,5 @@ create table pop_game(
   updated_time TIMESTAMP NOT NULL DEFAULT NOW()	COMMENT '修改时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
  

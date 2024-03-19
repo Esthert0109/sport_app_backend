@@ -1,6 +1,6 @@
 package com.maindark.livestream.service;
 
-import com.maindark.livestream.dao.BasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
 import com.maindark.livestream.dao.FootballMatchDao;
 import com.maindark.livestream.dao.LiveStreamCollectionDao;
 import com.maindark.livestream.domain.LiveStreamCollection;
@@ -9,10 +9,7 @@ import com.maindark.livestream.enums.StatusEnum;
 import com.maindark.livestream.form.CollectionForm;
 import com.maindark.livestream.redis.FootballMatchKey;
 import com.maindark.livestream.redis.RedisService;
-import com.maindark.livestream.util.BasketballMatchStatus;
-import com.maindark.livestream.util.DateUtil;
-import com.maindark.livestream.util.MatchDataConvertUtil;
-import com.maindark.livestream.util.StreamToListUtil;
+import com.maindark.livestream.util.*;
 import com.maindark.livestream.vo.BasketballMatchVo;
 import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
@@ -37,7 +34,7 @@ public class LiveStreamCollectionService {
     FootballMatchDao footballMatchDao;
 
     @Resource
-    BasketballMatchDao basketballMatchDao;
+    FeiJingBasketballMatchDao feiJingBasketballMatchDao;
 
     @Resource
     FollowService followService;
@@ -76,7 +73,7 @@ public class LiveStreamCollectionService {
         int limit = pageable.getPageSize();
         long offset = pageable.getOffset();
         List<Map<String,Object>> res = new ArrayList<>();
-        List<BasketballMatchVo> list = basketballMatchDao.getAllBasketballCollectionsByUserId(userId,limit,offset);
+        List<BasketballMatchVo> list = feiJingBasketballMatchDao.getFeiJingMatchByUserId(userId,limit,offset);
         if(list != null && !list.isEmpty()) {
             list = MatchDataConvertUtil.getBasketballMatchVos(list);
             Set<String> set = new LinkedHashSet<>();
@@ -95,7 +92,7 @@ public class LiveStreamCollectionService {
     }
 
     public List<BasketballMatchVo> getThreeBasketballCollectionsByUserId(Long userId) {
-        List<BasketballMatchVo> list = basketballMatchDao.getThreeBasketballCollectionsByUserId(userId);
+        List<BasketballMatchVo> list = feiJingBasketballMatchDao.getThreeCollectionsByUserId(userId);
         if(list != null && !list.isEmpty()) {
             list = MatchDataConvertUtil.getBasketballMatchVos(list);
         }
@@ -108,7 +105,7 @@ public class LiveStreamCollectionService {
             match = footballMatchDao.getFootballMatchVoById(matchId);
             if(match != null) {
                 match.setMatchDate(DateUtil.convertLongTimeToMatchDate(match.getMatchTime() * 1000));
-                match.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(match.getStatusId()));
+                match.setStatusStr(FootballMatchStatus.convertStatusIdToStr(match.getStatusId()));
                 match.setMatchTimeStr(DateUtil.interceptTime(match.getMatchTime() * 1000));
                 redisService.set(FootballMatchKey.matchVoKey, String.valueOf(matchId), match);
             }
@@ -117,9 +114,9 @@ public class LiveStreamCollectionService {
     }
 
     public BasketballMatchVo getBasketballMatchByMatchId(Integer matchId) {
-        BasketballMatchVo basketballMatchVo = basketballMatchDao.getBasketballVoByMatchId(Long.parseLong("" + matchId));
+        BasketballMatchVo basketballMatchVo = feiJingBasketballMatchDao.getBasketballMatchVoByMatchId(matchId);
         if (basketballMatchVo != null) {
-            basketballMatchVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchVo.getStatusId()));
+            basketballMatchVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(basketballMatchVo.getStatus()));
             basketballMatchVo.setMatchTimeStr(DateUtil.interceptTime(basketballMatchVo.getMatchTime() * 1000));
             basketballMatchVo.setMatchDate(DateUtil.convertLongTimeToMatchDate(basketballMatchVo.getMatchTime() * 1000));
         }

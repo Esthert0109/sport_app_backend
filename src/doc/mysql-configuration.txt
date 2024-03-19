@@ -1,4 +1,8 @@
-mysql-ip:198.148.116.174
-mysql-port:3306
-mysql-username:springUser
-mysql-password:livestream:ma6oH
+
+
+
+mysql:server=103.224.93.197
+mysql:port=3306
+mysql:user=mallUser
+mysql:password=livestream:ma6oH
+mysql:database=mall
