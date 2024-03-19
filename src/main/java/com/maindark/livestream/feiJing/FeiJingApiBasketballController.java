@@ -1,18 +1,15 @@
 package com.maindark.livestream.feiJing;
 
 import com.maindark.livestream.dao.FeijingBasketballMatchDao;
-import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
 import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
 import com.maindark.livestream.result.Result;
 import jakarta.annotation.Resource;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/FeiJing/basketball")
@@ -24,30 +21,43 @@ public class FeiJingApiBasketballController {
     FeijingBasketballMatchDao feijingBasketballMatchDao;
 
 
-//    @GetMapping("/matches/{matchDate}")
-//    public Result<List<Map<String,Object>>> getBasketball(@PathVariable("matchDate")String matchDate){
-//        List<Map<String,Object>> res = feijingApiBasketballService.getMatchByDate(matchDate);
-//        return Result.success(res);
-//    }
-
-    //Get All Match
+    //Get All Matches to Insert Database
     @GetMapping("/matches")
     public Result<Boolean> getAllMatches(){
         feijingApiBasketballService.getAllMatches();
         return Result.success(true);
     }
 
-    //Get Upcoming Match
-    @GetMapping("/pending")
-    public Result<List<Map<String, Object>>> getUpcomingMatches(){
-        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
-        return Result.success(matches);
+    //Get All Upcoming Matches
+    @GetMapping("/matches/pending")
+    public Result<List<FeijingBasketballMatch>> getPendingMatches() {
+        List<FeijingBasketballMatch> pendingMatches = feijingBasketballMatchDao.getMatchesByState();
+        return Result.success(pendingMatches);
     }
 
+
     //Get Match by State Id
-    @GetMapping("/pending/{stateId}")
-    public Result<List<Map<String, Object>>> getUpcomingMatches(){
-        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
-        return Result.success(matches);
+    /*
+     * 比赛状态码：
+     * 0：未开赛
+     * 1：一节
+     * 2：二节
+     * 3：三节
+     * 4：四节
+     * 5：1'OT (第一加时赛)
+     * 6：2'OT (第二加时赛)
+     * 7：3'OT (第三加时赛)
+     * 50：中场
+     * -1：完场
+     * -2：待定
+     * -3：中断
+     * -4：取消
+     * -5：推迟
+     */
+    @GetMapping("/matches/pending/{stateId}")
+    public Result<FeijingBasketballMatch> getUpcomingMatchesById(@PathVariable("stateId") Integer stateId){
+        FeijingBasketballMatch match = feijingBasketballMatchDao.getMatchByStateId(stateId);
+        return Result.success(match);
     }
+
 }
