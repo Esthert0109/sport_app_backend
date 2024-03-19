@@ -27,6 +27,7 @@ public class FeiJingApiBasketballPendingService {
         List<Map<String, Object>> matchList = (List<Map<String, Object>>) resultObj.get("matchList");
         if (matchList != null && !matchList.isEmpty()) {
             matchList.forEach(match ->{
+
                 Integer matchId = (Integer) match.get("matchId");
                 Integer competitionId = (Integer) match.get("leagueId");
                 String leagueEn = (String) match.get("leagueEn");
@@ -64,6 +65,17 @@ public class FeiJingApiBasketballPendingService {
                 feijingBasketballMatch.setSeason(season);
                 feijingBasketballMatch.setKind(kind);
                 feijingBasketballMatch.setUpdatedDate(updatedDate);
+
+                //Get Logo from others domain with team id
+                FeiJingBasketballTeam  homeTeam = feijingBasketballPendingMatchDao.getTeamLogo(homeTeamId);
+                if(homeTeam != null) {
+                    feijingBasketballMatch.setHomeTeamLogo(homeTeam.getLogo());
+                }
+
+                FeiJingBasketballTeam awayTeam = feijingBasketballPendingMatchDao.getTeamLogo(awayTeamId);
+                if(awayTeam != null) {
+                    feijingBasketballMatch.setAwayTeamLogo(awayTeam.getLogo());
+                }
 
 
                 int existed = feijingBasketballPendingMatchDao.queryExisted(matchId);

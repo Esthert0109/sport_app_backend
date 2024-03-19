@@ -21,6 +21,8 @@ public class FeijingBasketballMatch {
     private String awayScore;
     private String season;
     private String kind;
+    private String homeTeamLogo;
+    private String awayTeamLogo;
     private String updatedDate;
 
 }

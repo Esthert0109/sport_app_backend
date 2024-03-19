@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -33,6 +34,11 @@ public interface FeiJingBasketballPendingMatchDao {
     //Select By match id
     @Select("select * from fei_jing_basketball_pending_match where match_id=#{id}")
     FeijingBasketballMatch getMatchByStateId(@Param("id") Integer id);
+
+
+    @Select("select logo from fei_jing_basketball_team where team_id=#{teamId}")
+    FeiJingBasketballTeam getTeamLogo(@Param("teamId") Integer teamId);
+
 
 
 
