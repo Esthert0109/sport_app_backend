@@ -3,7 +3,7 @@ package com.maindark.livestream.domain.feijing;
 import lombok.Data;
 
 @Data
-public class FeijingBasketballMatch {
+public class FeijingBasketballPendingMatch {
 
     private Integer matchId;
     private Integer competitionId;

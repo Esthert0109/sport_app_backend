@@ -1,11 +1,10 @@
 package com.maindark.livestream.dao;
 
-import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
+import com.maindark.livestream.domain.feijing.FeijingBasketballPendingMatch;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -23,17 +22,17 @@ public interface FeiJingBasketballPendingMatchDao {
             " values(#{matchId},#{competitionId},#{leagueEn},#{leagueChs},#{matchTime}" +
             ",#{matchState},#{homeTeamId},#{homeTeamEn},#{homeTeamChs},#{awayTeamId},#{awayTeamEn}," +
             "#{awayTeamChs},#{homeScore},#{awayScore},#{season},#{kind},#{updatedDate})")
-    void insertData(FeijingBasketballMatch feijingBasketballMatch);
+    void insertData(FeijingBasketballPendingMatch feijingBasketballPendingMatch);
 
 
     //Select All Upcoming Matches
     @Select("select * from fei_jing_basketball_pending_match where match_state = 0")
-    List<FeijingBasketballMatch> getMatchesByState();
+    List<FeijingBasketballPendingMatch> getMatchesByState();
 
 
     //Select By match id
     @Select("select * from fei_jing_basketball_pending_match where match_id=#{id}")
-    FeijingBasketballMatch getMatchByStateId(@Param("id") Integer id);
+    FeijingBasketballPendingMatch getMatchByStateId(@Param("id") Integer id);
 
 
     @Select("select logo from fei_jing_basketball_team where team_id=#{teamId}")

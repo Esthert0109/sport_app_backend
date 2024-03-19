@@ -1,7 +1,7 @@
 package com.maindark.livestream.feiJing;
 
 import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
-import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
+import com.maindark.livestream.domain.feijing.FeijingBasketballPendingMatch;
 import com.maindark.livestream.result.Result;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +29,16 @@ public class FeiJingApiBasketballPendingController {
 
     //Get All Upcoming Matches
     @GetMapping("/matches/pending")
-    public Result<List<FeijingBasketballMatch>> getPendingMatches() {
-        List<FeijingBasketballMatch> pendingMatches = feijingBasketballPendingMatchDao.getMatchesByState();
+    public Result<List<FeijingBasketballPendingMatch>> getPendingMatches() {
+        List<FeijingBasketballPendingMatch> pendingMatches = feijingBasketballPendingMatchDao.getMatchesByState();
         return Result.success(pendingMatches);
     }
 
 
 
     @GetMapping("/matches/pending/{id}")
-    public Result<FeijingBasketballMatch> getUpcomingMatchesById(@PathVariable("id") Integer id){
-        FeijingBasketballMatch match = feijingBasketballPendingMatchDao.getMatchByStateId(id);
+    public Result<FeijingBasketballPendingMatch> getUpcomingMatchesById(@PathVariable("id") Integer id){
+        FeijingBasketballPendingMatch match = feijingBasketballPendingMatchDao.getMatchByStateId(id);
         return Result.success(match);
     }
 

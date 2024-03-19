@@ -3,7 +3,7 @@ package com.maindark.livestream.feiJing;
 
 import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
-import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
+import com.maindark.livestream.domain.feijing.FeijingBasketballPendingMatch;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -46,41 +46,41 @@ public class FeiJingApiBasketballPendingService {
                 String kind = (String) match.get("matchKind");
                 String updatedDate = (String) match.get("updateTime");
 
-                FeijingBasketballMatch feijingBasketballMatch = new FeijingBasketballMatch();
+                FeijingBasketballPendingMatch feijingBasketballPendingMatch = new FeijingBasketballPendingMatch();
 
-                feijingBasketballMatch.setMatchId(matchId);
-                feijingBasketballMatch.setCompetitionId(competitionId);
-                feijingBasketballMatch.setLeagueEn(leagueEn);
-                feijingBasketballMatch.setLeagueChs(leagueChs);
-                feijingBasketballMatch.setMatchTime(matchTime);
-                feijingBasketballMatch.setMatchState(matchState);
-                feijingBasketballMatch.setHomeTeamId(homeTeamId);
-                feijingBasketballMatch.setHomeTeamEn(homeTeamEn);
-                feijingBasketballMatch.setHomeTeamChs(homeTeamChs);
-                feijingBasketballMatch.setAwayTeamId(awayTeamId);
-                feijingBasketballMatch.setAwayTeamEn(awayTeamEn);
-                feijingBasketballMatch.setAwayTeamChs(awayTeamChs);
-                feijingBasketballMatch.setHomeScore(homeScore);
-                feijingBasketballMatch.setAwayScore(awayScore);
-                feijingBasketballMatch.setSeason(season);
-                feijingBasketballMatch.setKind(kind);
-                feijingBasketballMatch.setUpdatedDate(updatedDate);
+                feijingBasketballPendingMatch.setMatchId(matchId);
+                feijingBasketballPendingMatch.setCompetitionId(competitionId);
+                feijingBasketballPendingMatch.setLeagueEn(leagueEn);
+                feijingBasketballPendingMatch.setLeagueChs(leagueChs);
+                feijingBasketballPendingMatch.setMatchTime(matchTime);
+                feijingBasketballPendingMatch.setMatchState(matchState);
+                feijingBasketballPendingMatch.setHomeTeamId(homeTeamId);
+                feijingBasketballPendingMatch.setHomeTeamEn(homeTeamEn);
+                feijingBasketballPendingMatch.setHomeTeamChs(homeTeamChs);
+                feijingBasketballPendingMatch.setAwayTeamId(awayTeamId);
+                feijingBasketballPendingMatch.setAwayTeamEn(awayTeamEn);
+                feijingBasketballPendingMatch.setAwayTeamChs(awayTeamChs);
+                feijingBasketballPendingMatch.setHomeScore(homeScore);
+                feijingBasketballPendingMatch.setAwayScore(awayScore);
+                feijingBasketballPendingMatch.setSeason(season);
+                feijingBasketballPendingMatch.setKind(kind);
+                feijingBasketballPendingMatch.setUpdatedDate(updatedDate);
 
                 //Get Logo from others domain with team id
                 FeiJingBasketballTeam  homeTeam = feijingBasketballPendingMatchDao.getTeamLogo(homeTeamId);
                 if(homeTeam != null) {
-                    feijingBasketballMatch.setHomeTeamLogo(homeTeam.getLogo());
+                    feijingBasketballPendingMatch.setHomeTeamLogo(homeTeam.getLogo());
                 }
 
                 FeiJingBasketballTeam awayTeam = feijingBasketballPendingMatchDao.getTeamLogo(awayTeamId);
                 if(awayTeam != null) {
-                    feijingBasketballMatch.setAwayTeamLogo(awayTeam.getLogo());
+                    feijingBasketballPendingMatch.setAwayTeamLogo(awayTeam.getLogo());
                 }
 
 
                 int existed = feijingBasketballPendingMatchDao.queryExisted(matchId);
                 if (existed <= 0) {
-                    feijingBasketballPendingMatchDao.insertData(feijingBasketballMatch);
+                    feijingBasketballPendingMatchDao.insertData(feijingBasketballPendingMatch);
                 }
             });
         }
