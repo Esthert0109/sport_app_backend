@@ -35,27 +35,10 @@ public class FeiJingApiBasketballPendingController {
     }
 
 
-    //Get Match by State Id
-    /*
-     * 比赛状态码：
-     * 0：未开赛
-     * 1：一节
-     * 2：二节
-     * 3：三节
-     * 4：四节
-     * 5：1'OT (第一加时赛)
-     * 6：2'OT (第二加时赛)
-     * 7：3'OT (第三加时赛)
-     * 50：中场
-     * -1：完场
-     * -2：待定
-     * -3：中断
-     * -4：取消
-     * -5：推迟
-     */
-    @GetMapping("/matches/pending/{stateId}")
-    public Result<FeijingBasketballMatch> getUpcomingMatchesById(@PathVariable("stateId") Integer stateId){
-        FeijingBasketballMatch match = feijingBasketballPendingMatchDao.getMatchByStateId(stateId);
+
+    @GetMapping("/matches/pending/{id}")
+    public Result<FeijingBasketballMatch> getUpcomingMatchesById(@PathVariable("id") Integer id){
+        FeijingBasketballMatch match = feijingBasketballPendingMatchDao.getMatchByStateId(id);
         return Result.success(match);
     }
 
