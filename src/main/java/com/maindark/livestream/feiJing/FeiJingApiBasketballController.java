@@ -1,6 +1,7 @@
 package com.maindark.livestream.feiJing;
 
-import com.maindark.livestream.dao.FeijingBasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
 import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
 import com.maindark.livestream.result.Result;
 import jakarta.annotation.Resource;
@@ -18,7 +19,7 @@ public class FeiJingApiBasketballController {
     FeiJingApiBasketballService feijingApiBasketballService;
 
     @Resource
-    FeijingBasketballMatchDao feijingBasketballMatchDao;
+    FeiJingBasketballMatchDao feijingBasketballMatchDao;
 
 
     //Get All Matches to Insert Database
