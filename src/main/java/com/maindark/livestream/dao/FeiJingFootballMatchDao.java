@@ -58,15 +58,15 @@ public interface FeiJingFootballMatchDao {
 
     @Select("select t.match_id as id,t.league_cns_short as competition_name,t.match_time as matchTimeStr,t.match_date,t.home_team_name_cn as home_team_name,t.away_team_name_cn as away_team_name," +
             "t.home_team_logo,t.away_team_logo,t.status_id,t.home_team_score,t.away_team_score,t.line_up," +
-            "t.home_formation,t.away_formation,t.venue as venueName from fei_jing_football_match t inner join all_sports_collection co on co.match_id = t.match_id where " +
+            "t.home_formation,t.away_formation,t.venue as venueName from fei_jing_football_match t inner join live_stream_collection co on co.match_id = t.match_id where " +
             "co.user_id=#{userId} order by t.match_date desc,t.match_time desc limit #{limit} offset #{offset}  ")
     List<FootballMatchVo> getFeiJingMatchByUserId(@Param("userId") Long userId,@Param("limit")int limit,@Param("offset")long offset);
 
     @Select("select t.match_id as id,t.league_cns_short as competition_name,t.match_time as matchTimeStr,t.match_date,t.home_team_name_cn as home_team_name,t.away_team_name_cn as away_team_name," +
             "t.home_team_logo,t.away_team_logo,t.status_id,t.home_team_score,t.away_team_score," +
-            "t.line_up,t.home_formation,t.away_formation,t.venue as venueName from fei_jing_football_match t inner join all_sports_collection co on co.match_id= t.match_id " +
+            "t.line_up,t.home_formation,t.away_formation,t.venue as venueName from fei_jing_football_match t inner join live_stream_collection co on co.match_id= t.match_id " +
             "where co.user_id=#{userId} order by t.match_date desc,t.match_time desc limit 3")
     List<FootballMatchVo> getThreeCollectionsByUserId(@Param("userId") Long userId);
     @Select("select t.match_id as id,t.league_cns_short as competition_name,t.match_time as matchTimeStr,t.match_date,t.home_team_name_cn as home_team_name,t.away_team_name_cn as away_team_name,t.home_team_logo,t.away_team_logo,t.status_id,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation,t.venue as venueName from fei_jing_football_match t where t.match_id=#{matchId}")
-    FootballMatchVo getFeiJingFootballMatchByMatchId(@Param("matchId")Long matchId);
+    FootballMatchVo getFeiJingFootballMatchByMatchId(@Param("matchId")Integer matchId);
 }

@@ -1,6 +1,7 @@
 package com.maindark.livestream.service;
 
 import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingFootballMatchDao;
 import com.maindark.livestream.dao.FootballMatchDao;
 import com.maindark.livestream.dao.LiveStreamCollectionDao;
 import com.maindark.livestream.domain.LiveStreamCollection;
@@ -31,7 +32,7 @@ public class LiveStreamCollectionService {
     RedisService redisService;
 
     @Resource
-    FootballMatchDao footballMatchDao;
+    FeiJingFootballMatchDao feiJingFootballMatchDao;
 
     @Resource
     FeiJingBasketballMatchDao feiJingBasketballMatchDao;
@@ -43,7 +44,7 @@ public class LiveStreamCollectionService {
         int limit = pageable.getPageSize();
         long offset = pageable.getOffset();
         List<Map<String,Object>> res = new ArrayList<>();
-        List<FootballMatchVo> list = footballMatchDao.getAllFootballCollections(userId,limit,offset);
+        List<FootballMatchVo> list = feiJingFootballMatchDao.getFeiJingMatchByUserId(userId,limit,offset);
         if (list != null && !list.isEmpty()) {
             list = MatchDataConvertUtil.getFootballMatchVos(list);
             Set<String> set = new LinkedHashSet<>();
@@ -62,7 +63,7 @@ public class LiveStreamCollectionService {
     }
 
     public List<FootballMatchVo> getThreeFootballCollectionsByUserId(Long userId) {
-        List<FootballMatchVo> list = footballMatchDao.getThreeFootballCollections(userId);
+        List<FootballMatchVo> list = feiJingFootballMatchDao.getThreeCollectionsByUserId(userId);
         if (list != null && !list.isEmpty()) {
             list = MatchDataConvertUtil.getFootballMatchVos(list);
         }
@@ -102,7 +103,7 @@ public class LiveStreamCollectionService {
     public FootballMatchVo getFootballMatchByMatchId(Integer matchId) {
         FootballMatchVo match = redisService.get(FootballMatchKey.matchVoKey, String.valueOf(matchId), FootballMatchVo.class);
         if (match == null) {
-            match = footballMatchDao.getFootballMatchVoById(matchId);
+            match = feiJingFootballMatchDao.getFeiJingFootballMatchByMatchId(matchId);
             if(match != null) {
                 match.setMatchDate(DateUtil.convertLongTimeToMatchDate(match.getMatchTime() * 1000));
                 match.setStatusStr(FootballMatchStatus.convertStatusIdToStr(match.getStatusId()));
