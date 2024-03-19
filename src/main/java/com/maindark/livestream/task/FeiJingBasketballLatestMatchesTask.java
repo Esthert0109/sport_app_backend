@@ -2,6 +2,7 @@ package com.maindark.livestream.task;
 
 import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
+import com.maindark.livestream.domain.feijing.FeiJingBasketballTeam;
 import com.maindark.livestream.domain.feijing.FeijingBasketballPendingMatch;
 import com.maindark.livestream.feiJing.FeiJingBasketballConfig;
 import com.maindark.livestream.util.HttpUtil;
@@ -27,14 +28,14 @@ public class FeiJingBasketballLatestMatchesTask {
 
 
     //Per Hours
-    @Scheduled(cron = "*/15 * * * * *")
+    @Scheduled(cron = "0 0 */1 * * *")
     public void getAllMatches() {
         String url = feiJingBasketballConfig.getMatch();
         String result = HttpUtil.sendGet(url);
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         List<Map<String, Object>> matchList = (List<Map<String, Object>>) resultObj.get("matchList");
         if (matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match -> {
+            matchList.forEach(match ->{
 
                 Integer matchId = (Integer) match.get("matchId");
                 Integer competitionId = (Integer) match.get("leagueId");
@@ -73,6 +74,17 @@ public class FeiJingBasketballLatestMatchesTask {
                 feijingBasketballPendingMatch.setSeason(season);
                 feijingBasketballPendingMatch.setKind(kind);
                 feijingBasketballPendingMatch.setUpdatedDate(updatedDate);
+
+                //Get Logo from others domain with team id
+                FeiJingBasketballTeam homeTeam = feijingBasketballPendingMatchDao.getTeamLogo(homeTeamId);
+                if(homeTeam != null) {
+                    feijingBasketballPendingMatch.setHomeTeamLogo(homeTeam.getLogo());
+                }
+
+                FeiJingBasketballTeam awayTeam = feijingBasketballPendingMatchDao.getTeamLogo(awayTeamId);
+                if(awayTeam != null) {
+                    feijingBasketballPendingMatch.setAwayTeamLogo(awayTeam.getLogo());
+                }
 
 
                 int existed = feijingBasketballPendingMatchDao.queryExisted(matchId);

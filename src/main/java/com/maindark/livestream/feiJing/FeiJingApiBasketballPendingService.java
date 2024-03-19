@@ -73,7 +73,8 @@ public class FeiJingApiBasketballPendingService {
                     feijingBasketballPendingMatch.setHomeTeamLogo(homeTeam.getLogo());
                 }
 
-                FeiJingBasketballTeam awayTeam = feijingBasketballPendingMatchDao.getTeamLogo(awayTeamId);
+                //Parameter came from FeiJingBasketballTeam
+                    FeiJingBasketballTeam awayTeam = feijingBasketballPendingMatchDao.getTeamLogo(awayTeamId);
                 if(awayTeam != null) {
                     feijingBasketballPendingMatch.setAwayTeamLogo(awayTeam.getLogo());
                 }

@@ -17,6 +17,8 @@ CREATE TABLE `fei_jing_basketball_pending_match`
     `away_score`     varchar(255)        NOT NULL COMMENT '客队总分',
     `season`         varchar(255) COMMENT '赛季',
     `kind`           varchar(255) COMMENT '比赛阶段 1：常规、2：季后、3：季前、-1：无分类',
+    `home_team_logo` varchar(255) DEFAULT NULL,
+    `away_team_logo` varchar(255) DEFAULT NULL,
     `updated_date`   varchar(255) COMMENT '更新时间',
     PRIMARY KEY (`match_id`)
 ) ENGINE = InnoDB
