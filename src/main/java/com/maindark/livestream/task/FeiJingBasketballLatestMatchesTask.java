@@ -48,8 +48,8 @@ public class FeiJingBasketballLatestMatchesTask {
                 Integer awayTeamId = (Integer) match.get("awayTeamId");
                 String awayTeamEn = (String) match.get("awayTeamEn");
                 String awayTeamChs = (String) match.get("awayTeamChs");
-                Integer homeScore = (Integer) match.get("homeScore");
-                Integer awayScore = (Integer) match.get("awayScore");
+                String homeScore = (String) match.get("homeScore");
+                String awayScore = (String) match.get("awayScore");
                 String season = (String) match.get("season");
                 String kind = (String) match.get("matchKind");
                 String updatedDate = (String) match.get("updateTime");

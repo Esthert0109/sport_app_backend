@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `fei_jing_basketball_all_match`;
-CREATE TABLE `fei_jing_basketball_all_match`
+DROP TABLE IF EXISTS `fei_jing_basketball_pending_match`;
+CREATE TABLE `fei_jing_basketball_pending_match`
 (
     `match_id`       bigint NOT NULL COMMENT '赛程ID',
     `competition_id` bigint NOT NULL COMMENT '联赛ID',
@@ -13,8 +13,8 @@ CREATE TABLE `fei_jing_basketball_all_match`
     `away_team_id`   bigint NOT NULL COMMENT '客队ID',
     `away_team_en`   varchar(255) COMMENT '客队名-英文',
     `away_team_chs`  varchar(255) COMMENT '客队名-简体',
-    `home_score`     int        NOT NULL COMMENT '主队总分',
-    `away_score`     int        NOT NULL COMMENT '客队总分',
+    `home_score`     varchar(255)        NOT NULL COMMENT '主队总分',
+    `away_score`     varchar(255)        NOT NULL COMMENT '客队总分',
     `season`         varchar(255) COMMENT '赛季',
     `kind`           varchar(255) COMMENT '比赛阶段 1：常规、2：季后、3：季前、-1：无分类',
     `updated_date`   varchar(255) COMMENT '更新时间',
