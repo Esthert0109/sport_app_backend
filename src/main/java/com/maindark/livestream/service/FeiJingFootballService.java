@@ -67,7 +67,7 @@ public class FeiJingFootballService {
                     Integer matchId = footballMatchVo.getId();
                     Integer statusId = footballMatchVo.getStatusId();
                     footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
-                    Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                    Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                     footballMatchVo.setHasCollected(hasCollected);
                 });
             } else {
@@ -96,7 +96,7 @@ public class FeiJingFootballService {
         if(userId != null) {
             Stream<FootballMatchVo> stream =startMatches.stream().peek(footballMatchVo -> {
                 Integer matchId = footballMatchVo.getId();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                 Integer statusId = footballMatchVo.getStatusId();
                 footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
                 footballMatchVo.setHasCollected(hasCollected);
@@ -127,7 +127,7 @@ public class FeiJingFootballService {
         if(userId != null) {
             Stream<FootballMatchVo> stream = pastMatches.stream().peek(footballMatchVo -> {
                 Integer matchId = footballMatchVo.getId();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                 Integer statusId = footballMatchVo.getStatusId();
                 footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
                 footballMatchVo.setHasCollected(hasCollected);
@@ -159,7 +159,7 @@ public class FeiJingFootballService {
         if(userId != null) {
             Stream<FootballMatchVo> stream = futureMatches.stream().peek(footballMatchVo -> {
                 Integer matchId = footballMatchVo.getId();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                 Integer statusId = footballMatchVo.getStatusId();
                 footballMatchVo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(statusId));
                 footballMatchVo.setHasCollected(hasCollected);
@@ -252,12 +252,12 @@ public class FeiJingFootballService {
 
     public FeiJingFootballMatchLiveDataVo getMatchLiveData(Integer matchId) {
         FeiJingFootballMatchLiveDataVo feiJingFootballMatchLiveDataVo =  feiJingFootballMatchLiveDataDao.getMatchLiveData(matchId);
-//        if(feiJingFootballMatchLiveDataVo != null){
-////            String homePossessionRate = allSportsFootballMatchLiveDataVo.getHomePossessionRate().replace("%","");
-////            allSportsFootballMatchLiveDataVo.setHomePossessionRate(homePossessionRate);
-////            String awayPossessionRate = allSportsFootballMatchLiveDataVo.getAwayPossessionRate().replace("%","");
-////            allSportsFootballMatchLiveDataVo.setAwayPossessionRate(awayPossessionRate);
-//        }
+        if(feiJingFootballMatchLiveDataVo != null){
+            String homePossessionRate = feiJingFootballMatchLiveDataVo.getHomePossessionRate().replace("%","");
+            feiJingFootballMatchLiveDataVo.setHomePossessionRate(homePossessionRate);
+            String awayPossessionRate = feiJingFootballMatchLiveDataVo.getAwayPossessionRate().replace("%","");
+            feiJingFootballMatchLiveDataVo.setAwayPossessionRate(awayPossessionRate);
+        }
         return feiJingFootballMatchLiveDataVo;
     }
 

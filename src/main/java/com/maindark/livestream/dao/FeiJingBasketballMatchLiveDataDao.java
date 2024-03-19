@@ -3,6 +3,7 @@ package com.maindark.livestream.dao;
 import com.maindark.livestream.domain.AllSportsBasketballMatchLiveData;
 import com.maindark.livestream.domain.feijing.FeiJingBasketballMatchLiveData;
 import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
+import com.maindark.livestream.vo.FeiJingBasketballLiveDataVo;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
@@ -29,10 +30,9 @@ public interface FeiJingBasketballMatchLiveDataDao {
     @Select("select count(1) from fei_jing_basketball_match_live_data where match_id=#{matchId}")
     int queryExist(@Param("matchId")Integer matchId);
 
-
-    @Select("select match_id," +
-            "h_blocks,h_field_goals,h_free_throws,h_personal_fouls,h_rebounds,h_three_point_goals,h_rebounds,h_turn_overs, " +
+    @Select("select m.match_id,b.home_team_cns as home_team_name,b.away_team_cns as away_team_name,b.home_team_logo,b.away_team_logo,b.home_score,b.away_score," +
+            "m.h_blocks,m.h_field_goals,m.h_free_throws,m.h_personal_fouls,m.h_rebounds,m.h_three_point_goals,m.h_rebounds,m.h_turn_overs, " +
             "a_blocks,a_field_goals,a_free_throws,a_personal_fouls,a_rebounds,a_three_point_goals,a_rebounds,a_turn_overs " +
-            "from fei_jing_basketball_match_live_data where match_id=#{matchId}")
-    AllSportsBasketballLiveDataVo getMatchLiveDataByMatchId(@Param("matchId") Integer matchId);
+            "from fei_jing_basketball_match_live_data m inner join fei_jing_basketball_match b on m.match_id= b.match_id where m.match_id=#{matchId}")
+    FeiJingBasketballLiveDataVo getMatchLiveDataByMatchId(@Param("matchId") Integer matchId);
 }

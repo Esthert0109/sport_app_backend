@@ -29,5 +29,5 @@ public interface FeiJingBasketballLineUpDao {
     @Select("select count(1) from fei_jing_basketball_line_up where player_id=#{playerId} and match_id=#{matchId}")
     int queryExist(@Param("playerId")Integer playerId, @Param("matchId")Integer matchId);
     @Select("select * from fei_jing_basketball_line_up where type=#{type} and match_id=#{matchId}")
-    List<BasketballLineUp> getLineUpByMatchId(@Param("matchId") Long matchId, @Param("type") Integer type);
+    List<BasketballLineUp> getLineUpByMatchId(@Param("matchId") Integer matchId, @Param("type") Integer type);
 }
