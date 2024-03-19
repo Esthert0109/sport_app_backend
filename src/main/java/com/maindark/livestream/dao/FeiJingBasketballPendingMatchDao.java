@@ -1,5 +1,6 @@
 package com.maindark.livestream.dao;
 
+import com.maindark.livestream.domain.feijing.FeiJingBasketballTeam;
 import com.maindark.livestream.domain.feijing.FeijingBasketballPendingMatch;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

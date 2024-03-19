@@ -3,6 +3,7 @@ package com.maindark.livestream.feiJing;
 
 import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
+import com.maindark.livestream.domain.feijing.FeiJingBasketballTeam;
 import com.maindark.livestream.domain.feijing.FeijingBasketballPendingMatch;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
@@ -67,7 +68,7 @@ public class FeiJingApiBasketballPendingService {
                 feijingBasketballPendingMatch.setUpdatedDate(updatedDate);
 
                 //Get Logo from others domain with team id
-                FeiJingBasketballTeam  homeTeam = feijingBasketballPendingMatchDao.getTeamLogo(homeTeamId);
+                FeiJingBasketballTeam homeTeam = feijingBasketballPendingMatchDao.getTeamLogo(homeTeamId);
                 if(homeTeam != null) {
                     feijingBasketballPendingMatch.setHomeTeamLogo(homeTeam.getLogo());
                 }
