@@ -20,14 +20,9 @@ public class FeiJingApiBasketballController {
     @Resource
     FeiJingApiBasketballService feijingApiBasketballService;
 
-//    @Resource
-//    FeijingBasketballMatchDao feijingBasketballMatchDao;
+    @Resource
+    FeijingBasketballMatchDao feijingBasketballMatchDao;
 
-//    @GetMapping("/teams")
-//    public Result<Boolean> getAllTeams(){
-//        feijingApiBasketballService.getAllTeams();
-//        return Result.success(true);
-//    }
 
 //    @GetMapping("/matches/{matchDate}")
 //    public Result<List<Map<String,Object>>> getBasketball(@PathVariable("matchDate")String matchDate){
@@ -35,15 +30,24 @@ public class FeiJingApiBasketballController {
 //        return Result.success(res);
 //    }
 
+    //Get All Match
     @GetMapping("/matches")
     public Result<Boolean> getAllMatches(){
         feijingApiBasketballService.getAllMatches();
         return Result.success(true);
     }
 
-//    @GetMapping("/pending")
-//    public Result<List<Map<String, Object>>> getUpcomingMatches(){
-//        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
-//        return Result.success(matches);
-//    }
+    //Get Upcoming Match
+    @GetMapping("/pending")
+    public Result<List<Map<String, Object>>> getUpcomingMatches(){
+        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
+        return Result.success(matches);
+    }
+
+    //Get Match by State Id
+    @GetMapping("/pending/{stateId}")
+    public Result<List<Map<String, Object>>> getUpcomingMatches(){
+        List<Map<String, Object>> matches = feijingApiBasketballService.getMatches();
+        return Result.success(matches);
+    }
 }
