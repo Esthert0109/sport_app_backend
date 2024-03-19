@@ -11,7 +11,8 @@ import java.util.List;
 @Mapper
 public interface FeiJingBasketballPendingMatchDao {
 
-    @Select("select count(1) from fei_jing_basketball_match where match_id=#{matchId}")
+    //Check if Existed
+    @Select("select count(1) from fei_jing_basketball_pending_match where match_id=#{matchId}")
     int queryExisted(@Param("matchId") Integer matchId);
 
     //Insert API data to Database
@@ -29,9 +30,9 @@ public interface FeiJingBasketballPendingMatchDao {
     List<FeijingBasketballMatch> getMatchesByState();
 
 
-    //Select By match_state Id
-    @Select("select * from fei_jing_basketball_pending_match where match_state=#{stateId}")
-    FeijingBasketballMatch getMatchByStateId(@Param("stateId") Integer stateId);
+    //Select By match id
+    @Select("select * from fei_jing_basketball_pending_match where match_id=#{id}")
+    FeijingBasketballMatch getMatchByStateId(@Param("id") Integer id);
 
 
 
