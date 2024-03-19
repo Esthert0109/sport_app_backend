@@ -192,7 +192,11 @@ public class FeiJingBasketballService {
     }
 
     public FeiJingBasketballLiveDataVo getMatchLiveData(Integer matchId) {
-        return feiJingBasketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
+        FeiJingBasketballLiveDataVo feiJingBasketballLiveDataVo = feiJingBasketballMatchLiveDataDao.getMatchLiveDataByMatchId(matchId);
+        if(feiJingBasketballLiveDataVo != null) {
+            feiJingBasketballLiveDataVo.setStatusStr(BasketballMatchStatus.convertStatusIdToStr(feiJingBasketballLiveDataVo.getStatusStr()));
+        }
+        return feiJingBasketballLiveDataVo;
     }
 
     public String getLiveAddress(String homeTeamName, String awayTeamName) {

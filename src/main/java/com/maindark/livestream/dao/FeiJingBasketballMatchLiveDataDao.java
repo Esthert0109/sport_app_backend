@@ -1,8 +1,6 @@
 package com.maindark.livestream.dao;
 
-import com.maindark.livestream.domain.AllSportsBasketballMatchLiveData;
 import com.maindark.livestream.domain.feijing.FeiJingBasketballMatchLiveData;
-import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
 import com.maindark.livestream.vo.FeiJingBasketballLiveDataVo;
 import org.apache.ibatis.annotations.*;
 
@@ -30,9 +28,11 @@ public interface FeiJingBasketballMatchLiveDataDao {
     @Select("select count(1) from fei_jing_basketball_match_live_data where match_id=#{matchId}")
     int queryExist(@Param("matchId")Integer matchId);
 
-    @Select("select m.match_id,b.home_team_cns as home_team_name,b.away_team_cns as away_team_name,b.home_team_logo,b.away_team_logo,b.home_score,b.away_score," +
-            "m.h_blocks,m.h_field_goals,m.h_free_throws,m.h_personal_fouls,m.h_rebounds,m.h_three_point_goals,m.h_rebounds,m.h_turn_overs, " +
-            "a_blocks,a_field_goals,a_free_throws,a_personal_fouls,a_rebounds,a_three_point_goals,a_rebounds,a_turn_overs " +
+    @Select("select m.match_id,b.home_team_cns as home_team_name,b.away_team_cns as away_team_name," +
+            "b.home_team_logo,b.away_team_logo,b.home_score,b.away_score,b.match_date,b.match_time,b.status as status_str," +
+            "b.h_f_quarter,b.h_s_quarter,b.h_t_quarter,b.h_4_quarter,b.a_f_quarter,b.a_s_quarter,b.a_t_quarter,b.a_4_quarter," +
+            "m.h_blocks,m.h_field_goals,m.h_free_throws,m.h_personal_fouls,m.h_rebounds,m.h_three_point_goals,m.h_rebounds,m.h_turn_overs,m.h_steals, " +
+            "m.a_blocks,m.a_field_goals,m.a_free_throws,m.a_personal_fouls,m.a_rebounds,m.a_three_point_goals,m.a_rebounds,m.a_turn_overs,m.a_steals " +
             "from fei_jing_basketball_match_live_data m inner join fei_jing_basketball_match b on m.match_id= b.match_id where m.match_id=#{matchId}")
     FeiJingBasketballLiveDataVo getMatchLiveDataByMatchId(@Param("matchId") Integer matchId);
 }
