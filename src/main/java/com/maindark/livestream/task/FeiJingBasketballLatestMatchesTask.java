@@ -1,12 +1,13 @@
 package com.maindark.livestream.task;
 
 import com.alibaba.fastjson.JSON;
-import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
 import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
 import com.maindark.livestream.feiJing.FeiJingBasketballConfig;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,16 +16,18 @@ import java.util.Map;
 
 @Component
 @Slf4j
+@EnableScheduling
 public class FeiJingBasketballLatestMatchesTask {
 
     @Resource
-    FeiJingBasketballMatchDao feijingBasketballMatchDao;
+    FeiJingBasketballPendingMatchDao feijingBasketballPendingMatchDao;
 
     @Resource
     FeiJingBasketballConfig feiJingBasketballConfig;
 
 
-    @Scheduled(cron = "* * */1 * * *")
+    //Per Hours
+    @Scheduled(cron = "0 0 */1 * * *")
     public void getAllMatches() {
         String url = feiJingBasketballConfig.getMatch();
         String result = HttpUtil.sendGet(url);
@@ -72,9 +75,9 @@ public class FeiJingBasketballLatestMatchesTask {
                 feijingBasketballMatch.setUpdatedDate(updatedDate);
 
 
-                int existed = feijingBasketballMatchDao.queryExisted(matchId);
+                int existed = feijingBasketballPendingMatchDao.queryExisted(matchId);
                 if (existed <= 0) {
-                    feijingBasketballMatchDao.insertData(feijingBasketballMatch);
+                    feijingBasketballPendingMatchDao.insertData(feijingBasketballMatch);
                 }
             });
         }
