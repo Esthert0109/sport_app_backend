@@ -63,7 +63,7 @@ public interface FeiJingBasketballMatchDao {
             "t.status as statusStr,t.match_date,t.home_team_cns as home_team_name,t.away_team_cns as away_team_name," +
             "t.home_team_logo,t.away_team_logo,t.status,t.home_score as home_team_score," +
             "t.away_score as away_team_score from fei_jing_basketball_match t inner join live_stream_collection co on co.match_id = t.match_id " +
-            "where co.user_id=#{userId} order by t.match_date desc,t.match_time desc  ")
+            "where co.user_id=#{userId} order by t.match_date desc,t.match_time desc limit #{pageSize} offset #{offset}  ")
     List<BasketballMatchVo> getFeiJingMatchByUserId(@Param("userId") Long userId,@Param("pageSize") Integer pageSize, @Param("offset") Long offset);
 
     @Select("select t.match_id as id,t.competition_name,t.match_time as matchTimeStr," +

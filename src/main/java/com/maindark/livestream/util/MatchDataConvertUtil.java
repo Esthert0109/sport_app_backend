@@ -29,8 +29,8 @@ public class MatchDataConvertUtil {
         if(futureMatches != null && !futureMatches.isEmpty()){
             Stream<FootballMatchVo> footballMatchVoStream = futureMatches.stream().map(vo ->{
                 vo.setStatusStr(FootballMatchStatus.convertStatusIdToStr(vo.getStatusId()));
-                vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
-                vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
+                //vo.setMatchTimeStr(DateUtil.interceptTime(vo.getMatchTime() * 1000));
+                //vo.setMatchDate(DateUtil.convertLongTimeToMatchDate(vo.getMatchTime() * 1000));
                 vo.setHomeTeamLogo(vo.getHomeTeamLogo() == null?logo:vo.getHomeTeamLogo());
                 vo.setAwayTeamLogo(vo.getAwayTeamLogo() == null?logo:vo.getAwayTeamLogo());
                 return vo;
