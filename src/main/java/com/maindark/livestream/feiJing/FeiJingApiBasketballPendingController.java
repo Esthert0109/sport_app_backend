@@ -1,6 +1,6 @@
 package com.maindark.livestream.feiJing;
 
-import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
 import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
 import com.maindark.livestream.result.Result;
 import jakarta.annotation.Resource;
@@ -12,12 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/FeiJing/basketball")
-public class FeiJingApiBasketballController {
+public class FeiJingApiBasketballPendingController {
     @Resource
-    FeiJingApiBasketballService feijingApiBasketballService;
+    FeiJingApiBasketballPendingService feijingApiBasketballService;
 
     @Resource
-    FeiJingBasketballMatchDao feijingBasketballMatchDao;
+    FeiJingBasketballPendingMatchDao feijingBasketballPendingMatchDao;
 
 
     //Get All Matches to Insert Database
@@ -30,7 +30,7 @@ public class FeiJingApiBasketballController {
     //Get All Upcoming Matches
     @GetMapping("/matches/pending")
     public Result<List<FeijingBasketballMatch>> getPendingMatches() {
-        List<FeijingBasketballMatch> pendingMatches = feijingBasketballMatchDao.getMatchesByState();
+        List<FeijingBasketballMatch> pendingMatches = feijingBasketballPendingMatchDao.getMatchesByState();
         return Result.success(pendingMatches);
     }
 
@@ -55,7 +55,7 @@ public class FeiJingApiBasketballController {
      */
     @GetMapping("/matches/pending/{stateId}")
     public Result<FeijingBasketballMatch> getUpcomingMatchesById(@PathVariable("stateId") Integer stateId){
-        FeijingBasketballMatch match = feijingBasketballMatchDao.getMatchByStateId(stateId);
+        FeijingBasketballMatch match = feijingBasketballPendingMatchDao.getMatchByStateId(stateId);
         return Result.success(match);
     }
 

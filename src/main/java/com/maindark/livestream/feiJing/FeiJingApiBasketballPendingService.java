@@ -2,7 +2,7 @@ package com.maindark.livestream.feiJing;
 
 
 import com.alibaba.fastjson.JSON;
-import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
+import com.maindark.livestream.dao.FeiJingBasketballPendingMatchDao;
 import com.maindark.livestream.domain.feijing.FeijingBasketballMatch;
 import com.maindark.livestream.util.HttpUtil;
 import jakarta.annotation.Resource;
@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class FeiJingApiBasketballService {
+public class FeiJingApiBasketballPendingService {
 
     @Resource
     FeiJingBasketballConfig feiJingBasketballConfig;
 
     @Resource
-    FeiJingBasketballMatchDao feijingBasketballMatchDao;
+    FeiJingBasketballPendingMatchDao feijingBasketballPendingMatchDao;
 
 
     public void getAllMatches() {
@@ -68,9 +68,9 @@ public class FeiJingApiBasketballService {
                 feijingBasketballMatch.setUpdatedDate(updatedDate);
 
 
-                int existed = feijingBasketballMatchDao.queryExisted(matchId);
+                int existed = feijingBasketballPendingMatchDao.queryExisted(matchId);
                 if (existed <= 0) {
-                    feijingBasketballMatchDao.insertData(feijingBasketballMatch);
+                    feijingBasketballPendingMatchDao.insertData(feijingBasketballMatch);
                 }
             });
         }

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface FeiJingBasketballMatchDao {
+public interface FeiJingBasketballPendingMatchDao {
 
     @Select("select count(1) from fei_jing_basketball_match where match_id=#{matchId}")
     int queryExisted(@Param("matchId") Integer matchId);
@@ -24,7 +24,7 @@ public interface FeiJingBasketballMatchDao {
     void insertData(FeijingBasketballMatch feijingBasketballMatch);
 
 
-    //Select All Upcaming Matches
+    //Select All Upcoming Matches
     @Select("select * from fei_jing_basketball_all_match where match_state = 0")
     List<FeijingBasketballMatch> getMatchesByState();
 
