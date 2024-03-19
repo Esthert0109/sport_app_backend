@@ -27,7 +27,7 @@ public class FeiJingBasketballLatestMatchesTask {
 
 
     //Per Hours
-    @Scheduled(cron = "0 0 */1 * * *")
+    @Scheduled(cron = "*/15 * * * * *")
     public void getAllMatches() {
         String url = feiJingBasketballConfig.getMatch();
         String result = HttpUtil.sendGet(url);
