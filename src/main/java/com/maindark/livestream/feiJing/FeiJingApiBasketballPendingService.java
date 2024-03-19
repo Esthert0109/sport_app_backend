@@ -26,9 +26,7 @@ public class FeiJingApiBasketballPendingService {
         Map<String, Object> resultObj = JSON.parseObject(result, Map.class);
         List<Map<String, Object>> matchList = (List<Map<String, Object>>) resultObj.get("matchList");
         if (matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match -> {
-
-
+            matchList.forEach(match ->{
                 Integer matchId = (Integer) match.get("matchId");
                 Integer competitionId = (Integer) match.get("leagueId");
                 String leagueEn = (String) match.get("leagueEn");
