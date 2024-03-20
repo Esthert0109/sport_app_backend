@@ -17,6 +17,9 @@ public interface AnchorFollowDao {
     @Update("update follow set status = #{status} ,follow_updated_time = NOW() where id = #{id}")
     void updateFollowAnchorStatusById(@Param("id") Long id, @Param("status") Boolean status);
 
+    @Update("update follow set streaming_status = #{streamingStatus} ,follow_updated_time = NOW() where anchor_id = #{anchorId}")
+    void updateStreamingStatusById(@Param("anchorId") Long anchorId, @Param("streamingStatus") Boolean streamingStatus);
+
     @Select("SELECT EXISTS(SELECT 1 FROM follow where anchor_id = #{anchorId} and follower_id = #{followerId})")
     boolean checkFollowExistByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 

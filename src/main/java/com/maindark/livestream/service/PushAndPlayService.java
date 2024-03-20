@@ -1,6 +1,7 @@
 package com.maindark.livestream.service;
 
 import com.maindark.livestream.config.PushAndPlayConfig;
+import com.maindark.livestream.dao.AnchorFollowDao;
 import com.maindark.livestream.dao.LiveStreamDetailDao;
 import com.maindark.livestream.domain.LiveStreamDetail;
 import com.maindark.livestream.enums.PopularEnum;
@@ -27,6 +28,9 @@ public class PushAndPlayService {
     @Resource
     LiveStreamDetailDao liveStreamDetailDao;
 
+    @Resource
+    AnchorFollowDao anchorFollowDao;
+
     public Map<String,Object> getPushUrl(){
         String time = DateUtil.convertLocalDateToTime();
         Map<String,Object> map = new HashMap<>();
@@ -51,6 +55,10 @@ public class PushAndPlayService {
         liveStreamDetail.setTitle(liveStreamDetailForm.getTitle());
         liveStreamDetail.setSportType(liveStreamDetailForm.getSportType());
         liveStreamDetailDao.insertData(liveStreamDetail);
+
+//        update follow table
+        anchorFollowDao.updateStreamingStatusById(id, true);
+
         return liveStreamDetail.getId();
     }
 
@@ -86,5 +94,10 @@ public class PushAndPlayService {
 
     public void deleteLiveRoomById(Integer id) {
         liveStreamDetailDao.deleteLiveStreamDetailById(id);
+
+        //        update follow table
+        LiveStreamDetailVo liveStreamDetailVo = liveStreamDetailDao.getLiveStreamDetailById(id);
+        anchorFollowDao.updateStreamingStatusById(liveStreamDetailVo.getUserId(), true);
+
     }
 }

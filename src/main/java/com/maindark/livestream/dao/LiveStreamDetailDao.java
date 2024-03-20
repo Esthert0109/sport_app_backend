@@ -15,6 +15,10 @@ public interface LiveStreamDetailDao {
 
     @Select("select t.id, t.user_id,t.sport_type, t.cover, t.title, t.push_host, t.push_code, date_format(t.live_date,'%Y-%m-%d %H:%i:%s') as live_date, t.is_popular,u.nickname,u.head as avatar from live_stream_detail t left join live_stream_user u on t.user_id= u.id where t.id=#{id}")
     LiveStreamDetailVo getLiveStreamDetailById(@Param("id")Integer id);
+
+    @Select("select  * from live_stream_detail where user_id = #{anchorId}")
+    LiveStreamDetailVo getLiveStreamDetailByAnchorId(@Param("anchorId")Long anchorId);
+
     @Update("update live_stream_detail set title=#{title},cover=#{cover} where id=#{id}")
     void updateLiveStreamDetailById(LiveStreamDetail liveStreamDetail);
 
