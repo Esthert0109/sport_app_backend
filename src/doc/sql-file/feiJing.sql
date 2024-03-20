@@ -81,4 +81,16 @@ CREATE TABLE `fei_jing_football_match_live_data` (
   PRIMARY KEY (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `football_live_address`;
+CREATE TABLE `fei_jing_live_address` (
+  `id` int NOT NULL auto_increment COMMENT 'id',
+  `sport_id` int not null COMMENT '1-足球、2-篮球、3-网球',
+  `match_id` int not null COMMENT 'match id',
+  `push_url1` varchar(255)  COMMENT 'push url 1',
+  `push_url2` varchar(255)  COMMENT 'push url 2',
+  `push_url3` varchar(255) COMMENT 'push url 3',
+  `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 

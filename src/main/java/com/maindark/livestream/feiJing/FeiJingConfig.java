@@ -22,5 +22,10 @@ public class FeiJingConfig {
     private String basketballInfo;
     private String footballInfo;
     private String basketballLineup;
+    private String liveFootballAddress;
+    private String liveBasketballAddress;
+    private String liveSecretKey;
+    private String liveAccessKey;
+    private String liveHost;
 
 }

@@ -76,6 +76,7 @@ public class Demo {
         String str = DateUtil.convertStrToNormalTime(time);
         System.out.println(date);
         System.out.println(str);
+
     }
 
 

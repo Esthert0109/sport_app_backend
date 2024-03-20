@@ -1,10 +1,13 @@
 package com.maindark.livestream.util;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -15,6 +18,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -80,6 +84,27 @@ public class HttpUtil {
             log.error("get data from feijing error:{}",e.getMessage());
         }
         return stringBuffer.toString();
+    }
+
+    public static String getLiveAddress(String url,String secretKey,String accessKey){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        JSONObject jsonObject = new JSONObject();
+        headers.add("Sp-Access-Key", accessKey);
+        Long time = System.currentTimeMillis();
+        String encryption = secretKey + "|" + time + "|"+url;
+        String signature = DigestUtils.md5Hex(encryption).toUpperCase();
+        headers.add("Sp-Access-Time",String.valueOf(time));
+        headers.add("Sp-Access-Token",signature);
+        HttpEntity<String> request =
+                new HttpEntity<String>(jsonObject.toString(), headers);
+        String requestUrl = "https://api.365live88.com" + url;
+        requestUrl = URLDecoder.decode(requestUrl, Charset.forName(StandardCharsets.UTF_8.name()));
+        String result =
+                restTemplate.postForObject(requestUrl, request, String.class);
+        return result;
+
     }
 
 }
