@@ -22,6 +22,7 @@ public class AnchorFollowController {
 
     @Resource
     FollowService followService;
+    private Long userId;
 
 
     @PostMapping(value = "/create")
@@ -32,6 +33,18 @@ public class AnchorFollowController {
         followService.createFollow(anchorFollowForm.getAnchorId(), liveStreamUser.getId());
 
         return Result.success(true);
+    }
+
+    @GetMapping(value = "/check/{anchorId}")
+    public Result<Boolean> checkIfFollow (LiveStreamUser liveStreamUser, @PathVariable("anchorId") Long anchorId) {
+        if(liveStreamUser == null){
+            throw new GlobalException(CodeMsg.LOGIN_IN);
+        }
+        Long userId = liveStreamUser.getId();
+
+        Boolean isFollowed = followService.checkIfFollowedStatus(anchorId, userId);
+
+        return Result.success(isFollowed);
     }
 
     @GetMapping(value = "/following")

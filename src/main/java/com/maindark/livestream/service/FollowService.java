@@ -189,5 +189,9 @@ public class FollowService {
         return anchorFollowDao.checkFollowExistByAnchorIdFollowerId(anchorId, followerId);
     }
 
+    public Boolean checkIfFollowedStatus(Long anchorId, Long followerId) {
+        return anchorFollowDao.checkFollowedStatus(anchorId, followerId);
+    }
+
 
 }

@@ -20,6 +20,9 @@ public interface AnchorFollowDao {
     @Select("SELECT EXISTS(SELECT 1 FROM follow where anchor_id = #{anchorId} and follower_id = #{followerId})")
     boolean checkFollowExistByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
+    @Select("SELECT EXISTS(SELECT 1 FROM follow where anchor_id = #{anchorId} and follower_id = #{followerId} and status = true)")
+    boolean checkFollowedStatus(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
+
     @Select("Select * from follow where anchor_id = #{anchorId} and follower_id = #{followerId}")
     AnchorFollow getFollowDetailsByAnchorIdFollowerId(@Param("anchorId") Long anchorId, @Param("followerId") Long followerId);
 
