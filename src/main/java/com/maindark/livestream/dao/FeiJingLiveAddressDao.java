@@ -15,4 +15,7 @@ public interface FeiJingLiveAddressDao {
 
     @Select("select count(1) from fei_jing_live_address where sport_id = 1 and match_id=#{matchId} ")
     int queryFootballLiveExisted(@Param("matchId")Integer matchId);
+
+    @Select("select count(1) from fei_jing_live_address where sport_id = 2 and match_id=#{matchId} ")
+    int queryBasketballLiveExisted(@Param("matchId")Integer matchId);
 }
