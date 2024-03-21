@@ -41,10 +41,14 @@ public class FeiJingFootballController {
      * get all matches in seven days
      * */
     @GetMapping("/list")
-    public Result<Map<String,List<FootballMatchVo>>> getAllMatches(@RequestParam(value = "page", defaultValue = "1") Integer page,
+    public Result<Map<String,List<FootballMatchVo>>> getAllMatches(LiveStreamUser liveStreamUser,@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
+        }
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
-        Map<String,List<FootballMatchVo>> results = feiJingFootballService.getFootballMatchesInSevenDays(request);
+        Map<String,List<FootballMatchVo>> results = feiJingFootballService.getFootballMatchesInSevenDays(userId,request);
         return Result.success(results);
     }
 

@@ -9,6 +9,7 @@ import com.maindark.livestream.redis.FootballListKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.util.DateUtil;
+import com.maindark.livestream.util.FootballMatchStatus;
 import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.*;
 import jakarta.annotation.Resource;
@@ -188,13 +189,12 @@ public class AllSportsFootballService {
 
 
 
-    public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays(Pageable pageable) {
+    public Map<String, List<FootballMatchVo>> getFootballMatchesInSevenDays(Long userId,Pageable pageable) {
         int pageSize = pageable.getPageSize();
         long offset = pageable.getOffset();
         LocalDate now = LocalDate.now();
         String nowDate = DateUtil.convertDateToStr(now);
-        Map<String,List<FootballMatchVo>> results = redisService.get(FootballListKey.listKey,nowDate,Map.class);
-        if (results == null) {
+        Map<String,List<FootballMatchVo>> results = new HashMap<>();
             LocalDate tomorrow = now.plusDays(1);
             LocalDate future = now.plusDays(6);
             LocalDate past = now.minusDays(6);
@@ -205,11 +205,34 @@ public class AllSportsFootballService {
             List<FootballMatchVo> startMatches = allSportsFootballMatchDao.getAllSportsStart(nowDate,tomorrowDate,pageSize,offset);
             List<FootballMatchVo> futureMatches = allSportsFootballMatchDao.getAllSportsFuture(tomorrowDate,futureDate,pageSize,offset);
             results = new HashMap<>();
+        Stream<FootballMatchVo> streamPast = pastMatches.stream().peek(footballMatchVo -> {
+            if(userId != null) {
+                Integer matchId = footballMatchVo.getId();
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
+                footballMatchVo.setHasCollected(hasCollected);
+            }
+        });
+        pastMatches = StreamToListUtil.getArrayListFromStream(streamPast);
+        Stream<FootballMatchVo> streamStart = startMatches.stream().peek(footballMatchVo -> {
+            if(userId != null) {
+                Integer matchId = footballMatchVo.getId();
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
+                footballMatchVo.setHasCollected(hasCollected);
+            }
+        });
+        startMatches = StreamToListUtil.getArrayListFromStream(streamStart);
+        Stream<FootballMatchVo> stream = futureMatches.stream().peek(footballMatchVo -> {
+            if(userId != null) {
+                Integer matchId = footballMatchVo.getId();
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
+                footballMatchVo.setHasCollected(hasCollected);
+            }
+        });
+        futureMatches = StreamToListUtil.getArrayListFromStream(stream);
             results.put("pass",pastMatches);
             results.put("start",startMatches);
             results.put("future",futureMatches);
-            redisService.set(FootballListKey.listKey,nowDate,results);
-        }
+
         return results;
     }
 

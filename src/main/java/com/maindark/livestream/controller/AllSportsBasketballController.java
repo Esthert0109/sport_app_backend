@@ -6,6 +6,7 @@ import com.maindark.livestream.service.AllSportsBasketballService;
 import com.maindark.livestream.vo.AllSportsBasketballLiveDataVo;
 import com.maindark.livestream.vo.BasketballMatchLineUpVo;
 import com.maindark.livestream.vo.BasketballMatchVo;
+import com.maindark.livestream.vo.FootballMatchVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -124,6 +125,23 @@ public class AllSportsBasketballController {
     public Result<AllSportsBasketballLiveDataVo> getBasketballMatchLiveData(@PathVariable("matchId")String matchId){
         AllSportsBasketballLiveDataVo basketballMatchLiveDataVo = allSportsBasketballService.getMatchLiveData(Long.parseLong(matchId));
         return Result.success(basketballMatchLiveDataVo);
+    }
+
+    /**
+     * get all matches in seven days
+     *
+     */
+
+    @GetMapping("/list")
+    public Result<Map<String,List<BasketballMatchVo>>> getAllMatches(LiveStreamUser liveStreamUser,@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                                   @RequestParam(value = "size", defaultValue = "10") Integer size){
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
+        }
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"match_date");
+        Map<String,List<BasketballMatchVo>> results = allSportsBasketballService.getBasketballMatchesInSevenDays(userId,request);
+        return Result.success(results);
     }
 
 
