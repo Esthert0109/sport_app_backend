@@ -27,5 +27,9 @@ public class FeiJingConfig {
     private String liveSecretKey;
     private String liveAccessKey;
     private String liveHost;
+    private String footballAnimation;
+    private String basketballAnimation;
+    private String animationSecretKey;
+    private String animationAccessKey;
 
 }

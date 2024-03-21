@@ -81,7 +81,7 @@ CREATE TABLE `fei_jing_football_match_live_data` (
   PRIMARY KEY (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `football_live_address`;
+DROP TABLE IF EXISTS `fei_jing_live_address`;
 CREATE TABLE `fei_jing_live_address` (
   `id` int NOT NULL auto_increment COMMENT 'id',
   `sport_id` int not null COMMENT '1-足球、2-篮球、3-网球',
@@ -91,6 +91,24 @@ CREATE TABLE `fei_jing_live_address` (
   `push_url3` varchar(255) COMMENT 'push url 3',
   `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created time',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `fei_jing_football_animation`;
+CREATE TABLE `fei_jing_football_animation` (
+  `id` int NOT NULL auto_increment COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
+  PRIMARY KEY (`id`),
+  index idx_match_id(`match_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `fei_jing_basketball_animation`;
+CREATE TABLE `fei_jing_basketball_animation` (
+  `id` int NOT NULL auto_increment COMMENT 'id',
+  `match_id` int not null COMMENT 'match id',
+  `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
+  PRIMARY KEY (`id`),
+  index idx_match_id(`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
