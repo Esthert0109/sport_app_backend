@@ -229,10 +229,11 @@ public class AllSportsFootballService {
             }
         });
         futureMatches = StreamToListUtil.getArrayListFromStream(stream);
-            results.put("pass",pastMatches);
-            results.put("start",startMatches);
-            results.put("future",futureMatches);
-
+        List<FootballMatchVo> list = new ArrayList<>();
+        list.addAll(pastMatches);
+        list.addAll(startMatches);
+        list.addAll(futureMatches);
+        results.put("matchList",list);
         return results;
     }
 

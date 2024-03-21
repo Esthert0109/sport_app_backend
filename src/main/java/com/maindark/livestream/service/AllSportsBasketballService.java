@@ -257,10 +257,11 @@ public class AllSportsBasketballService {
                 });
                 futureMatches = StreamToListUtil.getArrayListFromStream(stream);
             }
-            results = new HashMap<>();
-            results.put("pass",pastMatches);
-            results.put("start",startMatches);
-            results.put("future",futureMatches);
+            List<BasketballMatchVo> list = new ArrayList<>();
+            list.addAll(pastMatches);
+            list.addAll(startMatches);
+            list.addAll(futureMatches);
+            results.put("matchList",list);
         return results;
     }
 }

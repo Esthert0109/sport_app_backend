@@ -259,10 +259,11 @@ public class FeiJingFootballService {
                 }
             });
             futureMatches = StreamToListUtil.getArrayListFromStream(stream);
-            results.put("pass",pastMatches);
-            results.put("start",startMatches);
-            results.put("future",futureMatches);
-            redisService.set(FootballListKey.listKey,nowDate,results);
+        List<FootballMatchVo> list = new ArrayList<>();
+        list.addAll(pastMatches);
+        list.addAll(startMatches);
+        list.addAll(futureMatches);
+        results.put("matchList",list);
         return results;
     }
 
