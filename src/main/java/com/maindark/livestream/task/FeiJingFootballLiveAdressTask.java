@@ -38,14 +38,14 @@ public class FeiJingFootballLiveAdressTask {
         if(matchList != null && !matchList.isEmpty()) {
             matchList.forEach(match ->{
                String matchId = (String)match.get("thirdId");
-               if(!StringUtils.equals("",matchId)) {
+               if(!StringUtils.equals("",matchId) && matchId != null) {
                    Boolean hasLive = (Boolean)match.get("hasLive");
                    if(hasLive) {
                        JSONArray streams = (JSONArray)match.get("streams");
                        if(streams != null && !streams.isEmpty()) {
-                           FeiJingLiveAddress feiJingLiveAddress = saveStreamData(matchId,streams);
                            int existed = feiJingLiveAddressDao.queryFootballLiveExisted(Integer.parseInt(matchId));
                            if(existed <=0) {
+                               FeiJingLiveAddress feiJingLiveAddress = saveStreamData(matchId,streams);
                                feiJingLiveAddressDao.insertData(feiJingLiveAddress);
                            }
                        }

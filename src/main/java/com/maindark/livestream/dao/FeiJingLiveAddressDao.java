@@ -18,4 +18,6 @@ public interface FeiJingLiveAddressDao {
 
     @Select("select count(1) from fei_jing_live_address where sport_id = 2 and match_id=#{matchId} ")
     int queryBasketballLiveExisted(@Param("matchId")Integer matchId);
+    @Select("select match_id,push_url1,push_url2 from fei_jing_live_address where sport_id=#{sportType} and match_id=#{matchId}")
+    FeiJingLiveAddress getAddressByMatchId(@Param("sportType") Integer sportType, @Param("matchId") Integer matchId);
 }
