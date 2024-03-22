@@ -179,6 +179,8 @@ public class FeiJingBasketballNormalDataTask {
         content = content.replaceAll("<strong>","");
         content = content.replaceAll("<span style=\"font-size:16px;line-height:2;\">","");
         content = content.replaceAll("<span style=\"color:#E53333;\">","");
+        content = content.replaceAll("\\r\\n","");
+
         feiJingInfo.setRecordId(recordId);
         feiJingInfo.setType(type);
         feiJingInfo.setSportType(SportTypeEnum.BASKETBALL.getCode());
