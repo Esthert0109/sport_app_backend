@@ -24,4 +24,7 @@ public interface FeiJingInforDao {
     List<InfoCategory> getCategories();
 
     List<FeiJingInfor> selectFeiJingInforList(Map<String, Object> searchMap);
+
+    @Select("select * from fei_jing_infor where id=#{id}")
+    FeiJingInfor getInfoById(@Param("id") Integer id);
 }

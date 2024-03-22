@@ -32,4 +32,9 @@ public class FeiJingInfoService {
     public List<InfoCategory> getCategories() {
         return feiJingInforDao.getCategories();
     }
+
+
+    public FeiJingInfor getInfoById(Integer id) {
+        return feiJingInforDao.getInfoById(id);
+    }
 }

@@ -32,4 +32,10 @@ public class FeiJingInforController {
         List<InfoCategory> list = feiJingInfoService.getCategories();
         return Result.success(list);
     }
+
+    @GetMapping("/{id}")
+    public Result<FeiJingInfor> getInfoById(@PathVariable("id")Integer id){
+        FeiJingInfor feiJingInfor = feiJingInfoService.getInfoById(id);
+        return Result.success(feiJingInfor);
+    }
 }
