@@ -100,4 +100,8 @@ public class PushAndPlayService {
         anchorFollowDao.updateStreamingStatusById(liveStreamDetailVo.getUserId(), true);
 
     }
+
+    public LiveStreamDetailVo getLiveStreamDetailsByUserId(Long userId) {
+        return liveStreamDetailDao.getLiveStreamDetailByAnchorId(userId);
+    }
 }

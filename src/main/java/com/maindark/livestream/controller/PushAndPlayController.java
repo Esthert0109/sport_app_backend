@@ -38,6 +38,12 @@ public class PushAndPlayController {
         return Result.success(liveStreamDetailVo);
     }
 
+    @GetMapping("/details/{userId}")
+    public Result<LiveStreamDetailVo> getLiveStreamDetailByUserId(@PathVariable("userId") Long userId) {
+        LiveStreamDetailVo liveStreamDetailVo = pushAndPlayService.getLiveStreamDetailsByUserId(userId);
+        return Result.success(liveStreamDetailVo);
+    }
+
     @PatchMapping("/{id}")
     public Result<Boolean> updateLiveStreamDetailById(@PathVariable("id")Integer id,@Valid @RequestBody LiveStreamDetailForm liveStreamDetailForm){
         pushAndPlayService.updateLiveStreamDetailById(id,liveStreamDetailForm);
