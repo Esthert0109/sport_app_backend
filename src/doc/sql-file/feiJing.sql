@@ -112,3 +112,31 @@ CREATE TABLE `fei_jing_basketball_animation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
+DROP TABLE IF EXISTS `fei_jing_basketball_infor`;
+CREATE TABLE `fei_jing_basketball_infor` (
+  `record_id` int NOT NULL  COMMENT 'record_id',
+  `type` int not null COMMENT 'type',
+  `title` varchar(255) not null comment 'title',
+  `content` varchar(255) not null comment 'content',
+  `img_url` varchar(255) default null comment 'img url',
+  `category_id` int default null comment 'category id',
+  `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
+  PRIMARY KEY (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `fei_jing_football_infor`;
+CREATE TABLE `fei_jing_football_infor` (
+  `record_id` int NOT NULL  COMMENT 'record_id',
+  `type` int not null COMMENT 'type',
+  `title` varchar(255) not null comment 'title',
+  `content` varchar(255) not null comment 'content',
+  `img_url` varchar(255) default null comment 'img url',
+  `category_id` int default null comment 'category id',
+  `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
+  PRIMARY KEY (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+

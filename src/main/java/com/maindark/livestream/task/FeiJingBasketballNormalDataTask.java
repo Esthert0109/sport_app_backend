@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.maindark.livestream.dao.FeiJingBasketballInfoDao;
 import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
 import com.maindark.livestream.dao.FeiJingBasketballTeamDao;
-import com.maindark.livestream.domain.feijing.FeiJingInfo;
+import com.maindark.livestream.domain.feijing.FeiJIngBasketballInfor;
+import com.maindark.livestream.domain.feijing.FeiJingFootballInfor;
 import com.maindark.livestream.domain.feijing.FeiJingBasketballMatch;
 import com.maindark.livestream.domain.feijing.FeiJingBasketballTeam;
 import com.maindark.livestream.feiJing.FeiJingConfig;
@@ -146,7 +147,7 @@ public class FeiJingBasketballNormalDataTask {
     }
 
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     public void getBasketballInfo(){
         String url = feiJingConfig.getBasketballInfo();
         String result = HttpUtil.sendGet(url);
@@ -159,37 +160,30 @@ public class FeiJingBasketballNormalDataTask {
 
                 //if not existed
                 if(existed <=0) {
-                    FeiJingInfo feiJingInfo = getFeiJingBasketballInfo(info);
+                    FeiJIngBasketballInfor feiJingInfo = getFeiJingBasketballInfo(info);
                     feiJingBasketballInfoDao.insertData(feiJingInfo);
                 }
             });
         }
     }
 
-    public FeiJingInfo getFeiJingBasketballInfo(Map<String, Object> info){
-        FeiJingInfo feiJingInfo = new FeiJingInfo();
+    public FeiJIngBasketballInfor getFeiJingBasketballInfo(Map<String, Object> info){
+        FeiJIngBasketballInfor feiJingInfo = new FeiJIngBasketballInfor();
         Integer recordId = (Integer) info.get("recordId");
-        Integer matchId = (Integer) info.get("matchId");
-        Integer leagueId = (Integer) info.get("leagueId");
-        String leagueName = (String) info.get("leagueName");
-        String homeTeam = (String) info.get("homeTeam");
-        String awayTeam = (String) info.get("awayTeam");
         Integer type = (Integer) info.get("type");
         String title = (String) info.get("title");
         String content = (String) info.get("content");
-        String updateTime = (String) info.get("updateTime");
-
+        content = content.replaceAll("</span>","");
+        content = content.replaceAll("<span style=\"font-size:16px;\">","");
+        content = content.replaceAll("<br />","");
+        content = content.replaceAll("</strong>","");
+        content = content.replaceAll("<strong><span style=\"color:#E53333;font-size:16px;\">","");
+        content = content.replaceAll("<strong>","");
+        content = content.replaceAll("<span style=\"font-size:16px;line-height:2;\">","");
         feiJingInfo.setRecordId(recordId);
-        feiJingInfo.setMatchId(matchId);
-        feiJingInfo.setLeagueId(leagueId);
-        feiJingInfo.setLeagueName(leagueName);
-        feiJingInfo.setHomeTeam(homeTeam);
-        feiJingInfo.setAwayTeam(awayTeam);
         feiJingInfo.setType(type);
         feiJingInfo.setTitle(title);
         feiJingInfo.setContent(content);
-        feiJingInfo.setUpdateTime(updateTime);
-
         return feiJingInfo;
     }
 }
