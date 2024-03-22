@@ -125,16 +125,19 @@ CREATE TABLE `fei_jing_basketball_infor` (
   PRIMARY KEY (`record_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `fei_jing_football_infor`;
-CREATE TABLE `fei_jing_football_infor` (
+DROP TABLE IF EXISTS `fei_jing_infor`;
+CREATE TABLE `fei_jing_infor` (
+  `id` int not null auto_increment comment 'id',
   `record_id` int NOT NULL  COMMENT 'record_id',
+  `category_id` int default null comment 'category id',
   `type` int not null COMMENT 'type',
+  `sport_type` int not null COMMENT '1 football 2 basketball',
   `title` varchar(255) not null comment 'title',
   `content` varchar(255) not null comment 'content',
   `img_url` varchar(255) default null comment 'img url',
-  `category_id` int default null comment 'category id',
+  `popular` char(1) default '0' comment '是否热门 0 是 1 否',
   `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
-  PRIMARY KEY (`record_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

@@ -1,13 +1,11 @@
 package com.maindark.livestream.task;
 
 import com.alibaba.fastjson.JSON;
-import com.maindark.livestream.dao.FeiJingBasketballInfoDao;
 import com.maindark.livestream.dao.FeiJingBasketballMatchDao;
 import com.maindark.livestream.dao.FeiJingBasketballTeamDao;
-import com.maindark.livestream.domain.feijing.FeiJIngBasketballInfor;
-import com.maindark.livestream.domain.feijing.FeiJingFootballInfor;
-import com.maindark.livestream.domain.feijing.FeiJingBasketballMatch;
-import com.maindark.livestream.domain.feijing.FeiJingBasketballTeam;
+import com.maindark.livestream.dao.FeiJingInforDao;
+import com.maindark.livestream.domain.feijing.*;
+import com.maindark.livestream.enums.SportTypeEnum;
 import com.maindark.livestream.feiJing.FeiJingConfig;
 import com.maindark.livestream.util.DateUtil;
 import com.maindark.livestream.util.HttpUtil;
@@ -36,7 +34,7 @@ public class FeiJingBasketballNormalDataTask {
     FeiJingBasketballMatchDao feiJingBasketballMatchDao;
 
     @Resource
-    FeiJingBasketballInfoDao feiJingBasketballInfoDao;
+    FeiJingInforDao feiJingInforDao;
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void getBasketballMatch(){
@@ -156,19 +154,19 @@ public class FeiJingBasketballNormalDataTask {
         if(infoList != null && !infoList.isEmpty()) {
             infoList.forEach(info -> {
                 Integer recordId = (Integer) info.get("recordId");
-                int existed = feiJingBasketballInfoDao.queryExisted(recordId);
+                int existed = feiJingInforDao.queryExisted(recordId);
 
                 //if not existed
                 if(existed <=0) {
-                    FeiJIngBasketballInfor feiJingInfo = getFeiJingBasketballInfo(info);
-                    feiJingBasketballInfoDao.insertData(feiJingInfo);
+                    FeiJingInfor feiJingInfo = getFeiJingBasketballInfo(info);
+                    feiJingInforDao.insertData(feiJingInfo);
                 }
             });
         }
     }
 
-    public FeiJIngBasketballInfor getFeiJingBasketballInfo(Map<String, Object> info){
-        FeiJIngBasketballInfor feiJingInfo = new FeiJIngBasketballInfor();
+    public FeiJingInfor getFeiJingBasketballInfo(Map<String, Object> info){
+        FeiJingInfor feiJingInfo = new FeiJingInfor();
         Integer recordId = (Integer) info.get("recordId");
         Integer type = (Integer) info.get("type");
         String title = (String) info.get("title");
@@ -182,6 +180,7 @@ public class FeiJingBasketballNormalDataTask {
         content = content.replaceAll("<span style=\"font-size:16px;line-height:2;\">","");
         feiJingInfo.setRecordId(recordId);
         feiJingInfo.setType(type);
+        feiJingInfo.setSportType(SportTypeEnum.BASKETBALL.getCode());
         feiJingInfo.setTitle(title);
         feiJingInfo.setContent(content);
         return feiJingInfo;
