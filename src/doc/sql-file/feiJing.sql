@@ -140,6 +140,12 @@ CREATE TABLE `fei_jing_infor` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+drop table if exists info_category(
+    `id` int not null auto_increment comment 'id',
+  `record_id` int NOT NULL  COMMENT 'record_id',
+  `category_id` int default null comment 'category id',
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 
