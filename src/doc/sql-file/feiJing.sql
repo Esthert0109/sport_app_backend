@@ -133,7 +133,7 @@ CREATE TABLE `fei_jing_infor` (
   `type` int not null COMMENT 'type',
   `sport_type` int not null COMMENT '1 football 2 basketball',
   `title` varchar(255) not null comment 'title',
-  `content` varchar(255) not null comment 'content',
+  `content` text not null comment 'content',
   `img_url` varchar(255) default null comment 'img url',
   `popular` char(1) default '0' comment '是否热门 0 是 1 否',
   `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',

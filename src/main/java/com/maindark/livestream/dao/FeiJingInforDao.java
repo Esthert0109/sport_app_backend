@@ -13,6 +13,6 @@ public interface FeiJingInforDao {
     int queryExisted(@Param("recordId") Integer recordId);
 
 
-    @Insert("insert into fei_jing_infor(record_id, type,sport_type, title, content) values( #{recordId},#{type},#{sportType} #{title}, #{content})")
+    @Insert("insert into fei_jing_infor(record_id, type,sport_type, title, content) values( #{recordId},#{type},#{sportType},#{title},#{content})")
     void insertData(FeiJingInfor feiJingInfo);
 }
