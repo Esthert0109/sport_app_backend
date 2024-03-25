@@ -248,20 +248,20 @@ public class FeiJingBasketballService {
         if(userId != null) {
             Stream<BasketballMatchVo> streamPast = pastMatches.stream().peek(basketballMatchVo -> {
                 int matchId = basketballMatchVo.getId().intValue();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                 basketballMatchVo.setHasCollected(hasCollected);
             });
             pastMatches = StreamToListUtil.getArrayListFromStream(streamPast);
             Stream<BasketballMatchVo> streamStart = startMatches.stream().peek(basketballMatchVo -> {
                 int matchId = basketballMatchVo.getId().intValue();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                 basketballMatchVo.setHasCollected(hasCollected);
             });
             startMatches = StreamToListUtil.getArrayListFromStream(streamStart);
 
             Stream<BasketballMatchVo> stream = futureMatches.stream().peek(basketballMatchVo -> {
                 int matchId = basketballMatchVo.getId().intValue();
-                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_EN.getCode(), matchId);
+                Boolean hasCollected = followService.hasFollowed(userId.intValue(), EntityTypeEnum.MATCH_CN.getCode(), matchId);
                 basketballMatchVo.setHasCollected(hasCollected);
             });
             futureMatches = StreamToListUtil.getArrayListFromStream(stream);
