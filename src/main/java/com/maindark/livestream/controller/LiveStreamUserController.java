@@ -4,6 +4,7 @@ import com.maindark.livestream.domain.LiveStreamUser;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.form.LiveStreamUserForm;
 import com.maindark.livestream.form.ResetHeadForm;
+import com.maindark.livestream.form.ResetNicknameForm;
 import com.maindark.livestream.redis.LoginKey;
 import com.maindark.livestream.redis.RedisService;
 import com.maindark.livestream.result.CodeMsg;
@@ -59,13 +60,14 @@ public class LiveStreamUserController {
        LiveStreamUserVo liveStreamUserVo = liveStreamUserService.findById(Long.parseLong(id));
        return Result.success(liveStreamUserVo);
     }
-    @PatchMapping("/updateNickName/{token}/{nickName}")
-    public Result<Boolean> updateNickName(@PathVariable String token,@PathVariable String nickName){
+    @PatchMapping("/updateNickName/{token}")
+    public Result<Boolean> updateNickName(@PathVariable String token,@RequestBody ResetNicknameForm nickNameForm){
         LiveStreamUser liveStreamUser = redisService.get(LoginKey.token,token,LiveStreamUser.class);
         if(liveStreamUser == null){
             throw new GlobalException(CodeMsg.LOGIN_IN);
         }
         Long id = liveStreamUser.getId();
+        String nickName = nickNameForm.getNickName();
         liveStreamUserService.updateNickName(token,id,nickName);
         return Result.success(true);
     }
