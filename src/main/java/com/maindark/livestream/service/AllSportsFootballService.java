@@ -3,7 +3,11 @@ package com.maindark.livestream.service;
 import com.maindark.livestream.dao.*;
 import com.maindark.livestream.domain.AllSportsFootballLineUp;
 import com.maindark.livestream.domain.FootballMatch;
+import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
+import com.maindark.livestream.domain.feijing.FeiJingFootballTeam;
+import com.maindark.livestream.domain.feijing.FeiJingLiveAddress;
 import com.maindark.livestream.enums.EntityTypeEnum;
+import com.maindark.livestream.enums.SportTypeEnum;
 import com.maindark.livestream.exception.GlobalException;
 import com.maindark.livestream.redis.FootballListKey;
 import com.maindark.livestream.redis.RedisService;
@@ -45,7 +49,13 @@ public class AllSportsFootballService {
     FootballTeamDao footballTeamDao;
 
     @Resource
-    FootballMatchDao footballMatchDao;
+    FeiJingFootballTeamDao feiJingFootballTeamDao;
+
+    @Resource
+    FeiJingFootballMatchDao feiJingFootballMatchDao;
+
+    @Resource
+    FeiJingLiveAddressDao feiJingLiveAddressDao;
 
     @Resource
     FootballLiveAddressDao footballLiveAddressDao;
@@ -261,30 +271,29 @@ public class AllSportsFootballService {
 
     public String getLiveAddress(String homeTeamName,String awayTeamName) {
         homeTeamName = homeTeamName.trim();
-        FootballTeamVo homFootballTeamVo = footballTeamDao.getTeamByName(homeTeamName);
+        FeiJingFootballTeam homFootballTeamVo = feiJingFootballTeamDao.getTeamByName(homeTeamName);
         if(homFootballTeamVo == null){
             throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
         }
         awayTeamName = awayTeamName.trim();
-        FootballTeamVo awayFootballTeamVo = footballTeamDao.getTeamByName(awayTeamName);
+        FeiJingFootballTeam awayFootballTeamVo = feiJingFootballTeamDao.getTeamByName(awayTeamName);
         if(awayFootballTeamVo == null) {
             throw new GlobalException(CodeMsg.FOOT_TEAM_IS_NOT_EXISTED);
         }
 
         // get home team id
-        Integer homeTeamId = homFootballTeamVo.getId();
+        Integer homeTeamId = homFootballTeamVo.getTeamId();
         // get away team id
-        Integer awayTeamId = awayFootballTeamVo.getId();
-        LocalDate now = LocalDate.now();
-        Long nowSeconds = DateUtil.convertDateToLongTime(now);
-        FootballMatch footballMatch = footballMatchDao.getFootballMatchByHomeTeamIdAndAwayTeamId(homeTeamId,awayTeamId,nowSeconds);
+        Integer awayTeamId = awayFootballTeamVo.getTeamId();
+        FeiJingFootballMatch footballMatch = feiJingFootballMatchDao.getFootballMatchByHomeTeamIdAndAwayTeamId(homeTeamId,awayTeamId);
         if(footballMatch == null){
             throw new GlobalException(CodeMsg.FOOTBALL_MATCH_IS_NOT_EXISTED);
         }
-        FootballLiveAddressVo footballLiveAddressVo = footballLiveAddressDao.getLiveAddressByMatchId(footballMatch.getId(),1);
+
+        FeiJingLiveAddress footballLiveAddressVo = feiJingLiveAddressDao.getAddressByMatchId(SportTypeEnum.FOOTBALL.getCode(),footballMatch.getMatchId() );
         if(footballLiveAddressVo == null){
             throw new GlobalException(CodeMsg.FOOTBALL_LIVE_ADDRESS_IS_NOT_EXISTED);
         }
-        return StringUtils.equals("",footballLiveAddressVo.getPushUrl3()) ? footballLiveAddressVo.getPushUrl1():footballLiveAddressVo.getPushUrl3();
+        return StringUtils.equals("",footballLiveAddressVo.getPushUrl1()) ? footballLiveAddressVo.getPushUrl2():footballLiveAddressVo.getPushUrl3();
     }
 }

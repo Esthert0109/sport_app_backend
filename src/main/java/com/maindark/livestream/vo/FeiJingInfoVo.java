@@ -2,6 +2,8 @@ package com.maindark.livestream.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 
 @Data
 public class FeiJingInfoVo {
@@ -15,4 +17,5 @@ public class FeiJingInfoVo {
     private String imgUrl;
     private String popular;
     private Integer readCount;
+    private Date createdDate;
 }

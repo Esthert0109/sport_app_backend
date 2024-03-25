@@ -1,6 +1,7 @@
 package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.feijing.FeiJingFootballTeam;
+import com.maindark.livestream.vo.FootballTeamVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,5 +20,6 @@ public interface FeiJingFootballTeamDao {
     @Select("select logo,coach_cn from fei_jing_football_team where team_id=#{teamId}")
     FeiJingFootballTeam getTeamLogoByTeamId(@Param("teamId")Integer teamId);
 
-
+    @Select("select * from fei_jing_football_team where name_en=#{teamName}")
+    FeiJingFootballTeam getTeamByName(@Param("teamName") String teamName);
 }

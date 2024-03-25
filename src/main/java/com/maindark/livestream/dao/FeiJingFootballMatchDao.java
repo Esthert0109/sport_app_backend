@@ -1,5 +1,6 @@
 package com.maindark.livestream.dao;
 
+import com.maindark.livestream.domain.FootballMatch;
 import com.maindark.livestream.domain.feijing.FeiJingFootballMatch;
 import com.maindark.livestream.vo.FootballMatchVo;
 import org.apache.ibatis.annotations.*;
@@ -69,4 +70,6 @@ public interface FeiJingFootballMatchDao {
     List<FootballMatchVo> getThreeCollectionsByUserId(@Param("userId") Long userId);
     @Select("select t.match_id as id,t.league_cns_short as competition_name,t.match_time as matchTimeStr,t.match_date,t.home_team_name_cn as home_team_name,t.away_team_name_cn as away_team_name,t.home_team_logo,t.away_team_logo,t.status_id,t.home_team_score,t.away_team_score,t.line_up,t.home_formation,t.away_formation,t.venue as venueName from fei_jing_football_match t where t.match_id=#{matchId}")
     FootballMatchVo getFeiJingFootballMatchByMatchId(@Param("matchId")Integer matchId);
+    @Select("select match_id from fei_jing_football_match where home_team_id=#{homeTeamId} and away_team_id=#{awayTeamId}  order by match_time asc limit 1")
+    FeiJingFootballMatch getFootballMatchByHomeTeamIdAndAwayTeamId(@Param("homeTeamId") Integer homeTeamId, @Param("awayTeamId") Integer awayTeamId);
 }
