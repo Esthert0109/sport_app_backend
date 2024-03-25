@@ -25,4 +25,13 @@
         </where>
         limit #{pageSize} offset #{offset}
     </select>
+
+    <select id="selectFeiJingInforPopularList" parameterType="Map" resultMap="FeiJingInforResult">
+        <include refid="selectFeiJingInforVo"/>
+        <where>
+            <if test="search != null "> and category_id = #{search}</if>
+
+        </where>
+        limit #{pageSize} offset #{offset}
+    </select>
 </mapper>

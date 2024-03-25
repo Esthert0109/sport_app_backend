@@ -27,4 +27,6 @@ public interface FeiJingInforDao {
 
     @Select("select * from fei_jing_infor where id=#{id}")
     FeiJingInfor getInfoById(@Param("id") Integer id);
+
+    List<FeiJingInfor> selectFeiJingInforPopularList(Map<String, Object> searchMap);
 }

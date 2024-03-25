@@ -37,4 +37,15 @@ public class FeiJingInfoService {
     public FeiJingInfor getInfoById(Integer id) {
         return feiJingInforDao.getInfoById(id);
     }
+
+    public List<FeiJingInfor> getPopularList(Integer categoryId, Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        Map<String,Object> searchMap = new HashMap<>();
+        searchMap.put("pageSize",pageSize);
+        searchMap.put("offset",offset);
+        searchMap.put("search",categoryId);
+        List<FeiJingInfor> list = feiJingInforDao.selectFeiJingInforPopularList(searchMap);
+        return list;
+    }
 }

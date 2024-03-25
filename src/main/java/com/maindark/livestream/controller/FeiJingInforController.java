@@ -38,4 +38,14 @@ public class FeiJingInforController {
         FeiJingInfor feiJingInfor = feiJingInfoService.getInfoById(id);
         return Result.success(feiJingInfor);
     }
+
+    @GetMapping("/popular/{categoryId}")
+    public Result<List<FeiJingInfor>> getPopularList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @PathVariable("categoryId") Integer categoryId){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"created_date");
+        List<FeiJingInfor> list = feiJingInfoService.getPopularList(categoryId,request);
+        return Result.success(list);
+    }
 }
