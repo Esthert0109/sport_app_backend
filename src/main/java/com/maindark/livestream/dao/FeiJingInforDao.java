@@ -2,6 +2,7 @@ package com.maindark.livestream.dao;
 
 import com.maindark.livestream.domain.feijing.FeiJingInfor;
 import com.maindark.livestream.domain.feijing.InfoCategory;
+import com.maindark.livestream.vo.FeiJingInfoVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,10 +24,10 @@ public interface FeiJingInforDao {
     @Select("select category_id,category from info_category")
     List<InfoCategory> getCategories();
 
-    List<FeiJingInfor> selectFeiJingInforList(Map<String, Object> searchMap);
+    List<FeiJingInfoVo> selectFeiJingInforList(Map<String, Object> searchMap);
 
     @Select("select * from fei_jing_infor where id=#{id}")
     FeiJingInfor getInfoById(@Param("id") Integer id);
 
-    List<FeiJingInfor> selectFeiJingInforPopularList(Map<String, Object> searchMap);
+    List<FeiJingInfoVo> selectFeiJingInforPopularList(Map<String, Object> searchMap);
 }

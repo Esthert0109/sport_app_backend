@@ -1,9 +1,11 @@
 package com.maindark.livestream.controller;
 
+import com.maindark.livestream.domain.LiveStreamUser;
 import com.maindark.livestream.domain.feijing.FeiJingInfor;
 import com.maindark.livestream.domain.feijing.InfoCategory;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.FeiJingInfoService;
+import com.maindark.livestream.vo.FeiJingInfoVo;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,12 +20,12 @@ public class FeiJingInforController {
     @Resource
     FeiJingInfoService feiJingInfoService;
     @GetMapping("/list")
-    public Result<List<FeiJingInfor>> getInfoList(
+    public Result<List<FeiJingInfoVo>> getInfoList(
                                                   @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                   @RequestParam(value = "size", defaultValue = "10") Integer size,
                                                   @RequestParam(required = false) String search){
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"created_date");
-        List<FeiJingInfor> list = feiJingInfoService.getInfoList(search,request);
+        List<FeiJingInfoVo> list = feiJingInfoService.getInfoList(search,request);
         return Result.success(list);
     }
 
@@ -34,18 +36,22 @@ public class FeiJingInforController {
     }
 
     @GetMapping("/{id}")
-    public Result<FeiJingInfor> getInfoById(@PathVariable("id")Integer id){
-        FeiJingInfor feiJingInfor = feiJingInfoService.getInfoById(id);
+    public Result<FeiJingInfor> getInfoById(LiveStreamUser liveStreamUser, @PathVariable("id")Integer id){
+        Long userId = null;
+        if(liveStreamUser != null) {
+            userId = liveStreamUser.getId();
+        }
+        FeiJingInfor feiJingInfor = feiJingInfoService.getInfoById(id,userId);
         return Result.success(feiJingInfor);
     }
 
     @GetMapping("/popular/{categoryId}")
-    public Result<List<FeiJingInfor>> getPopularList(
+    public Result<List<FeiJingInfoVo>> getPopularList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
             @PathVariable("categoryId") Integer categoryId){
         PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"created_date");
-        List<FeiJingInfor> list = feiJingInfoService.getPopularList(categoryId,request);
+        List<FeiJingInfoVo> list = feiJingInfoService.getPopularList(categoryId,request);
         return Result.success(list);
     }
 }

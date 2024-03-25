@@ -17,7 +17,7 @@
     <sql id="selectFeiJingInforVo">
         select id, record_id, category_id, type, sport_type, title, content, img_url, popular, created_date from fei_jing_infor
     </sql>
-    <select id="selectFeiJingInforList" parameterType="Map" resultMap="FeiJingInforResult">
+    <select id="selectFeiJingInforList" parameterType="Map" resultType="com.maindark.livestream.vo.FeiJingInfoVo">
         <include refid="selectFeiJingInforVo"/>
         <where>
             <if test="search != null "> and category_id = #{search}</if>
@@ -26,7 +26,7 @@
         limit #{pageSize} offset #{offset}
     </select>
 
-    <select id="selectFeiJingInforPopularList" parameterType="Map" resultMap="FeiJingInforResult">
+    <select id="selectFeiJingInforPopularList" parameterType="Map" resultType="com.maindark.livestream.vo.FeiJingInfoVo">
         <include refid="selectFeiJingInforVo"/>
         <where>
             <if test="search != null "> and category_id = #{search}</if>
