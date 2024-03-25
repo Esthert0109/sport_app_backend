@@ -98,7 +98,13 @@ public class DateUtil {
     }
 
     public static String convertStrToNormalTime(String time){
-        return time.substring(10,14);
+        String[] arr = time.split(" ");
+        if(arr[1].length() == 8){
+            return time.substring(10,15);
+        } else {
+            return time.substring(10,14);
+        }
+
     }
 
 
