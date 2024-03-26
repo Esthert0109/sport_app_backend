@@ -78,7 +78,7 @@ public class FeiJingInfoService {
         searchMap.put("offset",offset);
         searchMap.put("search",search);
         searchMap.put("isTop", PopularEnum.YES.getCode());
-        List<FeiJingInfoVo> list = feiJingInforDao.selectFeiJingInforList(searchMap);
+        List<FeiJingInfoVo> list = feiJingInforDao.selectFeiJingInforTopList(searchMap);
         Stream<FeiJingInfoVo> stream = list.stream().peek(info ->{
             long count = followService.findFollowerCount(EntityTypeEnum.INFO.getCode(), info.getId());
             info.setReadCount((int) count);
