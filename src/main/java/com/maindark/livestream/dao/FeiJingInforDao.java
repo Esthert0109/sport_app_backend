@@ -32,4 +32,6 @@ public interface FeiJingInforDao {
     List<FeiJingInfoVo> selectFeiJingInforPopularList(Map<String, Object> searchMap);
 
     List<FeiJingInfoVo> selectFeiJingInforTopList(Map<String, Object> searchMap);
+
+    List<FeiJingInfoVo> selectFeiJingInforUrlList(Map<String, Object> searchMap);
 }

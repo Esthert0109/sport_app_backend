@@ -64,4 +64,12 @@ public class FeiJingInforController {
         List<FeiJingInfoVo> list = feiJingInfoService.getInfoTopList(search,request);
         return Result.success(list);
     }
+
+    @GetMapping("/list/urls")
+    public Result<List<FeiJingInfoVo>> getInfoUrls(
+            @RequestParam(required = false) String search){
+        List<FeiJingInfoVo> list = feiJingInfoService.getInfoUrls(search);
+        return Result.success(list);
+    }
+
 }

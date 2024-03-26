@@ -44,4 +44,14 @@
         </where>
         limit 3
     </select>
+
+    <select id="selectFeiJingInforUrlList" parameterType="Map" resultType="com.maindark.livestream.vo.FeiJingInfoVo">
+        <include refid="selectFeiJingInforVo"/>
+        <where>
+            <if test="search != null "> and category_id = #{search}</if>
+        </where>
+        limit 5
+    </select>
+
+
 </mapper>
