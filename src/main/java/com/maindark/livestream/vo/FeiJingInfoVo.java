@@ -18,4 +18,7 @@ public class FeiJingInfoVo {
     private String popular;
     private Integer readCount;
     private Date createdDate;
+    private String dateStr;
+    // 0 false 1 true
+    private String isTop;
 }

@@ -54,4 +54,14 @@ public class FeiJingInforController {
         List<FeiJingInfoVo> list = feiJingInfoService.getPopularList(categoryId,request);
         return Result.success(list);
     }
+
+    @GetMapping("/list/isTop")
+    public Result<List<FeiJingInfoVo>> getInfoTopList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(required = false) String search){
+        PageRequest request = PageRequest.of(page - 1, size, Sort.Direction.DESC,"created_date");
+        List<FeiJingInfoVo> list = feiJingInfoService.getInfoTopList(search,request);
+        return Result.success(list);
+    }
 }

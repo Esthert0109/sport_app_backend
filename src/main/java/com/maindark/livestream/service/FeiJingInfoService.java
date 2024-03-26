@@ -4,6 +4,7 @@ import com.maindark.livestream.dao.FeiJingInforDao;
 import com.maindark.livestream.domain.feijing.FeiJingInfor;
 import com.maindark.livestream.domain.feijing.InfoCategory;
 import com.maindark.livestream.enums.EntityTypeEnum;
+import com.maindark.livestream.enums.PopularEnum;
 import com.maindark.livestream.util.StreamToListUtil;
 import com.maindark.livestream.vo.FeiJingInfoVo;
 import jakarta.annotation.Resource;
@@ -61,6 +62,23 @@ public class FeiJingInfoService {
         searchMap.put("offset",offset);
         searchMap.put("search",categoryId);
         List<FeiJingInfoVo> list = feiJingInforDao.selectFeiJingInforPopularList(searchMap);
+        Stream<FeiJingInfoVo> stream = list.stream().peek(info ->{
+            long count = followService.findFollowerCount(EntityTypeEnum.INFO.getCode(), info.getId());
+            info.setReadCount((int) count);
+        });
+        list = StreamToListUtil.getArrayListFromStream(stream);
+        return list;
+    }
+
+    public List<FeiJingInfoVo> getInfoTopList(String search, Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        long offset = pageable.getOffset();
+        Map<String,Object> searchMap = new HashMap<>();
+        searchMap.put("pageSize",pageSize);
+        searchMap.put("offset",offset);
+        searchMap.put("search",search);
+        searchMap.put("isTop", PopularEnum.YES.getCode());
+        List<FeiJingInfoVo> list = feiJingInforDao.selectFeiJingInforList(searchMap);
         Stream<FeiJingInfoVo> stream = list.stream().peek(info ->{
             long count = followService.findFollowerCount(EntityTypeEnum.INFO.getCode(), info.getId());
             info.setReadCount((int) count);

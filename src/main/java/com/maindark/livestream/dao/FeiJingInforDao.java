@@ -30,4 +30,6 @@ public interface FeiJingInforDao {
     FeiJingInfor getInfoById(@Param("id") Integer id);
 
     List<FeiJingInfoVo> selectFeiJingInforPopularList(Map<String, Object> searchMap);
+
+    List<FeiJingInfoVo> selectFeiJingInforTopList(Map<String, Object> searchMap);
 }

@@ -136,6 +136,7 @@ CREATE TABLE `fei_jing_infor` (
   `content` text not null comment 'content',
   `img_url` varchar(255) default null comment 'img url',
   `popular` char(1) default '0' comment '是否热门 0 是 1 否',
+    `is_top` char(1) default '1' comment '是否置顶',
   `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
