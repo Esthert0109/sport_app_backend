@@ -40,7 +40,7 @@
         <include refid="selectFeiJingInforVo"/>
         <where>
             <if test="search != null "> and category_id = #{search}</if>
-            <if test="isTop != null and isTop != ''">is_top=#{isTop}</if>
+            <if test="isTop != null and isTop != ''"> and is_top=#{isTop}</if>
         </where>
         limit 3
     </select>
