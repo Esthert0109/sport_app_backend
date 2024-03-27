@@ -136,7 +136,7 @@ CREATE TABLE `fei_jing_infor` (
   `content` text not null comment 'content',
   `img_url` varchar(255) default null comment 'img url',
   `popular` char(1) default '0' comment '是否热门 0 是 1 否',
-    `is_top` char(1) default '1' comment '是否置顶',
+    `is_top` char(1) default '0' comment '是否置顶 0 否 1 是',
   `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -145,6 +145,7 @@ drop table if exists info_category;
 create table info_category(
   `category_id` int not null auto_increment comment 'id',
   `category` varchar(255) not NULL  COMMENT 'category',
+  `sort_num` int default null comment 'sort num',
   `created_date` timestamp DEFAULT current_timestamp()  COMMENT 'created date',
   PRIMARY KEY (`category_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

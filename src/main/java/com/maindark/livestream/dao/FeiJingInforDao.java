@@ -21,7 +21,7 @@ public interface FeiJingInforDao {
     @Insert("insert into fei_jing_infor(record_id, type,sport_type, title, content) values( #{recordId},#{type},#{sportType},#{title},#{content})")
     void insertData(FeiJingInfor feiJingInfo);
 
-    @Select("select category_id,category from info_category")
+    @Select("select category_id,category from info_category order by sort_num")
     List<InfoCategory> getCategories();
 
     List<FeiJingInfoVo> selectFeiJingInforList(Map<String, Object> searchMap);
