@@ -87,10 +87,10 @@ public class FeiJingInfoService {
         return list;
     }
 
-    public List<FeiJingInfoVo> getInfoUrls(String search) {
+    public List<FeiJingInfoVo> getInfoUrls(Integer search) {
         Map<String,Object> searchMap = new HashMap<>();
         // search = 9 单独获取URL类资讯
-        searchMap.put("search",9);
+        searchMap.put("search",search);
         List<FeiJingInfoVo> list = feiJingInforDao.selectFeiJingInforUrlList(searchMap);
         Stream<FeiJingInfoVo> stream = list.stream().peek(info ->{
             long count = followService.findFollowerCount(EntityTypeEnum.INFO.getCode(), info.getId());
