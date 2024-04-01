@@ -1,7 +1,6 @@
 package com.maindark.livestream.controller;
 
 import com.maindark.livestream.domain.LiveStreamUser;
-import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.BasketBallService;
 import com.maindark.livestream.vo.*;

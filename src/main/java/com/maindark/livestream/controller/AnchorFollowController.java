@@ -6,15 +6,12 @@ import com.maindark.livestream.form.AnchorFollowForm;
 import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.FollowService;
-import com.maindark.livestream.service.LiveStreamUserService;
 import com.maindark.livestream.vo.AnchorFollowVo;
 import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/follow")
@@ -22,7 +19,7 @@ public class AnchorFollowController {
 
     @Resource
     FollowService followService;
-    private Long userId;
+
 
 
     @PostMapping(value = "/create")
