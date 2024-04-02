@@ -33,24 +33,26 @@ public class FeiJingBasketballLiveAddressTask {
         String secretKey = feiJingConfig.getLiveSecretKey();
         String res = HttpUtil.getLiveAddress(url,secretKey,accessKey);
         Map<String,Object> resultObj = JSON.parseObject(res,Map.class);
-        List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("data");
-        if(matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match ->{
-                String matchId = (String)match.get("thirdId");
-                if(!StringUtils.equals("",matchId) && matchId != null) {
-                    Boolean hasLive = (Boolean)match.get("hasLive");
-                    if(hasLive) {
-                        JSONArray streams = (JSONArray)match.get("streams");
-                        if(streams != null && !streams.isEmpty()) {
-                            int existed = feiJingLiveAddressDao.queryBasketballLiveExisted(Integer.parseInt(matchId));
-                            if(existed <=0) {
-                                FeiJingLiveAddress feiJingLiveAddress = saveStreamData(matchId,streams);
-                                feiJingLiveAddressDao.insertData(feiJingLiveAddress);
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("data");
+            if(matchList != null && !matchList.isEmpty()) {
+                matchList.forEach(match ->{
+                    String matchId = (String)match.get("thirdId");
+                    if(!StringUtils.equals("",matchId) && matchId != null) {
+                        Boolean hasLive = (Boolean)match.get("hasLive");
+                        if(hasLive) {
+                            JSONArray streams = (JSONArray)match.get("streams");
+                            if(streams != null && !streams.isEmpty()) {
+                                int existed = feiJingLiveAddressDao.queryBasketballLiveExisted(Integer.parseInt(matchId));
+                                if(existed <=0) {
+                                    FeiJingLiveAddress feiJingLiveAddress = saveStreamData(matchId,streams);
+                                    feiJingLiveAddressDao.insertData(feiJingLiveAddress);
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 

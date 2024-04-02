@@ -31,44 +31,45 @@ public class FeiJingBasketballLiveDataTask {
         String url = feiJingConfig.getBasketballLineup();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
-        if(matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match ->{
-                Integer matchId = (Integer) match.get("matchId");
-                FeiJingBasketballMatchLiveData feiJingBasketballMatchLiveData = new FeiJingBasketballMatchLiveData();
-                feiJingBasketballMatchLiveData.setMatchId(matchId);
-                JSONArray homePlayerList = (JSONArray) match.get("homePlayerList");
-                if(homePlayerList != null) {
-                    String[] homeData = getLiveResultData(homePlayerList);
-                    feiJingBasketballMatchLiveData.setHBlocks(homeData[0]);
-                    feiJingBasketballMatchLiveData.setHFieldGoals(homeData[1]);
-                    feiJingBasketballMatchLiveData.setHFreeThrows(homeData[2]);
-                    feiJingBasketballMatchLiveData.setHPersonalFouls(homeData[3]);
-                    feiJingBasketballMatchLiveData.setHRebounds(homeData[4]);
-                    feiJingBasketballMatchLiveData.setHSteals(homeData[5]);
-                    feiJingBasketballMatchLiveData.setHThreePointGoals(homeData[6]);
-                    feiJingBasketballMatchLiveData.setHTurnOvers(homeData[7]);
-                }
-                JSONArray awayPlayerList = (JSONArray) match.get("awayPlayerList");
-                if(awayPlayerList != null) {
-                    String[] awayData = getLiveResultData(awayPlayerList);
-                    feiJingBasketballMatchLiveData.setABlocks(awayData[0]);
-                    feiJingBasketballMatchLiveData.setAFieldGoals(awayData[1]);
-                    feiJingBasketballMatchLiveData.setAFreeThrows(awayData[2]);
-                    feiJingBasketballMatchLiveData.setAPersonalFouls(awayData[3]);
-                    feiJingBasketballMatchLiveData.setARebounds(awayData[4]);
-                    feiJingBasketballMatchLiveData.setASteals(awayData[5]);
-                    feiJingBasketballMatchLiveData.setAThreePointGoals(awayData[6]);
-                    feiJingBasketballMatchLiveData.setATurnOvers(awayData[7]);
-                }
-                int existed = feiJingBasketballMatchLiveDataDao.queryExist(matchId);
-                if(existed <=0){
-                    feiJingBasketballMatchLiveDataDao.insertData(feiJingBasketballMatchLiveData);
-                } else {
-                    feiJingBasketballMatchLiveDataDao.updateData(feiJingBasketballMatchLiveData);
-                }
-
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
+            if(matchList != null && !matchList.isEmpty()) {
+                matchList.forEach(match ->{
+                    Integer matchId = (Integer) match.get("matchId");
+                    FeiJingBasketballMatchLiveData feiJingBasketballMatchLiveData = new FeiJingBasketballMatchLiveData();
+                    feiJingBasketballMatchLiveData.setMatchId(matchId);
+                    JSONArray homePlayerList = (JSONArray) match.get("homePlayerList");
+                    if(homePlayerList != null) {
+                        String[] homeData = getLiveResultData(homePlayerList);
+                        feiJingBasketballMatchLiveData.setHBlocks(homeData[0]);
+                        feiJingBasketballMatchLiveData.setHFieldGoals(homeData[1]);
+                        feiJingBasketballMatchLiveData.setHFreeThrows(homeData[2]);
+                        feiJingBasketballMatchLiveData.setHPersonalFouls(homeData[3]);
+                        feiJingBasketballMatchLiveData.setHRebounds(homeData[4]);
+                        feiJingBasketballMatchLiveData.setHSteals(homeData[5]);
+                        feiJingBasketballMatchLiveData.setHThreePointGoals(homeData[6]);
+                        feiJingBasketballMatchLiveData.setHTurnOvers(homeData[7]);
+                    }
+                    JSONArray awayPlayerList = (JSONArray) match.get("awayPlayerList");
+                    if(awayPlayerList != null) {
+                        String[] awayData = getLiveResultData(awayPlayerList);
+                        feiJingBasketballMatchLiveData.setABlocks(awayData[0]);
+                        feiJingBasketballMatchLiveData.setAFieldGoals(awayData[1]);
+                        feiJingBasketballMatchLiveData.setAFreeThrows(awayData[2]);
+                        feiJingBasketballMatchLiveData.setAPersonalFouls(awayData[3]);
+                        feiJingBasketballMatchLiveData.setARebounds(awayData[4]);
+                        feiJingBasketballMatchLiveData.setASteals(awayData[5]);
+                        feiJingBasketballMatchLiveData.setAThreePointGoals(awayData[6]);
+                        feiJingBasketballMatchLiveData.setATurnOvers(awayData[7]);
+                    }
+                    int existed = feiJingBasketballMatchLiveDataDao.queryExist(matchId);
+                    if(existed <=0){
+                        feiJingBasketballMatchLiveDataDao.insertData(feiJingBasketballMatchLiveData);
+                    } else {
+                        feiJingBasketballMatchLiveDataDao.updateData(feiJingBasketballMatchLiveData);
+                    }
+                });
+            }
         }
     }
 

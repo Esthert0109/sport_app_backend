@@ -30,18 +30,21 @@ public class FeiJingBasketballAnimationTask {
         String url = feiJingConfig.getBasketballAnimation();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Object> matchList = (List<Object>) resultObj.get("list");
-        if(matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match->{
-                String str = (String)match;
-                String[] arr = str.split("!");
-                String[] data = arr[0].split("\\^");
-                Integer matchId = Integer.parseInt(data[0]);
-                int existed = feiJingBasketballAnimationDao.queryExisted(matchId);
-                if(existed <=0) {
-                    feiJingBasketballAnimationDao.insertData(matchId);
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Object> matchList = (List<Object>) resultObj.get("list");
+            if(matchList != null && !matchList.isEmpty()) {
+                matchList.forEach(match->{
+                    String str = (String)match;
+                    String[] arr = str.split("!");
+                    String[] data = arr[0].split("\\^");
+                    Integer matchId = Integer.parseInt(data[0]);
+                    int existed = feiJingBasketballAnimationDao.queryExisted(matchId);
+                    if(existed <=0) {
+                        feiJingBasketballAnimationDao.insertData(matchId);
+                    }
+                });
+            }
         }
+
     }
 }

@@ -39,21 +39,24 @@ public class FeiHingFootballLineUpTask {
         String url = feiJingConfig.getLineup();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> lineupList = (List<Map<String,Object>>) resultObj.get("lineupList");
-        if(lineupList != null && !lineupList.isEmpty()){
-            lineupList.forEach(match ->{
-                Integer matchId = (Integer)match.get("matchId");
-                String homeFormation = (String)match.get("homeArray");
-                String awayFormation = (String)match.get("awayArray");
-                feiJingFootballMatchDao.updateFormationByMatchId(homeFormation,awayFormation,matchId);
-                JSONArray homeLineup = (JSONArray) match.get("homeLineup");
-                JSONArray awayLineup = (JSONArray) match.get("awayLineup");
-                JSONArray homeBackup = (JSONArray) match.get("homeBackup");
-                JSONArray awayBackup = (JSONArray) match.get("awayBackup");
-                getMatchLineUp(homeLineup,matchId,homeBackup, TeamEnum.HOME.getCode());
-                getMatchLineUp(awayLineup,matchId,awayBackup, TeamEnum.AWAY.getCode());
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> lineupList = (List<Map<String,Object>>) resultObj.get("lineupList");
+            if(lineupList != null && !lineupList.isEmpty()){
+                lineupList.forEach(match ->{
+                    Integer matchId = (Integer)match.get("matchId");
+                    String homeFormation = (String)match.get("homeArray");
+                    String awayFormation = (String)match.get("awayArray");
+                    feiJingFootballMatchDao.updateFormationByMatchId(homeFormation,awayFormation,matchId);
+                    JSONArray homeLineup = (JSONArray) match.get("homeLineup");
+                    JSONArray awayLineup = (JSONArray) match.get("awayLineup");
+                    JSONArray homeBackup = (JSONArray) match.get("homeBackup");
+                    JSONArray awayBackup = (JSONArray) match.get("awayBackup");
+                    getMatchLineUp(homeLineup,matchId,homeBackup, TeamEnum.HOME.getCode());
+                    getMatchLineUp(awayLineup,matchId,awayBackup, TeamEnum.AWAY.getCode());
+                });
+            }
         }
+
 
     }
 

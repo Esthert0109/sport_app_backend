@@ -36,18 +36,19 @@ public class FeiJingBasketballCurrentMatchTask {
         String url = feiJingConfig.getBasketballTodayMatch();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
-        if(matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match->{
-                Integer matchId = (Integer) match.get("matchId");
-                int existed = feiJingBasketballMatchDao.queryExisted(matchId);
-                if(existed <=0) {
-                    FeiJingBasketballMatch feiJingBasketballMatch = getFeiJingBasketbllMatch(match);
-                    feiJingBasketballMatchDao.insertData(feiJingBasketballMatch);
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
+            if(matchList != null && !matchList.isEmpty()) {
+                matchList.forEach(match->{
+                    Integer matchId = (Integer) match.get("matchId");
+                    int existed = feiJingBasketballMatchDao.queryExisted(matchId);
+                    if(existed <=0) {
+                        FeiJingBasketballMatch feiJingBasketballMatch = getFeiJingBasketbllMatch(match);
+                        feiJingBasketballMatchDao.insertData(feiJingBasketballMatch);
+                    }
+                });
+            }
         }
-
     }
 
 

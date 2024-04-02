@@ -150,5 +150,16 @@ create table info_category(
   PRIMARY KEY (`category_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+drop table if exists ad_addr;
+create table ad_addr(
+  `ad_id` int not null auto_increment comment 'id',
+  `ad_url` varchar(255) not NULL  COMMENT '广告地址',
+  `valid` char(1) default '0' comment '是否有效 0 否 1 是',
+  `created_date` timestamp DEFAULT current_timestamp()  COMMENT '创建时间',
+  PRIMARY KEY (`ad_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment '广告地址';
+
+
+
 
 
