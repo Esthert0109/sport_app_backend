@@ -31,15 +31,18 @@ public class FeiJingFootballAnimationTask {
         String url = feiJingConfig.getFootballAnimation();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
-        if(matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match->{
-                Integer matchId = (Integer) match.get("matchId");
-                int existed = feiJingFootballAnimationDao.queryExisted(matchId);
-                if(existed <=0) {
-                    feiJingFootballAnimationDao.insertData(matchId);
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
+            if(matchList != null && !matchList.isEmpty()) {
+                matchList.forEach(match->{
+                    Integer matchId = (Integer) match.get("matchId");
+                    int existed = feiJingFootballAnimationDao.queryExisted(matchId);
+                    if(existed <=0) {
+                        feiJingFootballAnimationDao.insertData(matchId);
+                    }
+                });
+            }
         }
+
     }
 }

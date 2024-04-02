@@ -30,25 +30,28 @@ public class FeiJingFootballScoreTask {
         String url = feiJingConfig.getTodayMatch();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> changeList = (List<Map<String,Object>>) resultObj.get("changeList");
-        if(changeList != null && !changeList.isEmpty()) {
-            changeList.forEach(match->{
-                Integer matchId = (Integer) match.get("matchId");
-                int existed = feiJingFootballMatchDao.queryExisted(matchId);
-                if(existed >0) {
-                    FeiJingFootballMatch feiJingFootballMatch = new FeiJingFootballMatch();
-                    Integer state = (Integer)match.get("state");
-                    Integer homeScore = (Integer)match.get("homeScore");
-                    Integer awayScore = (Integer)match.get("awayScore");
-                    String hasLineup = (String) match.get("hasLineup");
-                    feiJingFootballMatch.setStatusId(state);
-                    feiJingFootballMatch.setHomeTeamScore(homeScore);
-                    feiJingFootballMatch.setAwayTeamScore(awayScore);
-                    feiJingFootballMatch.setLineUp(StringUtils.equals("",hasLineup)?0:1);
-                    feiJingFootballMatchDao.updateMatchScoreByMatchId(feiJingFootballMatch);
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> changeList = (List<Map<String,Object>>) resultObj.get("changeList");
+            if(changeList != null && !changeList.isEmpty()) {
+                changeList.forEach(match->{
+                    Integer matchId = (Integer) match.get("matchId");
+                    int existed = feiJingFootballMatchDao.queryExisted(matchId);
+                    if(existed >0) {
+                        FeiJingFootballMatch feiJingFootballMatch = new FeiJingFootballMatch();
+                        Integer state = (Integer)match.get("state");
+                        Integer homeScore = (Integer)match.get("homeScore");
+                        Integer awayScore = (Integer)match.get("awayScore");
+                        String hasLineup = (String) match.get("hasLineup");
+                        feiJingFootballMatch.setStatusId(state);
+                        feiJingFootballMatch.setHomeTeamScore(homeScore);
+                        feiJingFootballMatch.setAwayTeamScore(awayScore);
+                        feiJingFootballMatch.setLineUp(StringUtils.equals("",hasLineup)?0:1);
+                        feiJingFootballMatchDao.updateMatchScoreByMatchId(feiJingFootballMatch);
+                    }
+                });
+            }
         }
+
     }
 
 }

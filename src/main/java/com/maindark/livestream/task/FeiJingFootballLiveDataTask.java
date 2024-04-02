@@ -31,23 +31,25 @@ public class FeiJingFootballLiveDataTask {
         String url = feiJingConfig.getLiveData();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> technic = (List<Map<String,Object>>) resultObj.get("technic");
-        if(technic != null && !technic.isEmpty()){
-            technic.forEach(match ->{
-                Integer matchId = (Integer)match.get("matchId");
-                String technicCount = (String)match.get("technicCount");
-                if(!StringUtils.equals("",technicCount)) {
-                   String[] technicArr = technicCount.split(";");
-                   FeiJingFootballMatchLiveData feiJingFootballMatchLiveData = dealTechnicCount(technicArr);
-                   feiJingFootballMatchLiveData.setMatchId(matchId);
-                   int existed = feiJingFootballMatchLiveDataDao.queryExisted(matchId);
-                   if(existed <=0) {
-                       feiJingFootballMatchLiveDataDao.insertData(feiJingFootballMatchLiveData);
-                   } else {
-                       feiJingFootballMatchLiveDataDao.updateData(feiJingFootballMatchLiveData);
-                   }
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> technic = (List<Map<String,Object>>) resultObj.get("technic");
+            if(technic != null && !technic.isEmpty()){
+                technic.forEach(match ->{
+                    Integer matchId = (Integer)match.get("matchId");
+                    String technicCount = (String)match.get("technicCount");
+                    if(!StringUtils.equals("",technicCount)) {
+                        String[] technicArr = technicCount.split(";");
+                        FeiJingFootballMatchLiveData feiJingFootballMatchLiveData = dealTechnicCount(technicArr);
+                        feiJingFootballMatchLiveData.setMatchId(matchId);
+                        int existed = feiJingFootballMatchLiveDataDao.queryExisted(matchId);
+                        if(existed <=0) {
+                            feiJingFootballMatchLiveDataDao.insertData(feiJingFootballMatchLiveData);
+                        } else {
+                            feiJingFootballMatchLiveDataDao.updateData(feiJingFootballMatchLiveData);
+                        }
+                    }
+                });
+            }
         }
     }
 

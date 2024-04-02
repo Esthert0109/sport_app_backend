@@ -37,18 +37,19 @@ public class FeiJingFootballCurrentMatchTask {
         String url = feiJingConfig.getTeamMatch();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
-        if(matchList != null && !matchList.isEmpty()) {
-            matchList.forEach(match->{
-                Integer matchId = (Integer) match.get("matchId");
-                int existed = feiJingFootballMatchDao.queryExisted(matchId);
-                if(existed <=0) {
-                    FeiJingFootballMatch feiJingFootballMatch = getFeiJingFootballMatch(match);
-                    feiJingFootballMatchDao.insertData(feiJingFootballMatch);
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> matchList = (List<Map<String,Object>>) resultObj.get("matchList");
+            if(matchList != null && !matchList.isEmpty()) {
+                matchList.forEach(match->{
+                    Integer matchId = (Integer) match.get("matchId");
+                    int existed = feiJingFootballMatchDao.queryExisted(matchId);
+                    if(existed <=0) {
+                        FeiJingFootballMatch feiJingFootballMatch = getFeiJingFootballMatch(match);
+                        feiJingFootballMatchDao.insertData(feiJingFootballMatch);
+                    }
+                });
+            }
         }
-
     }
 
     public  FeiJingFootballMatch getFeiJingFootballMatch(Map<String, Object> match) {
