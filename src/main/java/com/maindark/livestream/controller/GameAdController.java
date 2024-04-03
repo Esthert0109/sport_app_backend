@@ -15,7 +15,7 @@ public class GameAdController {
     @Resource
     GameAdService gameAdService;
 
-    @GetMapping("/")
+    @GetMapping("/url")
     public Result<GameAdVo> getGameAd(){
         GameAdVo gameAdVo = gameAdService.getGameVo();
         return Result.success(gameAdVo);

@@ -120,29 +120,31 @@ public class FeiJingBasketballNormalDataTask {
         String url = feiJingConfig.getBasketballTeam();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result,Map.class);
-        List<Map<String,Object>> teamlist = (List<Map<String,Object>>) resultObj.get("teamList");
-        if(teamlist != null && !teamlist.isEmpty()) {
-            teamlist.forEach(obj ->{
-                Integer teamId = (Integer) obj.get("teamId");
-                Integer leagueId = (Integer) obj.get("leagueId");
-                String nameEn = (String)obj.get("nameEn");
-                String nameCn = (String)obj.get("nameChs");
-                String logo = (String)obj.get("logo");
-                String coachEn = (String)obj.get("headCoachEn");
-                String coachCn = (String)obj.get("headCoachCn");
-                FeiJingBasketballTeam feiJingBasketballTeam = new FeiJingBasketballTeam();
-                feiJingBasketballTeam.setTeamId(teamId);
-                feiJingBasketballTeam.setLogo(logo);
-                feiJingBasketballTeam.setLeagueId(leagueId);
-                feiJingBasketballTeam.setNameEn(nameEn);
-                feiJingBasketballTeam.setNameCn(nameCn);
-                feiJingBasketballTeam.setCoachEn(coachEn);
-                feiJingBasketballTeam.setCoachCn(coachCn);
-                int existed = feiJingBasketballTeamDao.queryExisted(teamId);
-                if(existed <=0){
-                    feiJingBasketballTeamDao.insertData(feiJingBasketballTeam);
-                }
-            });
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> teamlist = (List<Map<String,Object>>) resultObj.get("teamList");
+            if(teamlist != null && !teamlist.isEmpty()) {
+                teamlist.forEach(obj ->{
+                    Integer teamId = (Integer) obj.get("teamId");
+                    Integer leagueId = (Integer) obj.get("leagueId");
+                    String nameEn = (String)obj.get("nameEn");
+                    String nameCn = (String)obj.get("nameChs");
+                    String logo = (String)obj.get("logo");
+                    String coachEn = (String)obj.get("headCoachEn");
+                    String coachCn = (String)obj.get("headCoachCn");
+                    FeiJingBasketballTeam feiJingBasketballTeam = new FeiJingBasketballTeam();
+                    feiJingBasketballTeam.setTeamId(teamId);
+                    feiJingBasketballTeam.setLogo(logo);
+                    feiJingBasketballTeam.setLeagueId(leagueId);
+                    feiJingBasketballTeam.setNameEn(nameEn);
+                    feiJingBasketballTeam.setNameCn(nameCn);
+                    feiJingBasketballTeam.setCoachEn(coachEn);
+                    feiJingBasketballTeam.setCoachCn(coachCn);
+                    int existed = feiJingBasketballTeamDao.queryExisted(teamId);
+                    if(existed <=0){
+                        feiJingBasketballTeamDao.insertData(feiJingBasketballTeam);
+                    }
+                });
+            }
         }
     }
 
@@ -152,19 +154,22 @@ public class FeiJingBasketballNormalDataTask {
         String url = feiJingConfig.getBasketballInfo();
         String result = HttpUtil.sendGet(url);
         Map<String,Object> resultObj = JSON.parseObject(result, Map.class);
-        List<Map<String,Object>> infoList = (List<Map<String, Object>>) resultObj.get("list");
-        if(infoList != null && !infoList.isEmpty()) {
-            infoList.forEach(info -> {
-                Integer recordId = (Integer) info.get("recordId");
-                int existed = feiJingInforDao.queryExisted(recordId);
+        if(resultObj != null && !resultObj.isEmpty()){
+            List<Map<String,Object>> infoList = (List<Map<String, Object>>) resultObj.get("list");
+            if(infoList != null && !infoList.isEmpty()) {
+                infoList.forEach(info -> {
+                    Integer recordId = (Integer) info.get("recordId");
+                    int existed = feiJingInforDao.queryExisted(recordId);
 
-                //if not existed
-                if(existed <=0) {
-                    FeiJingInfor feiJingInfo = getFeiJingBasketballInfo(info);
-                    feiJingInforDao.insertData(feiJingInfo);
-                }
-            });
+                    //if not existed
+                    if(existed <=0) {
+                        FeiJingInfor feiJingInfo = getFeiJingBasketballInfo(info);
+                        feiJingInforDao.insertData(feiJingInfo);
+                    }
+                });
+            }
         }
+
     }
 
     public FeiJingInfor getFeiJingBasketballInfo(Map<String, Object> info){
