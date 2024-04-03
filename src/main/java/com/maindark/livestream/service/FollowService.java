@@ -11,7 +11,6 @@ import com.maindark.livestream.vo.LiveStreamUserVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -154,13 +153,11 @@ public class FollowService {
         List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByFollowerId(followerId,limit, offset );
 
         for(AnchorFollowVo anchor: followingList) {
-            LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
-            anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
+            LiveStreamUserVo anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
             anchor.setAnchorDetails(anchorDetail);
             boolean isStreaming = anchor.getStreamingStatus();
             if(isStreaming){
-                LiveStreamDetailVo liveStreamDetails = new LiveStreamDetailVo();
-                liveStreamDetails = liveStreamDetailDao.getLiveStreamDetailByAnchorId(anchor.getAnchorId());
+                LiveStreamDetailVo liveStreamDetails = liveStreamDetailDao.getLiveStreamDetailByAnchorId(anchor.getAnchorId());
                 anchor.setLiveStreamDetails(liveStreamDetails);
             }
         }
@@ -174,13 +171,11 @@ public class FollowService {
         List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByDescOrder(followerId,limit, offset );
 
         for(AnchorFollowVo anchor: followingList) {
-            LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
-            anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
+            LiveStreamUserVo anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
             anchor.setAnchorDetails(anchorDetail);
             boolean isStreaming = anchor.getStreamingStatus();
             if(isStreaming){
-                LiveStreamDetailVo liveStreamDetails = new LiveStreamDetailVo();
-                liveStreamDetails = liveStreamDetailDao.getLiveStreamDetailByAnchorId(anchor.getAnchorId());
+                LiveStreamDetailVo liveStreamDetails = liveStreamDetailDao.getLiveStreamDetailByAnchorId(anchor.getAnchorId());
                 anchor.setLiveStreamDetails(liveStreamDetails);
             }
         }
@@ -194,13 +189,11 @@ public class FollowService {
         List<AnchorFollowVo> followingList = anchorFollowDao.getFollowingListByAscOrder(followerId,limit, offset );
 
         for(AnchorFollowVo anchor: followingList) {
-            LiveStreamUserVo anchorDetail = new LiveStreamUserVo();
-            anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
+            LiveStreamUserVo anchorDetail = liveStreamUserService.findById(anchor.getAnchorId());
             anchor.setAnchorDetails(anchorDetail);
             boolean isStreaming = anchor.getStreamingStatus();
             if(isStreaming){
-                LiveStreamDetailVo liveStreamDetails = new LiveStreamDetailVo();
-                liveStreamDetails = liveStreamDetailDao.getLiveStreamDetailByAnchorId(anchor.getAnchorId());
+                LiveStreamDetailVo liveStreamDetails = liveStreamDetailDao.getLiveStreamDetailByAnchorId(anchor.getAnchorId());
                 anchor.setLiveStreamDetails(liveStreamDetails);
             }
         }
