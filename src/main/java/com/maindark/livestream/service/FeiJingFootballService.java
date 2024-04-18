@@ -285,6 +285,28 @@ public class FeiJingFootballService {
             feiJingFootballMatchLiveDataVo.setHomePossessionRate(homePossessionRate);
             String awayPossessionRate = feiJingFootballMatchLiveDataVo.getAwayPossessionRate().replace("%","");
             feiJingFootballMatchLiveDataVo.setAwayPossessionRate(awayPossessionRate);
+            String homeFormation = feiJingFootballMatchLiveDataVo.getHomeFormation();
+            String awayFormation = feiJingFootballMatchLiveDataVo.getAwayFormation();
+            if(homeFormation != null && !homeFormation.isEmpty()){
+                char[] attr = homeFormation.toCharArray();
+                StringBuilder sb = new StringBuilder();
+                for (char c : attr) {
+                    sb.append(c);
+                    sb.append("-");
+                }
+                String s = sb.substring(0,sb.lastIndexOf("-"));
+                feiJingFootballMatchLiveDataVo.setHomeFormation(s);
+            }
+            if(awayFormation != null && !awayFormation.isEmpty()){
+                char[] attr = awayFormation.toCharArray();
+                StringBuilder sb = new StringBuilder();
+                for (char c : attr) {
+                    sb.append(c);
+                    sb.append("-");
+                }
+                String s = sb.substring(0,sb.lastIndexOf("-"));
+                feiJingFootballMatchLiveDataVo.setAwayFormation(s);
+            }
         }
         return feiJingFootballMatchLiveDataVo;
     }

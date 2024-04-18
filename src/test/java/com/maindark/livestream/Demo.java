@@ -71,11 +71,12 @@ public class Demo {
 //        System.out.println(localDate.toString());
         //System.out.println(from);
 
-        String time = "2024/3/12 9:59:14";
-        String date = DateUtil.convertStrToNormalDate(time);
-        String str = DateUtil.convertStrToNormalTime(time);
-        System.out.println(date);
-        System.out.println(str);
+        String time = "433";
+
+        char[] attr = time.toCharArray();
+        System.out.println(attr);
+
+        //System.out.println(s);
 
     }
 
