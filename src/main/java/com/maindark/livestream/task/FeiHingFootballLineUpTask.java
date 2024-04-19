@@ -67,11 +67,25 @@ public class FeiHingFootballLineUpTask {
 
     private void setAllSportsFootballMatchLineUp(JSONArray jsonArray, Integer matchId, Integer first, String teamType) {
         if(jsonArray != null){
-            for (Object o : jsonArray) {
+            // right code
+            /*for (Object o : jsonArray) {
                 Map<String, Object> map = (Map<String, Object>) o;
                 String playerName = (String) map.get("nameChs");
                 String playerNumber = (String) map.get("number");
                 String playerPosition = (String) map.get("positionId");
+                Integer playerId = (Integer) map.get("playerId");
+                FeiJingFootballLineUp footballLineUp = getAllSportsLineUp(playerId, Integer.parseInt(playerNumber), playerPosition, matchId, playerName, first, teamType);
+                int exist = feiJingFootballLineUpDao.queryExists(playerId, matchId);
+                if (exist <= 0) {
+                    feiJingFootballLineUpDao.insert(footballLineUp);
+                }
+            }*/
+            // TODO
+            for(int i=0;i<jsonArray.size();i++){
+                Map<String, Object> map = (Map<String, Object>) jsonArray.get(i);
+                String playerName = (String) map.get("nameChs");
+                String playerNumber = (String) map.get("number");
+                String playerPosition = String.valueOf(i);
                 Integer playerId = (Integer) map.get("playerId");
                 FeiJingFootballLineUp footballLineUp = getAllSportsLineUp(playerId, Integer.parseInt(playerNumber), playerPosition, matchId, playerName, first, teamType);
                 int exist = feiJingFootballLineUpDao.queryExists(playerId, matchId);
