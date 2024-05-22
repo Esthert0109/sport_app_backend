@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/populars")
+@CrossOrigin
 public class PopularSearchController {
     @Resource
     PopularSearchService popularSearchService;

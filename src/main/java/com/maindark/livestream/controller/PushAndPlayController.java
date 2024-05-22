@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/pushAndPlay")
+@CrossOrigin
 public class PushAndPlayController {
 
     @Resource

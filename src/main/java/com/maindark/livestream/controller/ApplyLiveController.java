@@ -6,12 +6,14 @@ import com.maindark.livestream.result.CodeMsg;
 import com.maindark.livestream.result.Result;
 import com.maindark.livestream.service.ApplyForLiveService;
 import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/applies")
+@CrossOrigin
 public class ApplyLiveController {
 
     @Resource

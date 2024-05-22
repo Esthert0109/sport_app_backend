@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/footballs/match")
+@CrossOrigin
 public class FootballController {
 
 

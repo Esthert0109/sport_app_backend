@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/basketballs/match")
+@CrossOrigin
 public class BasketBallController {
 
 

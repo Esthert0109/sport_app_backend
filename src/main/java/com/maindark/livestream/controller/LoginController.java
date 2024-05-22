@@ -15,6 +15,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/login")
+@CrossOrigin
 public class LoginController {
 
     @Resource
